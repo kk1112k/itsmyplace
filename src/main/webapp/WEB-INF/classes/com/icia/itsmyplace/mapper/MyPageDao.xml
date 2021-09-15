@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.MyPageDao">
+
+<resultMap id="myPageResultMap" type="com.icia.itsmyplace.model.MyPage">
+	<id column="RSRV_SEQ" property="rsrvSeq"/>
+	<result column="PAY_DATE" property="payDate"/>
+	<result column="RSRV_SEAT_LIST" property="rsrvSeatList"/>
+	<result column="CAFE_NAME" property="cafeName"/>
+	<result column="RSRV_TIME" property="rsrvTime"/>
+	<result column="ORIGIN_PRICE" property="originPrice"/>
+	<result column="TOTAL_PRICE" property="totalPrice"/>
+	<result column="PAY_POINT" property="payPoint"/>
+	<result column="MENU_NAME" property="menuName" />
+	<result column="MENU_COUNT" property="menuCount"/>
+</resultMap>
+
+<!-- 마이페이지 내가쓴 자유게시판글 관리 -->
+<resultMap id="userPostListResultMap" type="com.icia.itsmyplace.model.UserPostList">
+	<id column="BBS_SEQ" property="bbsSeq"/>
+	<result column="USER_ID" property="userId"/>
+	<result column="BBS_TITLE" property="bbsTitle"/>
+	<result column="REG_DATE" property="regDate"/>
+	<result column="BBS_PUBLIC" property="bbsPublic"/>
+</resultMap>
+
+<!-- 마이페이지 내가쓴 후기게시판글 관리 -->
+<resultMap id="userReviewPostListResultMap" type="com.icia.itsmyplace.model.UserPostList">
+	<id column="RSRV_SEQ" property="rsrvSeq"/>
+	<result column="USER_ID" property="userId"/>
+	<result column="BBS_TITLE" property="bbsTitle"/>
+	<result column="BBS_CONTENT" property="bbsContent"/>
+	<result column="REG_DATE" property="regDate"/>
+	<result column="BBS_PUBLIC" property="bbsPublic"/>
+</resultMap>
+
+
+<!-- 마이페이지 카페관리자 예약현황 조회용 -->
+<resultMap id="RsRvListResultMap" type="com.icia.itsmyplace.model.RsRv">
+<id column="RSRV_SEQ" property="rsrvSeq"/>
+<result column="USER_ID" property="userId"/>
+<result column="RSRV_DATE" property="rsrvDate"/>
+<result column="RSRV_TIME" property="rsrvTime"/>
+<result column="RSRV_PPL_CNT" property="rsrvPplCnt"/>
+<result column="CAFE_NUM" property="cafeNum"/>
+<result column="RSRV_SEAT_LIST" property="seatList"/>
+</resultMap>
+
+<!-- 마이페이지 카페관리자 예약현황 조회용 -->
+<resultMap id="cafeResultMap" type="com.icia.itsmyplace.model.Cafe">
+<id column="CAFE_NUM" property="cafeNum"/>
+<result column="USER_ID" property="userId"/>
+<result column="AREA_NUM" property="areaNum"/>
+<result column="SUBAREA_NUM" property="subAreaNum"/>
+<result column="CAFE_NAME" property="cafeName"/>
+<result column="CAFE_CONTENT" property="cafeContent"/>
+<result column="CAFE_ADDR" property="cafeAddr"/>
+<result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
+<result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
+<result column="STATUS" property="status"/>
+<result column="CAFE_KEYWORD" property="cafeKeyword"/>
+</resultMap>
+
+
+<!--  주문목록조회 -->
+<select id="myOrderInfo" parameterType="string">
+SELECT A.RSRV_SEQ, A.RSRV_DATE, C.CAFE_NAME, B.TOTAL_PRICE
+FROM 
+	RSRV A, PAY B, CAFE C
+WHERE 
+	A.USER_ID = #{userId}
+AND C.CAFE_NUM = A.CAFE_NUM
+AND A.RSRV_SEQ = B.RSRV_SEQ
+	ORDER BY A.RSRV_SEQ DESC
+</select>
+
+<select id="myOrderDetail" parameterType="long" resultMap="myPageResultMap">
+SELECT
+    A.RSRV_SEQ AS RSRV_SEQ,
+    TO_CHAR(B.PAY_DATE, 'YYYY.MM.DD HH24:MI:SS') AS PAY_DATE,
+    A.RSRV_SEAT_LIST AS RSRV_SEAT_LIST,
+    C.CAFE_NAME AS CAFE_NAME,
+    A.RSRV_TIME AS RSRV_TIME,
+    B.ORIGIN_PRICE AS ORIGIN_PRICE,
+    B.TOTAL_PRICE AS TOTAL_PRICE,
+    B.PAY_POINT AS PAY_POINT,
+    B.PAY_STEP AS PAY_STEP
+FROM
+    RSRV A, PAY B, CAFE C
+WHERE A.RSRV_SEQ = #{value}
+    AND A.RSRV_SEQ = B.RSRV_SEQ
+    AND A.CAFE_NUM = C.CAFE_NUM
+</select> 
+
+<select id="userPostList" parameterType="com.icia.itsmyplace.model.UserPostList" resultMap="userPostListResultMap">
+SELECT      
+            BBS_SEQ,
+            BBS_TITLE,
+            REG_DATE,
+            BBS_PUBLIC
+ FROM       (SELECT     ROWNUM AS RNUM,
+                        BBS_SEQ,
+                        USER_ID,
+                        USER_NAME,
+                        BBS_TITLE,
+                        REG_DATE,
+                        BBS_PUBLIC
+               FROM     (SELECT     NVL(A.BBS_SEQ, 0) AS BBS_SEQ,
+                                    NVL(A.USER_ID, '') AS USER_ID,
+                                    NVL(B.USER_NAME, '') AS USER_NAME,
+                                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+                            FROM    COMMUNITY A, TBL_USER B 
+                           WHERE    B.USER_ID = #{userId}
+                           AND 		B.USER_ID = A.USER_ID
+                           ORDER BY BBS_SEQ DESC))
+WHERE 		RNUM <![CDATA[>=]]> #{startRow}
+  	  	AND RNUM <![CDATA[<=]]> #{endRow}                           
+</select>
+
+
+<select id="userPostListCount" parameterType="string" resultType="long">
+SELECT 	COUNT(A.BBS_SEQ)
+  FROM 	COMMUNITY A, TBL_USER B
+ WHERE  B.USER_ID = #{value}	
+   AND  B.USER_ID = A.USER_ID
+</select>
+
+<select id="userReviewPostList" parameterType="com.icia.itsmyplace.model.UserPostList" resultMap="userReviewPostListResultMap">
+
+SELECT      
+            RSRV_SEQ,
+            BBS_TITLE,
+            BBS_CONTENT,
+            REG_DATE,
+            BBS_PUBLIC
+ FROM       (SELECT     ROWNUM AS RNUM,
+                        RSRV_SEQ,
+                        USER_ID,
+                        USER_NAME,
+                        BBS_TITLE,
+                        BBS_CONTENT,
+                        REG_DATE,
+                        BBS_PUBLIC
+               FROM     (SELECT     NVL(A.RSRV_SEQ, 0) AS RSRV_SEQ,
+                                    NVL(B.USER_ID, '') AS USER_ID,
+                                    NVL(B.USER_NAME, '') AS USER_NAME,
+                                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+                            FROM    REVIEW A, TBL_USER B, RSRV C 
+                           WHERE    B.USER_ID = #{userId}
+                           AND 		B.USER_ID = C.USER_ID
+                           AND      A.RSRV_SEQ = C.RSRV_SEQ
+                           ORDER BY RSRV_SEQ DESC))
+WHERE 		RNUM <![CDATA[>=]]> #{startRow}
+  	  	AND RNUM <![CDATA[<=]]> #{endRow}                           
+</select>
+
+
+<select id="userReviewPostListCount" parameterType="string" resultType="long">
+SELECT 	COUNT(A.RSRV_SEQ)
+  FROM 	REVIEW A, TBL_USER B, RSRV C
+ WHERE  B.USER_ID = #{userId}
+    AND B.USER_ID = C.USER_ID
+    AND A.RSRV_SEQ = C.RSRV_SEQ
+</select>
+
+
+<select id="chkListSelect" parameterType="long" resultMap="userPostListResultMap">
+SELECT
+    NVL(A.BBS_SEQ, 0) AS BBS_SEQ,
+    NVL(A.USER_ID, '') AS USER_ID,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI'), '') AS REG_DATE,
+    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+FROM
+    COMMUNITY A, TBL_USER B
+WHERE	BBS_SEQ = #{value}
+		AND B.USER_ID = A.USER_ID
+</select>
+
+
+<delete id="chkDelete" parameterType="long">
+DELETE FROM COMMUNITY
+WHERE		BBS_SEQ = #{value}
+</delete>
+
+<!--  선택한리뷰삭제 -->
+<select id="chkReviewSelect" parameterType="long" resultMap="userReviewPostListResultMap">
+SELECT
+    NVL(A.RSRV_SEQ, 0) AS RSRV_SEQ,
+    NVL(B.USER_ID, '') AS USER_ID,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI'), '') AS REG_DATE,
+    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+FROM
+    REVIEW A, TBL_USER B, RSRV C
+WHERE	A.RSRV_SEQ = #{userId}
+    AND B.USER_ID = C.USER_ID
+    AND A.RSRV_SEQ = C.RSRV_SEQ
+</select>
+
+
+<delete id="chkReviewDelete" parameterType="long">
+DELETE FROM REVIEW
+WHERE		RSRV_SEQ = #{value}
+</delete>
+
+<!-- 마이페이지 카페관리자 예약현황 조회용 -->
+<select id="myCafeRsrvCnt" parameterType="string" resultType="long">
+SELECT
+    COUNT(*)
+FROM
+    RSRV
+WHERE
+    CAFE_NUM = (   SELECT
+                        CAFE_NUM
+                    FROM
+                        CAFE
+                    WHERE
+                        USER_ID = #{value})
+ORDER BY RSRV_DATE DESC, RSRV_TIME DESC
+</select>
+
+<!-- 마이페이지 카페관리자 예약현황 조회용 -->
+<select id="myCafeRsrvList" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="RsRvListResultMap">
+SELECT  RSRV_SEQ,
+        USER_ID,
+        RSRV_DATE,
+        RSRV_TIME,
+        RSRV_PPL_CNT,
+        CAFE_NUM,
+        RSRV_SEAT_LIST
+FROM    (   SELECT  ROWNUM AS RNUM,
+                    RSRV_SEQ,
+                    USER_ID,
+                    RSRV_DATE,
+                    RSRV_TIME,
+                    RSRV_PPL_CNT,
+                    CAFE_NUM,
+                    RSRV_SEAT_LIST
+            FROM	(	SELECT
+                            NVL(RSRV_SEQ, 0) AS RSRV_SEQ,
+                            NVL(USER_ID, '') AS USER_ID,
+                            NVL(TO_CHAR(RSRV_DATE, 'YYYY.MM.DD'), '') AS RSRV_DATE,
+                            NVL(RSRV_TIME, '') AS RSRV_TIME,
+                            NVL(RSRV_PPL_CNT, 0) AS RSRV_PPL_CNT,
+                            NVL(CAFE_NUM, '') AS CAFE_NUM,
+                            NVL(RSRV_SEAT_LIST, '') AS RSRV_SEAT_LIST
+                        FROM
+                            RSRV
+                        WHERE
+                            CAFE_NUM = (   SELECT
+                                                CAFE_NUM
+                                            FROM
+                                                CAFE
+                                            WHERE
+                                            	USER_ID = #{userId})
+                        ORDER BY RSRV_DATE DESC, RSRV_TIME DESC))
+WHERE   RNUM <![CDATA[>=]]> #{startRow}
+    AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+
+<select id="myCafeSelect" parameterType="string" resultMap="cafeResultMap">
+SELECT
+    CAFE_NUM,
+    USER_ID,
+    AREA_NUM,
+    SUBAREA_NUM,
+    CAFE_NAME,
+    CAFE_CONTENT,
+    CAFE_ADDR,
+    CAFE_OPN_HRS,
+    CAFE_CLS_HRS,
+    STATUS,
+    CAFE_KEYWORD
+FROM
+    CAFE
+WHERE
+    USER_ID = #{value}
+</select>
+
+</mapper>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.AreaDao">
+
+<resultMap id="areaResultMap" type="com.icia.itsmyplace.model.Area">
+	<id column="AREA_NUM" property="areaNum" />
+	<result column="AREA_NAME" property="areaName" />
+</resultMap>
+ 
+<resultMap id="subAreaResultMap" type="com.icia.itsmyplace.model.SubArea">
+	<id column="SUBAREA_NUM" property="subAreaNum" />
+	<result column="AREA_NUM" property="areaNum" />
+	<result column="SUBAREA_NAME" property="subAreaName" />
+</resultMap>
+
+<!-- 카페모아보기 페이지 지역명 조회 -->
+<resultMap id="cafeAreaResultMap" type="com.icia.itsmyplace.model.SubArea">
+<id column="AREA_NAME" property="areaName"/>
+<result column="SUBAREA_NAME" property="subAreaName"/>
+</resultMap>
+
+<!-- 게시물 조회 -->
+<select id="areaSelect" resultMap="areaResultMap">
+SELECT
+    AREA_NUM,
+    NVL(AREA_NAME, '') AS AREA_NAME
+FROM
+    AREA
+</select>
+
+<select id="myArea" resultMap="areaResultMap">
+SELECT
+	AREA_NUM,
+	NVL(AREA_NAME, '') AS AREA_NAME
+FROM
+	AREA
+WHERE
+	AREA_NUM = #{value}
+</select>
+
+<select id="mySubArea" parameterType="string" resultMap="subAreaResultMap">
+SELECT
+	AREA_NUM,
+	NVL(SUBAREA_NUM, '') AS SUBAREA_NUM,
+	NVL(SUBAREA_NAME, '') AS SUBAREA_NAME
+FROM
+    SUBAREA A
+WHERE
+	SUBAREA_NUM = #{value}
+
+</select>
+
+<!-- 게시물 조회 -->
+<select id="subAreaSelect" resultMap="subAreaResultMap">
+SELECT
+    SUBAREA_NUM,
+    NVL(SUBAREA_NAME, '') AS SUBAREA_NAME
+FROM
+    SUBAREA
+WHERE
+	AREA_NUM = '032'
+</select>
+
+<!-- 회원가입 세부지역 조회 -->
+<select id="subAreaList" parameterType="string" resultMap="subAreaResultMap">
+SELECT
+    AREA_NUM,
+    SUBAREA_NUM,
+    NVL(SUBAREA_NAME, '') AS SUBAREA_NAME
+FROM
+    SUBAREA
+WHERE
+    AREA_NUM = #{VALUE}
+</select>
+
+<!-- 카페모아보기 페이지 지역명 조회 -->
+<select id="areaNameSelect" parameterType="string" resultMap="cafeAreaResultMap">
+SELECT
+        A.AREA_NAME,
+        B.SUBAREA_NAME
+FROM
+        AREA A, SUBAREA B
+WHERE   A.AREA_NUM = B.AREA_NUM
+        AND SUBAREA_NUM = #{value}
+</select>
+
+
+</mapper>

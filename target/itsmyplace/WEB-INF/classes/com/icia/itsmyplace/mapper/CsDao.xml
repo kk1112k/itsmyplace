@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.CsDao">
+<!-- 게시물 resultMap -->
+<resultMap id="csResultMap" type="com.icia.itsmyplace.model.Cs">
+	<id column="BBS_SEQ" property="bbsSeq" />
+	<result column="USER_ID" property="userId" />
+	<result column="USER_NAME" property="userName"/>
+	<result column="USER_EMAIL" property="userEmail"/>
+	<result column="BBS_GROUP" property="bbsGroup" />
+    <result column="BBS_ORDER" property="bbsOrder" />
+    <result column="BBS_INDENT" property="bbsIndent" />
+    <result column="BBS_PARENT" property="bbsParent" />
+    <result column="BBS_TITLE" property="bbsTitle" />
+    <result column="BBS_CONTENT" property="bbsContent" />
+    <result column="BBS_READ_CNT" property="bbsReadCnt" />
+    <result column="REG_DATE" property="regDate" />
+    <result column="BBS_PUBLIC" property="bbsPublic" />
+</resultMap>
+
+
+
+<!-- 게시물 등록 -->
+<insert id="csInsert" parameterType="com.icia.itsmyplace.model.Cs">
+<selectKey resultType="long" keyProperty="bbsSeq" order="BEFORE">
+   SELECT TBL_CS_BBS_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+INSERT INTO TBL_CS (
+    BBS_SEQ,
+    USER_ID,
+    BBS_GROUP,
+    BBS_ORDER,
+    BBS_INDENT,
+    BBS_PARENT,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    BBS_PUBLIC
+) VALUES (
+    #{bbsSeq},
+    #{userId},
+    #{bbsSeq},
+    #{bbsOrder},
+    #{bbsIndent},
+    0,
+    #{bbsTitle},
+    #{bbsContent},
+    0,
+    SYSDATE,
+    #{bbsPublic}
+)
+</insert>
+
+<!-- 총 게시물 수 -->
+<select id="csListCount" parameterType="com.icia.itsmyplace.model.Cs" resultType="long">
+SELECT
+   COUNT(A.BBS_SEQ) AS CNT
+FROM
+    TBL_CS A, TBL_USER B
+WHERE
+    B.USER_ID = A.USER_ID
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose>
+      <when test='searchType == "1"'>
+  AND
+    B.USER_ID LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "2"'>
+  AND
+    A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "3"'>
+  AND
+    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>
+    </choose>
+</if>
+</select>
+
+
+<!-- 게시물 리스트 -->
+<select id="csList" parameterType="com.icia.itsmyplace.model.Cs" resultMap="csResultMap">
+SELECT
+    BBS_SEQ,
+    USER_ID,
+    USER_NAME,
+    USER_EMAIL,
+    BBS_GROUP,
+    BBS_ORDER,
+    BBS_INDENT,
+    BBS_PARENT,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    BBS_PUBLIC
+  FROM (SELECT  ROWNUM AS RNUM,
+                BBS_SEQ,
+			    USER_ID,
+			    USER_NAME,
+			    USER_EMAIL,
+			    BBS_GROUP,
+			    BBS_ORDER,
+			    BBS_INDENT,
+			    BBS_PARENT,
+			    BBS_TITLE,
+			    BBS_CONTENT,
+			    BBS_READ_CNT,
+			    REG_DATE,
+			    BBS_PUBLIC
+            FROM ( SELECT   A.BBS_SEQ AS BBS_SEQ,
+                            NVL(A.USER_ID, '') AS USER_ID,
+                            NVL(B.USER_NAME, '') AS USER_NAME,
+                            NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+                            NVL(A.BBS_GROUP, 0) AS BBS_GROUP,
+                            NVL(A.BBS_ORDER, 0) AS BBS_ORDER,
+                            NVL(A.BBS_INDENT, 0) AS BBS_INDENT,
+                            NVL(A.BBS_PARENT, 0) AS BBS_PARENT,
+                            NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                            NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                            NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                            NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'),'') AS REG_DATE,
+                            NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+                        FROM
+                            TBL_CS A, TBL_USER B
+                            WHERE
+                            B.USER_ID = A.USER_ID
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue !=""'>
+   <choose>
+      <when test='searchType == "1"'>
+                            AND
+                            B.USER_ID LIKE '%'|| #{searchValue} ||'%'
+        </when>
+        <when test='searchType == "2"'>
+                            AND
+                            A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+        </when>
+        <when test='searchType == "3"'>
+                            AND
+                            DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue})>0
+        </when>
+    </choose>
+</if>
+                              ORDER BY A.BBS_GROUP DESC, A.BBS_ORDER ASC))
+                                                     
+WHERE RNUM <![CDATA[>=]]> #{startRow}
+  AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+
+<!-- 게시물 조회 -->
+<select id="csSelect" parameterType="long" resultMap="csResultMap">
+SELECT
+    A.BBS_SEQ AS BBS_SEQ,
+    NVL(A.USER_ID, '') AS USER_ID,
+    NVL(B.USER_NAME, '') AS USER_NAME,
+    NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+    NVL(A.BBS_GROUP, 0) AS BBS_GROUP,
+    NVL(A.BBS_ORDER, 0) AS BBS_ORDER,
+    NVL(A.BBS_INDENT, 0) AS BBS_INDENT,
+    NVL(A.BBS_PARENT, 0) AS BBS_PARENT,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'),'') AS REG_DATE,
+    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+ FROM
+    TBL_CS A, TBL_USER B
+WHERE
+    A.BBS_SEQ = ${value}
+  AND
+    A.USER_ID = B.USER_ID
+</select>
+
+<!-- 게시물 조회수 증가 -->
+<update id="csReadCntPlus" parameterType="long">
+UPDATE TBL_CS
+   SET BBS_READ_CNT = BBS_READ_CNT + 1
+ WHERE BBS_SEQ = #{value}
+</update> 
+
+<!-- 게시물 수정 -->
+<update id="csUpdate" parameterType="com.icia.itsmyplace.model.Cs">
+UPDATE TBL_CS
+SET
+    BBS_TITLE = #{bbsTitle},
+    BBS_CONTENT = #{bbsContent}
+WHERE
+    BBS_SEQ = #{bbsSeq}
+</update>
+
+<!--  게시글 삭제 -->
+<delete id="csDelete" parameterType="long">
+DELETE FROM TBL_CS
+WHERE
+    BBS_SEQ = #{value}
+</delete>
+
+<!-- BBS_GROUP의 BBS_ORDER 수정 -->
+<update id="csGroupOrderUpdate" parameterType="com.icia.itsmyplace.model.Cs">
+UPDATE TBL_CS
+   SET 
+        BBS_ORDER = BBS_ORDER + 1
+WHERE    
+        BBS_GROUP = #{bbsGroup}
+    AND BBS_ORDER <![CDATA[>=]]> #{bbsOrder}
+</update>
+
+
+
+<!-- 게시물 답글 등록 -->
+<insert id="csReplyInsert" parameterType="com.icia.itsmyplace.model.Cs">
+<selectKey resultType="long" keyProperty="bbsSeq" order="BEFORE">
+	SELECT TBL_CS_BBS_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+INSERT INTO TBL_CS (
+    BBS_SEQ,
+    USER_ID,
+    BBS_GROUP,
+    BBS_ORDER,
+    BBS_INDENT,
+    BBS_PARENT,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    BBS_PUBLIC
+) VALUES (
+    #{bbsSeq},
+    #{userId},
+    #{bbsGroup},
+    #{bbsOrder},
+    #{bbsIndent},
+    #{bbsParent},
+    #{bbsTitle},
+    #{bbsContent},
+    0,
+    SYSDATE,
+    #{bbsPublic}
+)
+</insert>
+
+
+</mapper>

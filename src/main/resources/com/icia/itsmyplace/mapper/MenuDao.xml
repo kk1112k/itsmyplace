@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.MenuDao">
+
+<resultMap id="menuPhtResultMap" type="com.icia.itsmyplace.model.MenuPht">
+<id column="CAFE_NUM" property="cafeNum"/>
+<id column="MENU_NUM" property="menuNum"/>
+<id column="PHT_NUM" property="phtNum"/>
+<result column="LIST_ORDER" property="listOrder"/>
+<result column="PHT_NAME" property="phtName"/>
+<result column="PHT_ORG_NAME" property="phtOrgName"/>
+<result column="PHT_SIZE" property="phtSize"/>
+<result column="PHT_EXT" property="phtExt"/>
+<result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<insert id="menuPhtInsert" parameterType="com.icia.itsmyplace.model.MenuPht">
+INSERT INTO MENU_PHT (
+    CAFE_NUM,
+    MENU_NUM,
+    PHT_NUM,
+    LIST_ORDER,
+    PHT_NAME,
+    PHT_ORG_NAME,
+    PHT_SIZE,
+    PHT_EXT,
+    REG_DATE
+) VALUES (
+    #{cafeNum},
+    #{menuNum},
+    0,
+    0,
+    #{phtName},
+    #{phtOrgName},
+    #{phtSize},
+    #{phtExt},
+    SYSDATE
+)
+</insert>
+
+
+<!-- 카페소개 페이지 베스 메뉴사진 조회 목적 -->
+<select id="bestMenuPhtSelect" parameterType="com.icia.itsmyplace.model.MenuPht" resultMap="menuPhtResultMap">
+SELECT
+    CAFE_NUM,
+    MENU_NUM,
+    PHT_NUM,
+    LIST_ORDER,
+    PHT_ORG_NAME,
+    PHT_SIZE,
+    PHT_EXT,
+    REG_DATE
+FROM
+    MENU_PHT
+WHERE
+    CAFE_NUM = #{cafeNum}
+    AND MENU_NUM = #{menuNum}
+</select>
+
+</mapper>

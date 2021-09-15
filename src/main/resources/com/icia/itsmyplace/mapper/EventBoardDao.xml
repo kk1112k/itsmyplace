@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.EventBoardDao">
+
+<!-- 게시물 resultMap [김호준] -->
+<resultMap id="eventBoardResultMap" type="com.icia.itsmyplace.model.EventBoard">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <result column="USER_ID" property="userId" />
+   <result column="USER_NAME" property="userName" />
+   <result column="USER_EMAIL" property="userEmail" />
+   <result column="USER_CLASS" property="userClass" />
+   <result column="BBS_TITLE" property="bbsTitle" />
+   <result column="BBS_CONTENT" property="bbsContent" />
+   <result column="BBS_READ_CNT" property="bbsReadCnt" />
+   <result column="REG_DATE" property="regDate" />
+   <result column="EVT_OPN_DATE" property="evtOpnDate" />
+   <result column="EVT_CLS_DATE" property="evtClsDate" />
+   <result column="BBS_PUBLIC" property="bbsPublic" />
+   <result column="FILE_NAME" property="fileName" />
+   <result column="FILE_ORG_NAME" property="fileOrgName" />
+   <result column="ADMIN_PUBLIC" property="adminPublic" />
+</resultMap>
+ 
+ 
+<!-- 첨부파일 resultMap -->
+<resultMap id="eventBoardFileResultMap" type="com.icia.itsmyplace.model.EventBoardFile">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <id column="FILE_NUM" property="fileNum" />
+   <result column="FILE_NAME" property="fileName" />
+   <result column="FILE_ORG_NAME" property="fileOrgName" />
+   <result column="FILE_SIZE" property="fileSize" />
+   <result column="FILE_EXT" property="fileExt" />
+   <result column="REG_DATE" property="regDate" />
+</resultMap>
+
+<!--  순서!! 
+1. 게시물 카운트
+2. 게시물 리스트
+3. 게시물 조회
+4. 게시물 등록
+5. 첨부파일 등록
+ -->
+
+
+
+<!-- 게시물 카운트 -->
+<select id ="eventBoardListCount" resultType="long">
+	SELECT
+    	COUNT(A.BBS_SEQ) AS CNT
+	FROM
+       EVENT A, TBL_USER B, EVENT_FILE C
+   WHERE 
+       B.USER_ID = A.USER_ID
+     AND
+       A.ADMIN_PUBLIC = 'Y'  
+     AND
+       A.BBS_SEQ = C.BBS_SEQ(+)
+	    
+<if test='searchStatus != null and searchStatus != ""'>
+   <choose>
+      <when test='searchStatus == "Y"'>  
+						  AND
+						    A.BBS_PUBLIC = 'Y'
+       </when>
+       <when test='searchStatus == "N"'>
+						  AND
+						    A.BBS_PUBLIC = 'N'
+       </when>
+   </choose>                            
+</if>	    
+	    
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose> 
+      <when test='searchType == "1"'>  
+  AND
+    B.USER_ID LIKE '%' || #{searchValue} || '%'
+       </when>
+       <when test='searchType == "2"'>
+  AND
+    A.BBS_TITLE LIKE '%' || #{searchValue} || '%'
+       </when>
+       <when test='searchType == "3"'>
+  AND
+    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>	
+    </choose>
+</if>    	    
+</select>
+ 
+
+<!-- 게시물리스트 -->
+
+<select id="eventBoardList" parameterType="com.icia.itsmyplace.model.EventBoard" resultMap="eventBoardResultMap">
+SELECT 
+    BBS_SEQ,
+    USER_ID,
+    USER_NAME,
+    USER_EMAIL,
+    USER_CLASS,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    EVT_OPN_DATE,
+    EVT_CLS_DATE,
+    BBS_PUBLIC,
+    FILE_NAME,
+    FILE_ORG_NAME,
+    ADMIN_PUBLIC
+  FROM (SELECT  ROWNUM AS RNUM,
+                BBS_SEQ,
+                USER_ID,
+                USER_NAME,
+                USER_EMAIL,
+                USER_CLASS,
+                BBS_TITLE,
+                BBS_CONTENT,
+                BBS_READ_CNT,
+                REG_DATE,
+                EVT_OPN_DATE,
+                EVT_CLS_DATE,
+                BBS_PUBLIC,
+                FILE_NAME,
+                FILE_ORG_NAME,
+                ADMIN_PUBLIC
+              FROM (SELECT  A.BBS_SEQ AS BBS_SEQ,
+                            NVL(A.USER_ID, '') AS USER_ID,
+                            NVL(B.USER_NAME, '') AS USER_NAME,
+                            NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+                            NVL(B.USER_CLASS, '') AS USER_CLASS,
+                            NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                            NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                            NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                            NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                            NVL(TO_CHAR(A.EVT_OPN_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS EVT_OPN_DATE,
+                            NVL(TO_CHAR(A.EVT_CLS_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS EVT_CLS_DATE,
+                            NVL(A.BBS_PUBLIC, 'Y') AS BBS_PUBLIC,
+                            NVL(C.FILE_NAME, '') AS FILE_NAME,
+                            NVL(C.FILE_ORG_NAME, '') AS FILE_ORG_NAME,
+                            NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                        FROM
+                            EVENT A, TBL_USER B, EVENT_FILE C
+                        WHERE 
+                            B.USER_ID = A.USER_ID
+                          AND
+                          	A.ADMIN_PUBLIC = 'Y'  
+                          AND
+                            A.BBS_SEQ = C.BBS_SEQ(+)
+<if test='searchStatus != null and searchStatus != ""'>
+   <choose>
+      <when test='searchStatus == "Y"'>  
+						  AND
+						    A.BBS_PUBLIC = 'Y'
+       </when>
+       <when test='searchStatus == "N"'>
+						  AND
+						    A.BBS_PUBLIC = 'N'
+       </when>
+   </choose>                            
+</if> 
+                            
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose>
+      <when test='searchType == "1"'>  
+						  AND
+						    B.USER_ID LIKE '%' || #{searchValue} || '%'
+       </when>
+       <when test='searchType == "2"'>
+						  AND
+						    A.BBS_TITLE LIKE '%' || #{searchValue} || '%'
+       </when>
+       <when test='searchType == "3"'>
+						  AND
+						    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>                       
+   </choose>                            
+</if>
+                            
+     				     ORDER BY A.BBS_PUBLIC DESC, A.BBS_SEQ DESC)) 
+ WHERE RNUM <![CDATA[>=]]> #{startRow}
+   AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+	
+
+<!-- 게시물 조회 [김호준] 0819 -->
+<select id="eventBoardSelect" parameterType="long" resultMap="eventBoardResultMap">
+SELECT
+    A.BBS_SEQ AS BBS_SEQ,
+    NVL(A.USER_ID, '') AS USER_ID,
+    NVL(B.USER_NAME, '') AS USER_NAME,
+    NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(TO_CHAR(A.EVT_OPN_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS EVT_OPN_DATE,
+    NVL(TO_CHAR(A.EVT_CLS_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS EVT_CLS_DATE,
+    NVL(A.BBS_PUBLIC, 'Y') AS BBS_PUBLIC,
+    NVL(C.FILE_NAME, '') AS FILE_NAME,
+    NVL(C.FILE_ORG_NAME, '') AS FILE_ORG_NAME,
+    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+FROM
+    EVENT A, TBL_USER B, EVENT_FILE C
+WHERE   
+    A.BBS_SEQ = #{value}
+  AND   
+    A.USER_ID = B.USER_ID
+  AND
+    A.ADMIN_PUBLIC = 'Y'  
+  AND
+  	A.BBS_SEQ = C.BBS_SEQ(+)  
+</select>
+
+
+<!-- 게시물 등록 --> 
+<insert id="eventBoardInsert"  parameterType="com.icia.itsmyplace.model.EventBoard">
+<selectKey resultType="long" keyProperty="bbsSeq" order="BEFORE">
+   SELECT EVENT_BBS_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+INSERT INTO EVENT (
+    BBS_SEQ,
+    USER_ID,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    EVT_OPN_DATE,
+    EVT_CLS_DATE,
+    BBS_PUBLIC,
+    ADMIN_PUBLIC
+) VALUES (
+    #{bbsSeq},
+    #{userId},
+    #{bbsTitle},
+    #{bbsContent},
+    0,
+    SYSDATE,
+    #{evtOpnDate},
+    #{evtClsDate},
+    'Y',
+    'Y'
+)
+</insert>
+
+
+<!-- 첨부파일 등록 -->
+<insert id="eventBoardFileInsert"  parameterType="com.icia.itsmyplace.model.EventBoardFile">
+INSERT INTO EVENT_FILE (
+    BBS_SEQ,
+    FILE_NUM,
+    FILE_NAME,
+    FILE_ORG_NAME,
+    FILE_SIZE,
+    FILE_EXT,
+    REG_DATE
+) VALUES (
+    #{bbsSeq},
+    1,
+    #{fileName},
+    #{fileOrgName},
+    #{fileSize},
+    #{fileExt},
+    SYSDATE
+)
+</insert>
+
+
+<!-- 게시물 조회수 증가--> 
+<update id="eventBoardReadCntPlus" parameterType="long">
+UPDATE EVENT
+   SET BBS_READ_CNT = BBS_READ_CNT + 1
+ WHERE BBS_SEQ = #{value}
+</update>
+
+
+<!-- 첨부파일 삭제 -->
+<delete id="eventBoardFileDelete" parameterType="long">
+DELETE FROM EVENT_FILE
+ WHERE
+       BBS_SEQ = #{value}
+</delete>
+
+
+<!-- 게시물 삭제--> 
+<delete id="eventBoardDelete" parameterType="long">
+DELETE FROM EVENT
+ WHERE
+       BBS_SEQ = #{value}
+</delete>
+
+
+<!-- 게시물 수정 -->
+<update id="eventBoardUpdate" parameterType="com.icia.itsmyplace.model.EventBoard">
+UPDATE EVENT
+SET BBS_TITLE = #{bbsTitle},
+    BBS_CONTENT = #{bbsContent},
+    EVT_OPN_DATE = #{evtOpnDate},
+    EVT_CLS_DATE = #{evtClsDate}
+WHERE
+    BBS_SEQ = #{bbsSeq}
+</update>
+
+
+<!-- 첨부파일 조회 -->
+<select id="eventBoardFileSelect" parameterType="long" resultMap="eventBoardFileResultMap">
+SELECT
+    BBS_SEQ,
+    FILE_NUM,
+    NVL(FILE_NAME, '') AS FILE_NAME,
+    NVL(FILE_ORG_NAME, '') AS FILE_ORG_NAME,
+    NVL(FILE_SIZE, 0) AS FILE_SIZE,
+    NVL(FILE_EXT, '') AS FILE_EXT,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+FROM
+    EVENT_FILE
+WHERE 
+    BBS_SEQ = #{value}
+  AND
+    FILE_NUM = 1
+</select>
+
+
+
+<update id="eventPublicUpdate" parameterType="com.icia.itsmyplace.model.EventBoard">
+UPDATE EVENT
+SET
+    BBS_PUBLIC = 'N'
+WHERE
+    BBS_PUBLIC = 'Y'
+  AND
+  	EVT_CLS_DATE <![CDATA[<]]> SYSDATE   
+</update>
+
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

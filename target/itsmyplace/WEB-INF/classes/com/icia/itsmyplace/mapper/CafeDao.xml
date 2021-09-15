@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.CafeDao">
+<resultMap id="cafeResultMap" type="com.icia.itsmyplace.model.Cafe">
+	<id column="CAFE_NUM" property="cafenum"/>
+	<result column="USER_ID" property="userid"/>
+	<result column="AREA_NUM" property="areanum"/>
+	<result column="SUBAREA_NUM" property="subareanum"/>
+	<result column="CAFE_NAME" property="cafename"/>
+	<result column="CAFE_CONTENT" property="cafecontent"/>
+	<result column="CAFE_ADDR" property="cafeaddr"/>
+	<result column="CAFE_OPN_HRS" property="cafeopnhrs"/>
+	<result column="CAFE_CLS_HRS" property="cafeclshrs"/>
+	<result column="STATUS" property="status"/>
+</resultMap>
+
+<resultMap id="SeatResultMap" type="com.icia.itsmyplace.model.Seat">
+	<id column="CAFE_NUM" property="cafenum"/>
+	<result column="SEAT_NUM" property="seatnum"/>
+	<result column="VACANCY" property="vacancy"/>
+</resultMap>
+
+<resultMap id="MenuPhtMap" type="com.icia.itsmyplace.model.MenuPht">
+	<id column="CAFE_NUM" property="cafenum"/>
+	<id column="MENU_NUM" property="menunum"/>
+	<id column="PHT_NUM" property="phtnum"/>
+	<result column="LIST_ORDER" property="listorder"/>
+	<result column="PHT_ORG_NAME" property="phtorgname"/>
+	<result column="PHT_SIZE" property="phtsize"/>
+	<result column="PHT_EXT" property="phtext"/>
+	<result column="REG_DATE" property="regdate"/>
+	<result column="MENU_NAME" property="menuname"/>
+	<result column="MENU_PRICE" property="menuprice"/>
+</resultMap>
+
+<!-- 카페 조회 -->
+<select id="cafeSelect" parameterType="string" resultMap="cafeResultMap">
+SELECT
+    CAFE_NUM,
+    NVL(USER_ID, '') AS USER_ID,
+    NVL(AREA_NUM, '') AS AREA_NUM,
+    NVL(SUBAREA_NUM, '') AS SUBAREA_NUM,
+    NVL(CAFE_NAME, '') AS CAFE_NAME,
+    NVL(CAFE_CONTENT, '') AS CAFE_CONTENT,
+    NVL(CAFE_ADDR, '') AS CAFE_ADDR,
+    NVL(CAFE_OPN_HRS, '') AS CAFE_OPN_HRS,
+    NVL(CAFE_CLS_HRS, '') AS CAFE_CLS_HRS,
+    NVL(STATUS, '') AS STATUS
+FROM
+    CAFE
+WHERE
+    CAFE_NUM = #{value}
+</select>
+
+<!-- 카페 자리예약/공석 조회 -->
+<select id="seatSelect" parameterType="string" resultMap="SeatResultMap">
+SELECT
+    CAFE_NUM,
+    NVL(SEAT_NUM, '') AS SEAT_NUM,
+    NVL(VACANCY, '') AS VACANCY
+FROM
+    SEAT
+WHERE
+    CAFE_NUM = #{value}
+</select>
+
+<!-- 메뉴사진 조회 -->
+<select id="menuPhtSelect" parameterType="com.icia.itsmyplace.model.MenuPht" resultMap="MenuPhtMap">
+SELECT 
+    NVL(A.CAFE_NUM, '')AS CAFE_NUM,
+    NVL(A.PHT_NUM, 0) AS PHT_NUM,
+    NVL(A.LIST_ORDER, 0) AS LIST_ORDER,
+    NVL(A.PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(A.PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(A.PHT_EXT, '') AS PHT_EXT,
+    NVL(A.REG_DATE, '') AS REG_DATE,
+    NVL(B.MENU_NUM, '') AS MENU_NUM,
+    NVL(B.MENU_NAME, '') AS MENU_NAME,
+    NVL(B.MENU_PRICE, '') AS MENU_PRICE
+FROM 
+	MENU_PHT A, MENU B
+WHERE 
+	A.CAFE_NUM = #{VALUE}
+	<choose>
+		<when test='searchType == "1"'>
+AND A.MENU_NUM LIKE 'COF%'		
+		</when>
+		<when test='searchType == "2"'>
+AND A.MENU_NUM LIKE 'HOT%'		
+		</when>
+	</choose>
+AND A.MENU_NUM = B.MENU_NUM
+AND A.CAFE_NUM = B.CAFE_NUM
+</select>
+
+
+<!-- 원종석 메뉴클릭하면 리스트에집어넣기 -->
+<select id="menuSelected" parameterType="string" resultMap="MenuPhtMap">
+SELECT 
+	B.PHT_NUM, A.MENU_NAME, A.MENU_PRICE
+FROM 
+	MENU A, MENU_PHT B
+WHERE 
+	A.MENU_NUM = B.MENU_NUM
+	AND A.CAFE_NUM = B.CAFE_NUM
+	AND A.CAFE_NUM = 'A0000001'
+	AND B.MENU_NUM = #{value}
+
+</select>
+
+
+</mapper>

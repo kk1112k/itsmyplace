@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.AreaDao">
+
+<resultMap id="areaResultMap" type="com.icia.itsmyplace.model.Area">
+	<id column="AREA_NUM" property="areaNum" />
+	<result column="AREA_NAME" property="areaName" />
+</resultMap>
+ 
+<resultMap id="subAreaResultMap" type="com.icia.itsmyplace.model.SubArea">
+	<id column="SUBAREA_NUM" property="subAreaNum" />
+	<result column="AREA_NUM" property="areaNum" />
+	<result column="SUBAREA_NAME" property="subAreaName" />
+</resultMap>
+
+<!-- 게시물 조회 -->
+<select id="areaSelect" resultMap="areaResultMap">
+SELECT
+    AREA_NUM,
+    NVL(AREA_NAME, '') AS AREA_NAME
+FROM
+    AREA
+</select>
+
+<select id="mySubArea" parameterType="string" resultMap="subAreaResultMap">
+SELECT
+	NVL(SUBAREA_NAME, '') AS SUBAREA_NAME
+FROM
+    SUBAREA
+WHERE
+	SUBAREA_NUM = #{value}
+
+</select>
+
+<!-- 게시물 조회 -->
+<select id="subAreaSelect" resultMap="subAreaResultMap">
+SELECT
+    SUBAREA_NUM,
+    NVL(SUBAREA_NAME, '') AS SUBAREA_NAME
+FROM
+    SUBAREA
+WHERE
+	AREA_NUM = '032'
+</select>
+
+<select id="subAreaListAll" resultMap="subAreaResultMap">
+SELECT	SUBAREA_NUM,
+		SUBAREA_NAME
+FROM    SUBAREA
+</select>
+
+</mapper>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.ReviewDao">
+
+<resultMap id="reviewResultMap" type="com.icia.itsmyplace.model.Review">
+	<id column="RSRV_SEQ" property="rsrvSeq" />
+	<result column="BBS_TITLE" property="bbsTitle"></result>
+	<result column="BBS_CONTENT" property="bbsContent"></result>
+	<result column="BBS_READ_CNT" property="bbsReadCnt"></result>
+	<result column="REG_DATE" property="regDate"></result>
+	<result column="BBS_STAR" property="bbsStar"></result>
+	<result column="BBS_PUBLIC" property="bbsPublic"></result>
+	<result column="USER_ID" property="userId"></result>
+   </resultMap>
+   
+<resultMap id="ReviewPhtMap" type="com.icia.itsmyplace.model.ReviewPht">
+	<id column="RSRV_SEQ" property="rsrvSeq" />
+	<id column="PHT_NUM" property="phtNum" />
+	<result column="PHT_ORG_NAME" property="phtOrgName"></result>
+	<result column="PHT_SIZE" property="phtSize"></result>
+	<result column="PHT_EXT" property="phtExt"></result>
+	<result column="REG_DATE" property="regDate"></result>
+</resultMap>
+
+<!-- 게시물 등록 -->
+<insert id="reviewInsert" parameterType="com.icia.itsmyplace.model.Review">
+INSERT INTO REVIEW (
+    RSRV_SEQ,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    BBS_STAR,
+    BBS_PUBLIC
+) VALUES (
+    #{rsrvSeq},
+    #{bbsTitle},
+    #{bbsContent},
+    0,
+    SYSDATE,
+    #{bbsStar}
+    Y
+)
+</insert>
+
+<!-- 첨부파일 등록 -->
+<insert id="reviewPhtInsert" parameterType="com.icia.itsmyplace.model.ReviewPht">
+INSERT INTO REVIEW_PHT (
+    RSRV_SEQ,
+    PHT_NUM,
+    PHT_ORG_NAME,
+    PHT_SIZE,
+    PHT_EXT,
+    REG_DATE
+) VALUES (
+    #{rsrvSeq},
+    1,
+    #{fileOrgName},
+    #{fileSize},
+    #{fileExt},
+    SYSDATE
+)
+</insert>
+
+<!-- 후기 페이지 리스트 -->
+<select id="reviewList" parameterType="com.icia.itsmyplace.model.Review" resultMap="reviewResultMap">
+SELECT
+    A.RSRV_SEQ,
+    B.USER_ID,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+    NVL(A.BBS_PUBLIC, 'N') BBS_PUBLIC
+FROM
+    REVIEW A, RSRV B
+WHERE
+    B.RSRV_SEQ = A.RSRV_SEQ
+ORDER BY 
+    A.BBS_STAR DESC
+</select>
+
+<!-- 게시물 모달보기 -->
+<select id="reviewSelect" parameterType="long" resultMap="reviewResultMap">
+SELECT
+	RSRV_SEQ,
+    NVL(BBS_TITLE, '') AS BBS_TITLE,
+    NVL(BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(BBS_STAR, 0.0) AS BBS_STAR,
+    NVL(BBS_PUBLIC, 'N') BBS_PUBLIC
+FROM
+    REVIEW
+WHERE 
+	RSRV_SEQ = #{value} 
+</select>
+
+</mapper>

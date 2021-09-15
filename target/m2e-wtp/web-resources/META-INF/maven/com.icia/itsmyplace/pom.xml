@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.icia</groupId>
+	<artifactId>itsmyplace</artifactId>
+	<name>itsmyplace</name>
+	<packaging>war</packaging>
+	<version>1.0.0-BUILD-SNAPSHOT</version>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  		<java-version>1.8</java-version>
+		<org.springframework-version>5.3.3</org.springframework-version>
+		<org.aspectj-version>1.9.6</org.aspectj-version>
+		<org.slf4j-version>1.7.30</org.slf4j-version>
+		<org.log4j-version>2.14.0</org.log4j-version>
+		<com.google.code.gson-version>2.8.6</com.google.code.gson-version>
+		<org.mybatis-version>3.5.6</org.mybatis-version>
+		<org.mybatis.spring-version>2.0.6</org.mybatis.spring-version>
+		<commons-io-version>2.8.0</commons-io-version>
+		<commons-fileupload-version>1.4</commons-fileupload-version>
+		<com.zaxxer.HikariCP-version>4.0.0</com.zaxxer.HikariCP-version>
+		<com.oracle.ojdbc6-version>11.2.0.4</com.oracle.ojdbc6-version>
+		<jackson-version>2.12.1</jackson-version>
+	</properties>
+	<dependencies>
+		<!-- spring 시작 -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${org.springframework-version}</version>
+			<exclusions>
+				<!-- slf4j를 사용하기 위해 commons 로깅 제외 -->
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				 </exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webmvc</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-jdbc</artifactId>
+		    <version>${org.springframework-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+		<!-- spring 종료 -->
+		
+		<!-- oracle driver 시작 -->
+		<dependency>
+		    <groupId>com.oracle.database.jdbc</groupId>
+		    <artifactId>ojdbc6</artifactId>
+		    <version>${com.oracle.ojdbc6-version}</version>
+		</dependency>
+		<!-- oracle driver 종료 -->
+		
+		<!-- database connection pool (HikariCP) 시작 -->
+		<dependency>
+		    <groupId>com.zaxxer</groupId>
+		    <artifactId>HikariCP</artifactId>
+		    <version>${com.zaxxer.HikariCP-version}</version>
+		</dependency>
+		<!-- database connection pool (HikariCP) 종료 -->
+		
+		<!-- mybatis 시작 -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis</artifactId>
+		    <version>${org.mybatis-version}</version>
+		</dependency>
+		<!-- mybatis 종료 -->
+		
+		<!-- mybatis 와 spring 시작 -->
+		<dependency>
+		    <groupId>org.mybatis</groupId>
+		    <artifactId>mybatis-spring</artifactId>
+		    <version>${org.mybatis.spring-version}</version>
+		</dependency>
+		<!-- mybatis 와 spring 종료 -->
+		
+		<!-- AspectJ 시작 -->
+		<!-- dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>${org.aspectj-version}</version>
+		</dependency -->	
+		<!-- AspectJ 종료 -->
+		
+		<!-- slf4j 시작 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<!-- slf4j 종료 -->
+		
+		<!-- log4j2 호출을 slf4j API로 리디렉션 시작 -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${org.slf4j-version}</version>
+		</dependency>
+		<!-- log4j2 호출을 slf4j API로 리디렉션 종료 -->
+		
+		<!-- log4j2 시작 -->
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-core</artifactId>
+		    <version>${org.log4j-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-slf4j-impl</artifactId>
+		    <version>${org.log4j-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.logging.log4j</groupId>
+		    <artifactId>log4j-api</artifactId>
+		    <version>${org.log4j-version}</version>
+		</dependency>
+		<!-- log4j2 종료 -->
+				
+		<!-- 파일 업로그 시작 -->
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>${commons-io-version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-fileupload</groupId>
+		    <artifactId>commons-fileupload</artifactId>
+		    <version>${commons-fileupload-version}</version>
+		</dependency>
+		<!-- 파일 업로그 종료 -->
+		
+		<!-- JSON 시작 -->
+		<dependency>
+		    <groupId>com.google.code.gson</groupId>
+		    <artifactId>gson</artifactId>
+		    <version>${com.google.code.gson-version}</version>
+		</dependency>
+		<!-- JSON 종료 -->
+		
+		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>${jackson-version}</version>
+		</dependency>
+				
+		<!-- jstl 시작 -->		
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<!-- jstl 종료 -->
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		
+	</dependencies>
+    <build>
+    	<sourceDirectory>src/java</sourceDirectory>
+    	<plugins>
+	      	<plugin>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <version>3.6.1</version>
+		        <configuration>
+		          	<source>1.8</source>
+		          	<target>1.8</target>
+		        </configuration>
+	      	</plugin>
+	      	
+	      	<plugin>
+		    	<groupId>org.apache.maven.plugins</groupId>
+		      	<artifactId>maven-dependency-plugin</artifactId>
+		      	<executions>
+		        	<execution>
+		            	<id>copy-dependencies</id>
+		            	<phase>prepare-package</phase>
+		            	<goals>
+		              		<goal>copy-dependencies</goal>
+		            	</goals>
+		            	<configuration>
+		               		<outputDirectory>${project.basedir}/src/main/webapp/WEB-INF/lib</outputDirectory>
+		               		<overWriteReleases>false</overWriteReleases>
+		               		<overWriteSnapshots>false</overWriteSnapshots>
+		               		<overWriteIfNewer>true</overWriteIfNewer>
+		               		<includeScope>runtime</includeScope>
+		               		<excludeScope>provided</excludeScope> 
+		            	</configuration>
+		        	</execution>
+		      	</executions>
+	    	</plugin>
+	    </plugins>
+	    <finalName>${project.artifactId}</finalName>
+  	</build>
+</project>

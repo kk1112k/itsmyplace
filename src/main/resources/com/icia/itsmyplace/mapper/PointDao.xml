@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.PointDao">
+
+
+<insert id="pointInsert" parameterType="com.icia.itsmyplace.model.Point">
+
+<selectKey resultType="long" keyProperty="pointSeq" order="BEFORE">
+   SELECT TBL_POINT_POINT_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+
+INSERT INTO TBL_POINT(
+	POINT_SEQ,
+	USER_ID,
+	SAVE_POINT,
+	SAVE_PATH,
+	SAVE_DATE,
+	DEL_DATE,
+<if test='rsrvSeq != null and rsrvSeq != ""'>
+	RSRV_SEQ,
+</if>
+	STATUS
+)VALUES(
+	#{pointSeq},
+	#{userId},
+	#{savePoint},
+	#{savePath},
+	SYSDATE,
+	SYSDATE + 365,
+<if test='rsrvSeq != null and rsrvSeq != ""'>
+	#{rsrvSeq},
+</if>
+	'Y'
+)
+</insert>
+
+
+
+
+</mapper>

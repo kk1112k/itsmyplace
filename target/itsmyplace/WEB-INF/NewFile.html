@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="web.css" />
+<link rel="stylesheet" media="(max-width: 1920px)" href="mobile.css" />
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 10px;
+  font-family: Gulim;
+  background: #eee;
+  border: solid;
+}
+
+.id{
+   float: right;
+   text-align: right;
+    border: solid;
+    font-size: 15px;
+}
+
+.header {
+  padding: 10px;
+  text-align: center;
+  background: white;
+   border: solid;
+}
+
+.header h1 {
+  font-size: 40px;
+  
+}
+
+.nav {
+  overflow: hidden;
+   border: solid;
+}
+
+.nav a {
+  float: left;
+  text-align: center;
+  padding: 12px 12px;
+  text-decoration: none;
+}
+.right {
+  float: right;
+  text-align: center;
+  padding: 12px 12px;
+  text-decoration: none;
+}
+
+.fakeimg {
+  width: 100%;
+  padding: 20px;
+  background-color: gray;
+}
+
+.card {
+  background-color: white;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.footer {
+  padding: 10px;
+  text-align: center;
+  background: white;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<!-- header 영역 -->
+<div class="id">
+
+      <a href="#">로그인</a>
+      <a href="#">회원가입</a>
+      <a href="#">마이페이지</a>
+      <a href="#">고객센터</a>
+</div>
+<div class="header">
+  <h1>내자리얌</h1>
+</div>
+<!-- navigator 영역 -->
+<div class="nav">
+<ul>
+<li class= "left">
+  <a href="#">내자리얌</a>
+  <a href="#">입점카페</a>
+  <a href="#">공지사항</a>
+  <a href="#">이벤트</a>
+  <a href="#">구매후기</a>
+  <a href="#">커뮤니티</a>
+ </li>
+ <div class="right">
+ <li class ="2">
+ <a href="#"><img src="./2.png"></a>
+  </li> 
+ </div>
+
+</ul>
+</div>
+<!-- main content 영역 -->
+<div class="row">
+      <h2>광고 들어갈 영역</h2>
+      <div class="fakeimg" style="height:200px;">image</div>
+</div>
+<div class="row">
+      <h2>카페 영역</h2>
+      <div class="fakeimg" style="height:200px;">
+         <a href="#">카페1</a>
+         <a href="#">카페2</a>
+         <a href="#">카페3</a>
+         <a href="#">카페4</a>
+       </div>
+</div>
+<div class="row">
+      <h2>리뷰 영역</h2>
+      <div class="fakeimg" style="height:100px;">
+      <a href="#">리뷰1</a>
+         <a href="#">리뷰2</a>
+         <a href="#">리뷰3</a>
+         <a href="#">리뷰4</a>
+      </div>
+</div>
+<div class="row">
+      <h2>게시판 바로가기 영역</h2>
+      <div class="fakeimg" style="height:100px;">
+      <a href="#">게1</a>
+         <a href="#">게2</a>
+         <a href="#">게3</a>
+         <a href="#">게4</a>
+      </div>
+</div>
+
+<!-- footer 영역 -->
+<div class="footer">
+  <h3>link: 내자리얌</h3>
+</div>
+</body>
+</html>

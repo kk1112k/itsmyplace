@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.OrderDao">
+
+<resultMap id="orderResultMap" type="com.icia.itsmyplace.model.Order">
+	<id column="RSRV_SEQ" property="rsrvSeq"/>
+	<result column="ORDER_NUM" property="orderNum"/>
+	<result column="CAFE_NUM" property="cafeNum"/>
+	<result column="MENU_NUM" property="menuNum"/>
+	<result column="MENU_COUNT" property="menuCount"/>
+	<result column="MENU_NAME" property="menuName" />
+</resultMap>
+
+<insert id="orderInsert" parameterType="com.icia.itsmyplace.model.Order">
+<selectKey resultType="int" keyProperty="orderNum" order="BEFORE">
+   SELECT NVL(MAX(ORDER_NUM),0)+1 FROM TBL_ORDER WHERE RSRV_SEQ = #{rsrvSeq}
+</selectKey>
+INSERT INTO TBL_ORDER (
+    RSRV_SEQ,
+    ORDER_NUM,
+    CAFE_NUM,
+    MENU_NUM,
+    MENU_COUNT
+) VALUES (
+    #{rsrvSeq},
+    #{orderNum},
+    #{cafeNum},
+    #{menuNum},
+    #{menuCount}
+)
+
+</insert>
+
+<select id="myOrderList" parameterType="long" resultMap="orderResultMap">
+SELECT 
+	A.ORDER_NUM, A.MENU_COUNT, B.MENU_NAME
+FROM 
+	TBL_ORDER A, MENU B
+WHERE
+	  A.RSRV_SEQ = #{value} 
+  AND A.CAFE_NUM = B.CAFE_NUM
+  AND A.MENU_NUM = B.MENU_NUM
+</select>
+
+<!-- 카페 소개페이지 베스트 메뉴 조회용 -->
+<select id="BestSellerList" parameterType="string" resultType="string">
+SELECT
+        MENU_NUM
+FROM    (   SELECT
+               NVL(MENU_NUM, '') AS MENU_NUM,
+               SUM(MENU_COUNT) AS CNT
+            FROM
+                TBL_ORDER
+            WHERE
+                CAFE_NUM = #{VALUE}
+            GROUP BY MENU_NUM
+            ORDER BY CNT DESC)
+WHERE   ROWNUM <![CDATA[>=]]> 1
+        AND ROWNUM <![CDATA[<=]]> 3
+</select>
+
+</mapper>

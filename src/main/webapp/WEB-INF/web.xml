@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+                             http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+
+	<display-name>itsmyplace</display-name>
+	
+	<!-- contextConfigLocation 시작 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/config/spring/root-context.xml</param-value>
+	</context-param>
+	<!-- contextConfigLocation 종료 -->
+	
+	<!-- ContextLoaderListener 시작 -->
+	<!-- 
+	    계층별로 나눈 xml 설정파일이 있다고 가정할 때,
+        web.xml에서 모두 load되도록 등록할 때 사용.
+        서블릿 이전에 서블릿 초기화하는 용도록 쓰이며, 
+        contextConfigLocation라는 파라미터를 쓰면, 
+        Context Loader가 load할 수 있는 설정파일을 여거개 쓸 수 있다.
+	 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<!-- ContextLoaderListener 종료 -->
+	
+	<!-- CharacterEncodingFilter 시작 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+	    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+	    <init-param>
+	    	<param-name>encoding</param-name>
+	    	<param-value>UTF-8</param-value>
+	  	</init-param>
+	  	<init-param>
+	    	<param-name>forceEncoding</param-name>
+	    	<param-value>true</param-value>
+	  	</init-param>
+	</filter>
+	
+	<filter-mapping>
+    	<filter-name>encodingFilter</filter-name>
+    	<url-pattern>/*</url-pattern>
+  	</filter-mapping>
+  	<!-- CharacterEncodingFilter 종료 -->
+	
+	<!-- DispatcherServlet 시작 -->
+	<!--
+		클라이언트의 요청을 전달 받아 url 과 일치하는 Controller에게 클라이언트의 요청을 전달하고, 
+		Controller가 리턴한 결과값을 View 에 전달 한다.
+	 -->
+	<servlet>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/config/spring/servlet-context.xml</param-value>
+		</init-param>
+		<!--
+			클라이언트가 요청한 URL을 처리할 핸들러가 없으면 404 에러가 발생하고
+			이를 DispatcherServlet 에서 처리한다.
+			
+			Rest API를 만들때는 아래 throwExceptionIfNoHandlerFound 를 true로 만들면
+			전역 예외처리 @RestControllerAdvice 에서 NoHandlerFoundException 로 처리를 할수가 있다.
+		-->
+		<init-param>
+            <param-name>throwExceptionIfNoHandlerFound</param-name>
+            <param-value>true</param-value>
+ 		</init-param>
+ 		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>dispatcherServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<!-- DispatcherServlet 종료 -->
+	
+</web-app>

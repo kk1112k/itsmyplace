@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.ReviewDao">
+
+<resultMap id="reviewResultMap" type="com.icia.itsmyplace.model.Review">
+	<id column="RSRV_SEQ" property="rsrvSeq" />
+	<result column="BBS_TITLE" property="bbsTitle"></result>
+	<result column="BBS_CONTENT" property="bbsContent"></result>
+	<result column="BBS_READ_CNT" property="bbsReadCnt"></result>
+	<result column="REG_DATE" property="regDate"></result>
+	<result column="BBS_STAR" property="bbsStar"></result>
+	<result column="BBS_PUBLIC" property="bbsPublic"></result>
+	<result column="USER_ID" property="userId"></result>
+	<result column="USER_GENDER" property="userGender"></result>
+	<result column="CAFE_NUM" property="cafeNum"></result>
+	<result column="CAFE_NAME" property="cafeName"></result>
+	<result column="PHT_NUM" property="phtNum"></result>
+	<result column="PHT_NAME" property="phtName"></result>
+	<result column="PHT_ORG_NAME" property="phtOrgName"></result>
+	<result column="PHT_NUM_FOR_UPDATE" property="phtNumForUpdate"></result>
+	<result column="ADMIN_PUBLIC" property="adminPublic"></result>
+</resultMap>
+   
+<resultMap id="reviewPhtResultMap" type="com.icia.itsmyplace.model.ReviewPht">
+	<id column="RSRV_SEQ" property="rsrvSeq" />
+	<id column="PHT_NUM" property="phtNum" />
+	<id column="PHT_NAME" property="phtName" />
+	<result column="PHT_ORG_NAME" property="phtOrgName"></result>
+	<result column="PHT_SIZE" property="phtSize"></result>
+	<result column="PHT_EXT" property="phtExt"></result>
+	<result column="REG_DATE" property="regDate"></result>
+</resultMap>
+
+<!-- 게시물 등록 -->
+<insert id="reviewInsert" parameterType="com.icia.itsmyplace.model.Review">
+INSERT INTO REVIEW (
+    RSRV_SEQ,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    BBS_STAR,
+    BBS_PUBLIC,
+    ADMIN_PUBLIC
+) VALUES (
+    #{rsrvSeq},
+    #{bbsTitle},
+    #{bbsContent},
+    0,
+    SYSDATE,
+    #{bbsStar},
+    #{bbsPublic},
+    'Y'
+)
+</insert>
+
+<!-- 첨부파일 등록 -->
+<insert id="reviewPhtInsert" parameterType="com.icia.itsmyplace.model.ReviewPht">
+INSERT INTO REVIEW_PHT (
+    RSRV_SEQ,
+    PHT_NUM,
+    PHT_NAME,
+    PHT_ORG_NAME,
+    PHT_SIZE,
+    PHT_EXT,
+    REG_DATE
+) VALUES (
+    #{rsrvSeq},
+    #{phtNum},
+    #{phtName},
+    #{phtOrgName},
+    #{phtSize},
+    #{phtExt},
+    SYSDATE
+)
+</insert>
+
+<update id="payStatusUpdate" parameterType="com.icia.itsmyplace.model.Pay">
+UPDATE PAY
+SET
+   PAY_STEP = '400'
+WHERE
+   RSRV_SEQ = #{rsrvSeq}
+</update>
+
+<!-- 총 게시물 수 -->
+<select id="reviewListCount" parameterType="com.icia.itsmyplace.model.Review" resultType="long">
+SELECT
+    COUNT(A.RSRV_SEQ) CNT
+FROM
+    REVIEW A, RSRV B, CAFE C
+WHERE
+    A.RSRV_SEQ = B.RSRV_SEQ
+AND    
+    B.CAFE_NUM = C.CAFE_NUM
+AND
+	A.ADMIN_PUBLIC = 'Y'
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose>
+      <when test='searchType == "1"'>
+AND
+    C.CAFE_NAME LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "2"'>
+AND
+    A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "3"'>
+AND
+    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>
+    </choose>
+</if>
+</select>
+
+<!-- 후기 페이지 리스트(후기페이지) -->
+<select id="reviewList" parameterType="com.icia.itsmyplace.model.Review" resultMap="reviewResultMap">
+SELECT
+    RSRV_SEQ,
+    BBS_TITLE,
+    BBS_CONTENT,
+    REG_DATE,
+    BBS_STAR,
+    BBS_PUBLIC,
+    USER_ID,
+    CAFE_NUM,
+    CAFE_NAME,
+    PHT_NUM,
+    PHT_NAME,
+    ADMIN_PUBLIC
+FROM (SELECT
+            ROWNUM AS RNUM,
+            RSRV_SEQ,
+            BBS_TITLE,
+            BBS_CONTENT,
+            REG_DATE,
+            BBS_STAR,
+            BBS_PUBLIC,
+            USER_ID,
+            CAFE_NUM,
+            CAFE_NAME,
+            PHT_NUM,
+            PHT_NAME,
+    		ADMIN_PUBLIC
+        FROM (SELECT
+                    A.RSRV_SEQ AS RSRV_SEQ,
+                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+                    NVL(A.BBS_PUBLIC, 'N') AS BBS_PUBLIC,
+                    NVL(B.USER_ID, '') AS USER_ID,
+                    NVL(B.CAFE_NUM, '') AS CAFE_NUM,
+                    NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+                    D.PHT_NUM AS PHT_NUM,
+                   	NVL(D.PHT_NAME, '') AS PHT_NAME,
+                   	NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                FROM
+                    REVIEW A, RSRV B, CAFE C, (SELECT RSRV_SEQ, PHT_NAME, PHT_NUM FROM REVIEW_PHT WHERE PHT_NUM = 1) D
+                WHERE
+                    A.RSRV_SEQ = B.RSRV_SEQ
+                AND    
+                    B.CAFE_NUM = C.CAFE_NUM
+                AND 
+                	A.RSRV_SEQ  = D.RSRV_SEQ(+)
+                AND
+                	A.ADMIN_PUBLIC = 'Y'
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue !=""'>
+   <choose>
+      <when test='searchType == "1"'>
+                AND
+                	 C.CAFE_NAME LIKE '%'|| #{searchValue} ||'%'
+        </when>
+        <when test='searchType == "2"'>
+               	AND
+               		A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+        </when>
+        <when test='searchType == "3"'>
+              	AND
+                	DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+        </when>
+    </choose>
+</if>
+                ORDER BY 
+                    REG_DATE DESC))
+WHERE RNUM <![CDATA[>=]]> #{startRow}
+  AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+
+<!-- 카페별 후기 리스트-->
+<select id="cafeReviewList" parameterType="String" resultMap="reviewResultMap">
+SELECT
+    RSRV_SEQ,
+    BBS_TITLE,
+    BBS_CONTENT,
+    REG_DATE,
+    BBS_STAR,
+    BBS_PUBLIC,
+    USER_ID,
+    CAFE_NUM,
+    USER_GENDER
+FROM (SELECT
+            ROWNUM AS RNUM,
+            RSRV_SEQ,
+            BBS_TITLE,
+            BBS_CONTENT,
+            REG_DATE,
+            BBS_STAR,
+            BBS_PUBLIC,
+            USER_ID,
+            CAFE_NUM,
+            USER_GENDER
+        FROM (SELECT
+                    A.RSRV_SEQ AS RSRV_SEQ,
+                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+                    NVL(A.BBS_PUBLIC, 'N') AS BBS_PUBLIC,
+                    NVL(B.USER_ID, '') AS USER_ID,
+                    NVL(B.CAFE_NUM, '') AS CAFE_NUM,
+                    NVL(C.USER_GENDER, '') AS USER_GENDER
+                FROM
+                    REVIEW A, RSRV B, TBL_USER C
+                WHERE
+                    B.CAFE_NUM = #{value}
+                AND
+                    A.RSRV_SEQ = B.RSRV_SEQ
+                AND 
+                    B.USER_ID  = C.USER_ID
+                ORDER BY 
+                    REG_DATE DESC))
+WHERE RNUM <![CDATA[>=]]> 1
+  AND RNUM <![CDATA[<=]]> 3
+</select>
+
+
+<!-- 입점카페 모아보기 후기 리스트-->
+<select id="allCafeReviewList" parameterType="String" resultMap="reviewResultMap">
+SELECT
+    RSRV_SEQ,
+    BBS_TITLE,
+    BBS_CONTENT,
+    REG_DATE,
+    BBS_STAR,
+    BBS_PUBLIC,
+    USER_ID,
+    CAFE_NUM,
+    USER_GENDER
+FROM (SELECT
+            ROWNUM AS RNUM,
+            RSRV_SEQ,
+            BBS_TITLE,
+            BBS_CONTENT,
+            REG_DATE,
+            BBS_STAR,
+            BBS_PUBLIC,
+            USER_ID,
+            CAFE_NUM,
+            USER_GENDER
+        FROM (SELECT
+                    A.RSRV_SEQ AS RSRV_SEQ,
+                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+                    NVL(A.BBS_PUBLIC, 'N') AS BBS_PUBLIC,
+                    NVL(B.USER_ID, '') AS USER_ID,
+                    NVL(B.CAFE_NUM, '') AS CAFE_NUM,
+                    NVL(C.USER_GENDER, '') AS USER_GENDER
+                FROM
+                    REVIEW A, RSRV B, TBL_USER C
+                WHERE
+                    B.CAFE_NUM = #{value}
+                AND
+                    A.RSRV_SEQ = B.RSRV_SEQ
+                AND 
+                    B.USER_ID  = C.USER_ID
+                ORDER BY 
+                    REG_DATE DESC))
+WHERE RNUM = 1
+</select>
+
+
+
+<!-- 게시물 조회-->
+<select id="reviewSelect" parameterType="long" resultMap="reviewResultMap">
+SELECT
+    A.RSRV_SEQ AS RSRV_SEQ,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+    NVL(A.BBS_PUBLIC, 'N') AS BBS_PUBLIC,
+    NVL(B.USER_ID, '') AS USER_ID,
+    NVL(B.CAFE_NUM, '') AS CAFE_NUM,
+    NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+FROM
+    REVIEW A, RSRV B, CAFE C
+WHERE
+	A.RSRV_SEQ = #{value}
+AND  
+    A.RSRV_SEQ = B.RSRV_SEQ
+AND    
+    B.CAFE_NUM = C.CAFE_NUM
+AND 
+	A.ADMIN_PUBLIC = 'Y' s
+</select>
+
+<!-- 첨부사진 조회 -->
+<select id="reviwPhtSelect" parameterType="long" resultMap="reviewPhtResultMap">
+SELECT
+    RSRV_SEQ,
+    PHT_NUM,
+    NVL(PHT_NAME, '') AS PHT_NAME,
+    NVL(PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(PHT_EXT, '') AS PHT_EXT,
+    REG_DATE
+FROM
+    REVIEW_PHT
+WHERE 
+    RSRV_SEQ = #{value}
+AND
+	PHT_NUM = 1
+</select>
+
+
+<!-- 모달 첨부사진 조회 -->
+<select id="modalPhtList" parameterType="long" resultMap="reviewPhtResultMap">
+SELECT
+    RSRV_SEQ,
+    PHT_NUM,
+    NVL(PHT_NAME, '') AS PHT_NAME,
+    NVL(PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(PHT_EXT, '') AS PHT_EXT,
+    REG_DATE
+FROM
+    REVIEW_PHT
+WHERE 
+    RSRV_SEQ = #{value}
+</select>
+
+<!-- 첨부사진 낱개 삭제 -->
+<delete id="reviewPhtDelete" parameterType="com.icia.itsmyplace.model.ReviewPht">
+DELETE FROM REVIEW_PHT
+WHERE
+     RSRV_SEQ = #{rsrvSeq}
+ AND PHT_NUM = #{phtNum}
+</delete>
+
+<delete id="reviewPhtDeleteAll" parameterType="long">
+DELETE FROM REVIEW_PHT
+WHERE
+     RSRV_SEQ = #{value}
+</delete>
+
+<!-- 게시물 업데이트 -->
+<update id="reviewUpdate" parameterType="com.icia.itsmyplace.model.Review">
+UPDATE REVIEW
+SET
+    BBS_TITLE = #{bbsTitle},
+    BBS_CONTENT = #{bbsContent},
+    BBS_STAR = #{bbsStar},
+    BBS_PUBLIC = #{bbsPublic} 
+WHERE
+    RSRV_SEQ = #{rsrvSeq}
+</update>
+
+<update id="reviewPhtUpdate" parameterType="com.icia.itsmyplace.model.ReviewPht">
+UPDATE REVIEW_PHT
+SET
+    PHT_NUM = #{phtNumForUpdate}
+WHERE
+    RSRV_SEQ = #{rsrvSeq}
+AND PHT_NUM = #{phtNum}
+</update>
+
+<!-- 게시글 삭제 -->
+<delete id="reviewDelete" parameterType="long">
+DELETE FROM REVIEW
+WHERE
+       RSRV_SEQ = #{value}
+</delete>
+
+</mapper>

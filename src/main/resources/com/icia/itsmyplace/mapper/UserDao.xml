@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.UserDao">
+
+<resultMap type="com.icia.itsmyplace.model.User" id="userResultMap">
+	<id column="USER_ID" property="userId" />
+	<result column="USER_CLASS" property="userClass" />
+	<result column="AREA_NUM" property="areaNum" />
+	<result column="SUBAREA_NUM" property="subAreaNum" />
+	<result column="USER_PWD" property="userPwd" />
+	<result column="USER_NAME" property="userName" />
+	<result column="USER_EMAIL" property="userEmail" />
+	<result column="USER_GENDER" property="userGender" />
+	<result column="STATUS" property="status" />
+	<result column="REG_DATE" property="regDate" />
+	<result column="TOTAL_POINT" property="totalPoint" />
+	<result column="AREA_NAME" property="areaName" />
+	<result column="SUBAREA_NAME" property="subAreaName" />
+</resultMap>
+
+<!-- 로그인 조회 -->
+<select id="userSelect" parameterType="string" resultMap="userResultMap">
+SELECT
+    USER_ID,
+    NVL(USER_CLASS, '') AS USER_CLASS,
+    NVL(AREA_NUM, '') AS AREA_NUM,
+    NVL(SUBAREA_NUM, '') AS SUBAREA_NUM,
+    NVL(USER_PWD, '') AS USER_PWD,
+    NVL(USER_NAME, '') AS USER_NAME,
+    NVL(USER_EMAIL, '') AS USER_EMAIL,
+    NVL(USER_GENDER, '') AS USER_GENDER, 
+    NVL(STATUS, '') AS STATUS,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(TOTAL_POINT, 0) AS TOTAL_POINT
+FROM
+    TBL_USER
+WHERE
+    USER_ID = #{value}
+</select>
+
+<!-- 지역조회(마이페이지에담을부분) -->
+<select id="userAreaSelect" parameterType="string" resultMap="userResultMap">
+SELECT
+    B.AREA_NAME,
+    C.SUBAREA_NAME
+FROM
+    TBL_USER A, AREA B, SUBAREA C
+WHERE
+	A.USER_ID = #{value}
+	AND
+    A.AREA_NUM = B.AREA_NUM
+    AND
+    A.SUBAREA_NUM = C.SUBAREA_NUM
+</select>
+
+
+<insert id="userInsert" parameterType="com.icia.itsmyplace.model.User">
+
+INSERT INTO TBL_USER (
+    USER_ID,
+	USER_CLASS,
+	AREA_NUM,
+	SUBAREA_NUM,
+	USER_PWD,
+	USER_NAME,
+	USER_EMAIL,
+	USER_GENDER,
+	STATUS,
+	REG_DATE,
+	TOTAL_POINT
+) VALUES (
+    #{userId},
+    #{userClass},
+    #{areaNum},
+    #{subAreaNum},
+    #{userPwd},
+    #{userName},
+    #{userEmail},
+    #{userGender},
+    #{status},
+    SYSDATE,
+    #{totalPoint}
+)
+
+</insert>
+
+<update id="userUpdate" parameterType="com.icia.itsmyplace.model.User">
+UPDATE TBL_USER
+SET
+    USER_PWD = #{userPwd},
+    USER_NAME = #{userName},
+    USER_EMAIL = #{userEmail},
+    AREA_NUM = #{areaNum},
+    SUBAREA_NUM = #{subAreaNum},
+    TOTAL_POINT = TOTAL_POINT + #{totalPoint}
+WHERE
+	USER_ID = #{userId}
+</update>
+
+<update id="userWithdrawal" parameterType="com.icia.itsmyplace.model.User">
+UPDATE TBL_USER
+SET
+    STATUS = 'N'
+WHERE
+	USER_ID = #{userId}
+</update>
+
+<update id="userPointUpdate" parameterType="com.icia.itsmyplace.model.User">
+UPDATE TBL_USER
+SET
+	TOTAL_POINT = TOTAL_POINT - #{payPoint}
+WHERE 
+	USER_ID = #{userId}
+
+</update>
+</mapper>

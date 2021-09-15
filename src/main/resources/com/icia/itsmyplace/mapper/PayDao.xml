@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.PayDao">
+
+<resultMap type="com.icia.itsmyplace.model.Pay" id="payResultMap">
+	<id column="RSRV_SEQ" property="rsrvSeq" />
+	<result column="PAY_POINT" property="payPoint" />
+	<result column="ORIGIN_PRICE" property="originPrice" />
+	<result column="TOTAL_PRICE" property="totalPrice" />
+	<result column="PAY_DATE" property="payDate" />
+	<result column="PAY_STEP" property="payStep" />
+</resultMap>
+
+<insert id="payInsert" parameterType="com.icia.itsmyplace.model.Pay">
+INSERT INTO PAY (
+    RSRV_SEQ,
+    PAY_POINT,
+    ORIGIN_PRICE,
+    TOTAL_PRICE,
+    PAY_DATE,
+    PAY_STEP
+) VALUES (
+    #{rsrvSeq},
+    #{payPoint},
+    #{originPrice},
+    #{totalPrice},
+    SYSDATE,
+    #{payStep}
+)
+</insert>
+<!-- 결제상태만 변경 -->
+<update id="payStatusUpdate" parameterType="com.icia.itsmyplace.model.Pay">
+UPDATE PAY
+SET
+   PAY_STEP = #{payStep},
+   PAY_DATE = SYSDATE
+WHERE
+   RSRV_SEQ = #{rsrvSeq}
+</update>
+
+<!-- 결제정보전체변경(포인트결제눌렀다가 카카오페이결제하는경우 및 반대의 경우 -->
+<update id="payUpdateAll" parameterType="com.icia.itsmyplace.model.Pay">
+UPDATE PAY
+SET
+    RSRV_SEQ = #{rsrvSeq},
+    PAY_STEP = #{payStep},
+    PAY_POINT = #{payPoint},
+    ORIGIN_PRICE = #{originPrice},
+    TOTAL_PRICE = #{totalPrice},
+    PAY_DATE = SYSDATE
+    
+WHERE
+	RSRV_SEQ = #{rsrvSeq}
+</update>
+
+<select id="paySelect" parameterType="long" resultMap="payResultMap">
+SELECT
+	RSRV_SEQ,
+	PAY_POINT,
+	ORIGIN_PRICE,
+	TOTAL_PRICE,
+	PAY_DATE,
+	PAY_STEP
+FROM
+	PAY
+WHERE
+	RSRV_SEQ = #{rsrvSeq}
+</select>
+<insert id="refundInsert" parameterType="com.icia.itsmyplace.model.Refund">
+INSERT INTO REFUND (
+    RSRV_SEQ,
+    RFD_REASON,
+    RFD_METHOD
+) VALUES (
+    #{rsrvSeq},
+    #{rfdReason},
+    '전액포인트환불'
+)
+</insert>
+
+</mapper>

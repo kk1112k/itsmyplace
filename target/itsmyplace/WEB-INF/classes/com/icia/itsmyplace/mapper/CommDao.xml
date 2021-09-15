@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.CommDao">
+
+<resultMap id="commResultMap" type="com.icia.itsmyplace.model.Comm">
+<id column="BBS_SEQ" property="bbsSeq"/>
+<result column="USER_ID" property="userId"/>
+<result column="USER_NAME" property="userName"/>
+<result column="BBS_TITLE" property="bbsTitle"/>
+<result column="BBS_CONTENT" property="bbsContent"/>
+<result column="BBS_READ_CNT" property="bbsReadCnt"/>
+<result column="REG_DATE" property="regDate"/>
+<result column="BBS_PUBLIC" property="bbsPublic"/>
+</resultMap>
+
+<resultMap id="commPhtResultMap" type="com.icia.itsmyplace.model.CommPht">
+<id column="BBS_SEQ" property="bbsSeq"/>
+<id column="PHT_NUM" property="phtNum"/>
+<result column="PHT_NAME" property="phtName"/>
+<result column="PHT_ORG_NAME" property="phtOrgName"/>
+<result column="PHT_SIZE" property="phtSize"/>
+<result column="PHT_EXT" property="phtExt"/>
+<result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<resultMap id="commCmtResultMap" type="com.icia.itsmyplace.model.CommCmt">
+<id column="BBS_SEQ" property="bbsSeq"/>
+<id column="CMT_SEQ" property="cmtSeq"/>
+<result column="USER_ID" property="userId"/>
+<result column="CMT_GROUP" property="cmtGroup"/>
+<result column="CMT_ORDER" property="cmtOrder"/>
+<result column="CMT_INDENT" property="cmtIndent"/>
+<result column="CMT_CONTENT" property="cmtContent"/>
+<result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<select id="commListCount" parameterType="com.icia.itsmyplace.model.Comm" resultType="long">
+SELECT 	COUNT(A.BBS_SEQ)
+  FROM 	COMMUNITY A, TBL_USER B
+ WHERE 	B.USER_ID = A.USER_ID
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+	<choose>
+		<when test='searchType == "1"'>
+AND
+	B.USER_NAME LIKE '%' || #{searchValue} || '%'
+		</when>
+		
+		<when test='searchType == "2"'>
+AND
+	A.BBS_TITLE LIKE '%' || #{searchValue} || '%'
+		</when>
+		
+		<when test='searchType == "3"'>
+AND
+	A.BBS_CONTENT LIKE '%' || #{searchValue} || '%'
+		</when>
+	</choose>
+</if>
+</select>
+
+<select id="commList" parameterType="com.icia.itsmyplace.model.Comm" resultMap="commResultMap">
+SELECT      RNUM,
+            BBS_SEQ,
+            USER_ID,
+            USER_NAME,
+            BBS_TITLE,
+            BBS_CONTENT,
+            BBS_READ_CNT,
+            REG_DATE,
+            BBS_PUBLIC
+ FROM       (SELECT     ROWNUM AS RNUM,
+                        BBS_SEQ,
+                        USER_ID,
+                        USER_NAME,
+                        BBS_TITLE,
+                        BBS_CONTENT,
+                        BBS_READ_CNT,
+                        REG_DATE,
+                        BBS_PUBLIC
+               FROM     (SELECT     NVL(A.BBS_SEQ, 0) AS BBS_SEQ,
+                                    NVL(A.USER_ID, '') AS USER_ID,
+                                    NVL(B.USER_NAME, '') AS USER_NAME,
+                                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                                    NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+                            FROM    COMMUNITY A, TBL_USER B 
+                           WHERE    B.USER_ID = A.USER_ID
+									<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+										<choose>
+											<when test='searchType == "1"'>
+									AND
+										B.USER_NAME LIKE '%' || #{searchValue} || '%'
+											</when>
+											
+											<when test='searchType == "2"'>
+									AND
+										A.BBS_TITLE LIKE '%' || #{searchValue} || '%'
+											</when>
+											
+											<when test='searchType == "3"'>
+									AND
+										A.BBS_CONTENT LIKE '%' || #{searchValue} || '%'
+											</when>
+										</choose>
+									</if>
+                           ORDER BY BBS_SEQ DESC))
+WHERE 		RNUM <![CDATA[>=]]> #{startRow}
+  	  	AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+
+<select id="commSelect" parameterType="long" resultMap="commResultMap">
+SELECT
+    NVL(A.BBS_SEQ, 0) AS BBS_SEQ,
+    NVL(B.USER_NAME, '') AS USER_NAME,
+    NVL(A.USER_ID, '') AS USER_ID,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+FROM
+    COMMUNITY A, TBL_USER B
+WHERE	BBS_SEQ = #{value}
+		AND B.USER_ID = A.USER_ID
+</select>
+
+<insert id="commInsert" parameterType="com.icia.itsmyplace.model.Comm">
+<selectKey resultType="long" keyProperty="bbsSeq" order="BEFORE">
+   SELECT COMMUNITY_BBS_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+INSERT INTO COMMUNITY (
+    BBS_SEQ,
+    USER_ID,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE,
+    BBS_PUBLIC
+) VALUES (
+    #{bbsSeq},
+    #{userId},
+    #{bbsTitle},
+    #{bbsContent},
+    #{bbsReadCnt},
+    SYSDATE,
+    'Y'
+)
+</insert>
+
+<insert id="commPhtInsert" parameterType="com.icia.itsmyplace.model.CommPht">
+INSERT INTO COMM_PHT (
+    BBS_SEQ,
+    PHT_NUM,
+    PHT_NAME,
+    PHT_ORG_NAME,
+    PHT_SIZE,
+    PHT_EXT,
+    REG_DATE
+) VALUES (
+    #{bbsSeq},
+    1,
+    #{phtName},
+    #{phtOrgName},
+    #{phtSize},
+    #{phtExt},
+    SYSDATE
+)
+</insert>
+
+<update id="bbsReadCntPlus" parameterType="long">
+UPDATE  COMMUNITY
+SET     BBS_READ_CNT = BBS_READ_CNT +1
+WHERE   BBS_SEQ = #{VALUE}
+</update>
+
+<select id="commPhtSelect" parameterType="long" resultMap="commPhtResultMap">
+SELECT
+    NVL(BBS_SEQ, 0) AS BBS_SEQ,
+    NVL(PHT_NUM, 0) AS PHT_NUM,
+    NVL(PHT_NAME, '') AS PHT_NAME,
+    NVL(PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(PHT_EXT, '') AS PHT_EXT,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+FROM
+    COMM_PHT
+WHERE
+	BBS_SEQ = #{VALUE}
+	AND PHT_NUM = 1
+</select>
+
+<select id="commCmtList" parameterType="long" resultMap="commCmtResultMap">
+SELECT  BBS_SEQ,
+        CMT_SEQ,
+        USER_ID,
+        CMT_GROUP,
+        CMT_ORDER,
+        CMT_INDENT,
+        CMT_CONTENT,
+        REG_DATE
+FROM (  SELECT  ROWNUM AS RNUM,
+                BBS_SEQ,
+                CMT_SEQ,
+                USER_ID,
+                CMT_GROUP,
+                CMT_ORDER,
+                CMT_INDENT,
+                CMT_CONTENT,
+                REG_DATE
+        FROM (  SELECT      NVL(BBS_SEQ, 0) AS BBS_SEQ,
+                            NVL(CMT_SEQ, 0) AS CMT_SEQ,
+                            NVL(USER_ID, '') AS USER_ID,
+                            NVL(CMT_GROUP, 0) AS CMT_GROUP,
+                            NVL(CMT_ORDER, 0) AS CMT_ORDER,
+                            NVL(CMT_INDENT, 0) AS CMT_INDENT,
+                            NVL(CMT_CONTENT, '') AS CMT_CONTENT,
+                            NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+                FROM        COMM_CMT
+                ORDER BY    CMT_GROUP DESC, CMT_ORDER ASC)
+        ORDER BY RNUM DESC)
+WHERE BBS_SEQ = #{VALUE}
+</select>
+
+<select id="commCmtSelect" parameterType="com.icia.itsmyplace.model.CommCmt" resultMap="commCmtResultMap">
+SELECT  NVL(BBS_SEQ, 0) AS BBS_SEQ,
+        NVL(CMT_SEQ, 0) AS CMT_SEQ,
+        NVL(USER_ID, '') AS USER_ID,
+        NVL(CMT_GROUP, 0) AS CMT_GROUP,
+        NVL(CMT_ORDER, 0) AS CMT_ORDER,
+        NVL(CMT_INDENT, 0) AS CMT_INDENT,
+        NVL(CMT_CONTENT, '') AS CMT_CONTENT,
+        NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+FROM    COMM_CMT
+WHERE   BBS_SEQ = #{bbsSeq}
+		AND CMT_SEQ = #{cmtSeq}
+</select>
+
+<insert id="commCmtInsert" parameterType="com.icia.itsmyplace.model.CommCmt">
+<selectKey resultType="long" keyProperty="cmtSeq" order="BEFORE">
+   SELECT COMM_CMT_CMT_SEQ.nextval FROM DUAL
+</selectKey>
+INSERT INTO COMM_CMT (
+    BBS_SEQ,
+    CMT_SEQ,
+    USER_ID,
+    CMT_GROUP,
+    CMT_ORDER,
+    CMT_INDENT,
+    CMT_CONTENT,
+    REG_DATE
+) VALUES (
+    #{bbsSeq},
+    #{cmtSeq},
+    #{userId},
+    #{cmtSeq},
+    #{cmtOrder},
+    #{cmtIndent},
+    #{cmtContent},
+    SYSDATE
+)
+</insert>
+
+<select id="commCmtListCount" parameterType="long" resultType="short">
+SELECT  COUNT(CMT_SEQ)
+FROM    COMM_CMT
+WHERE   BBS_SEQ = #{value}
+</select>
+
+<!-- 댓글 한 개 삭제 -->
+<delete id="commCmtDelete" parameterType="com.icia.itsmyplace.model.CommCmt">
+DELETE  FROM COMM_CMT
+WHERE   BBS_SEQ = #{bbsSeq}
+    AND CMT_SEQ = #{cmtSeq}
+    AND USER_ID = #{userId}
+</delete>
+
+<update id="commUpdate" parameterType="com.icia.itsmyplace.model.Comm">
+UPDATE  COMMUNITY
+SET     BBS_TITLE = #{bbsTitle},
+        BBS_CONTENT = #{bbsContent},
+        REG_DATE = SYSDATE
+WHERE   BBS_SEQ = #{bbsSeq}
+</update>
+
+<!-- 댓글 전부 삭졔 : 게시글 삭제시 필요 -->
+<delete id="commCmtDeleteAll" parameterType="long">
+DELETE FROM	COMM_CMT
+WHERE		BBS_SEQ = #{value}
+</delete>
+
+<delete id="commDelete" parameterType="long">
+DELETE FROM COMMUNITY
+WHERE		BBS_SEQ = #{value}
+</delete>
+
+<delete id="commPhtDeleteAll" parameterType="long">
+DELETE FROM	COMM_PHT
+WHERE	BBS_SEQ = #{value}
+</delete>
+
+</mapper>

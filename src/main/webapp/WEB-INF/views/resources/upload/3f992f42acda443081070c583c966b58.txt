@@ -1,0 +1,10 @@
+1. 입력한 값의 약수만 출력하는 프로그램
+2. 1~10까지 수에 홀수만 출력하는 프로그램
+4. 피보나치 수열
+5. 스머핑 스니핑 스푸핑
+6. 기본키, 외래키, 후보키 등등 SQL 정리
+7. DDL(create, alter, drop, truncate), DML(select, update, delete, insert) , DCL(grant, revoke)
+
+
+
+

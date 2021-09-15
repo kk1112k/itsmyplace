@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.RsRvDao">
+<resultMap id="rsRvResultMap" type="com.icia.itsmyplace.model.RsRv">
+	<id column="RSRV_SEQ" property="rsrvSeq"/>
+	<result column="USER_ID" property="userId"/>
+	<result column="RSRV_DATE" property="rsrvDate"/>
+	<result column="RSRV_TIME" property="rsrvTime"/>
+	<result column="RSRV_PPL_CNT" property="rsrvPplCnt"/>
+	<result column="CAFE_NUM" property="cafeNum"/>
+	<result column="RSRV_SEAT_LIST" property="seatList"/>
+	
+	<result column="PAY_STEP" property="payStep"/>
+	<result column="CAFE_NAME" property="cafeName"/>
+	<result column="ORIGIN_PRICE" property="originPrice"/>
+	<result column="TOTAL_PRICE" property="totalPrice"/>
+</resultMap>
+
+<!-- 카페 시간, 인원수 시간예약-->
+<insert id="rsRvInsert" parameterType="com.icia.itsmyplace.model.RsRv">
+INSERT INTO RSRV (
+    RSRV_SEQ,
+    USER_ID,
+    RSRV_DATE,
+    RSRV_TIME,
+    RSRV_PPL_CNT,
+    CAFE_NUM,
+    RSRV_SEAT_LIST
+) VALUES (
+    #{rsrvSeq},
+    #{userId},
+    TO_DATE(#{rsrvDate}, 'YYYYMMDD'),
+    #{rsrvTime},
+    #{rsrvPplCnt},
+    #{cafeNum},
+    #{seatList}
+)
+</insert>
+
+<!--  총 결제 수 -->
+<select id="myOrderCount" parameterType="com.icia.itsmyplace.model.User" resultType="long">
+SELECT
+	COUNT(A.RSRV_SEQ) AS CNT
+FROM
+	RSRV A, TBL_USER B
+WHERE
+	B.USER_ID = #{userId}
+	AND
+	B.USER_ID = A.USER_ID
+</select>
+
+<!--  결제정보조회 -->
+<select id="myOrderInfo" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="rsRvResultMap">
+SELECT
+	RSRV_SEQ,
+	RSRV_DATE,
+	RSRV_TIME,
+	CAFE_NAME,
+    PAY_STEP,
+	TOTAL_PRICE
+	FROM (SELECT ROWNUM AS RNUM,
+				 RSRV_SEQ,
+				 RSRV_DATE,
+				 RSRV_TIME,
+				 CAFE_NAME,
+                 PAY_STEP,
+				 TOTAL_PRICE
+			FROM (SELECT A.RSRV_SEQ, 
+						 NVL(TO_CHAR(A.RSRV_DATE, 'YYYY.MM.DD'),'') AS RSRV_DATE,
+						 NVL(A.RSRV_TIME,'') AS RSRV_TIME,
+                         NVL(B.PAY_STEP, '') AS PAY_STEP,
+                         NVL(B.TOTAL_PRICE, 0) AS TOTAL_PRICE,
+						 NVL(C.CAFE_NAME, '') AS CAFE_NAME
+					FROM 
+						 RSRV A, PAY B, CAFE C
+					WHERE 
+						 A.USER_ID = #{userId}
+					 AND C.CAFE_NUM = A.CAFE_NUM
+					 AND A.RSRV_SEQ = B.RSRV_SEQ
+                   ORDER BY A.RSRV_SEQ DESC))
+WHERE RNUM <![CDATA[>=]]> #{startRow}
+  AND RNUM <![CDATA[<=]]> #{endRow}
+
+<!--  
+SELECT 
+	A.RSRV_SEQ, 
+	NVL(TO_CHAR(A.RSRV_DATE, 'YYYY.MM.DD'),'') AS RSRV_DATE,
+	NVL(A.RSRV_TIME,'') AS RSRV_TIME,
+	NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+	NVL(B.TOTAL_PRICE, 0) AS TOTAL_PRICE
+FROM 
+	RSRV A, PAY B, CAFE C
+WHERE 
+	A.USER_ID = #{userId}
+AND C.CAFE_NUM = A.CAFE_NUM
+AND A.RSRV_SEQ = B.RSRV_SEQ
+	ORDER BY A.RSRV_SEQ DESC-->
+</select>
+
+<select id="rsRvSelect" parameterType="long" resultMap="rsRvResultMap">
+SELECT 
+     A.RSRV_SEQ, 
+     NVL(A.USER_ID,'') AS USER_ID,
+     NVL(TO_CHAR(A.RSRV_DATE, 'YYYY.MM.DD'),'') AS RSRV_DATE,
+     NVL(A.RSRV_TIME,'') AS RSRV_TIME,
+     NVL(B.PAY_STEP, '') AS PAY_STEP,
+     NVL(B.TOTAL_PRICE, 0) AS TOTAL_PRICE,
+     NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+     NVL(A.CAFE_NUM, '') AS CAFE_NUM,
+     NVL(A.RSRV_PPL_CNT, 0) AS RSRV_PPL_CNT,
+     NVL(A.RSRV_SEAT_LIST, '') AS RSRV_SEAT_LIST,
+     NVL(B.ORIGIN_PRICE, 0) AS ORIGIN_PRICE
+FROM 
+     RSRV A, PAY B, CAFE C
+WHERE 
+     A.RSRV_SEQ = #{value}
+ AND C.CAFE_NUM = A.CAFE_NUM
+ AND A.RSRV_SEQ = B.RSRV_SEQ
+</select>
+
+
+</mapper>

@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.AdminDao">
+
+<resultMap type="com.icia.itsmyplace.model.User" id="adminUserResultMap">
+   <id column="USER_ID" property="userId" />
+   <result column="USER_CLASS" property="userClass" />
+   <result column="AREA_NUM" property="areaNum" />
+   <result column="SUBAREA_NUM" property="subAreaNum" />
+   <result column="USER_PWD" property="userPwd" />
+   <result column="USER_NAME" property="userName" />
+   <result column="USER_EMAIL" property="userEmail" />
+   <result column="USER_GENDER" property="userGender" />
+   <result column="STATUS" property="status" />
+   <result column="REG_DATE" property="regDate" />
+   <result column="TOTAL_POINT" property="totalPoint" />
+</resultMap>
+
+
+<resultMap type="com.icia.itsmyplace.model.Point" id="adminPointResultMap">
+   <id column="POINT_SEQ" property="pointSeq" />
+   <id column="USER_ID" property="userId" />
+   <result column="SAVE_POINT" property="savePoint" />
+   <result column="SAVE_PATH" property="savePath" />
+   <result column="SAVE_DATE" property="saveDate" />
+   <result column="DEL_DATE" property="delDate" />
+   <result column="RSRV_DATE" property="rsrvDate" />
+   <result column="STATUS" property="status" />
+</resultMap>
+
+
+<!-- User에 대한 처리 -->
+
+<select id="userListCount" parameterType="com.icia.itsmyplace.model.User" resultType="int">
+SELECT
+    COUNT(USER_ID) AS CNT
+  FROM
+    TBL_USER
+ WHERE
+    1 = 1
+<if test='status != null and status != ""'>    
+   AND
+    STATUS = #{status}
+</if>
+<if test='userId != null and userId != ""'>    
+   AND
+    USER_ID LIKE '%' || #{userId} || '%'
+</if>
+<if test='userName != null and userName != ""'>
+   AND
+    USER_NAME LIKE '%' || #{userName} || '%'
+</if>    
+</select>
+
+
+
+<select id="userList" parameterType="com.icia.itsmyplace.model.User" resultMap="adminUserResultMap">
+                SELECT 
+                      USER_ID,
+                      NVL(USER_CLASS, '') AS USER_CLASS,
+                      NVL(AREA_NUM, 0) AS AREA_NUM,
+                      NVL(SUBAREA_NUM, 0) AS SUBAREA_NUM,
+                      NVL(USER_PWD, '') AS USER_PWD,
+                      NVL(USER_NAME, '') AS USER_NAME,
+                      NVL(USER_EMAIL, '') AS USER_EMAIL,
+                      NVL(USER_GENDER, '') AS USER_GENDER,
+                      NVL(STATUS, '') AS STATUS,
+                      NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                      NVL(TOTAL_POINT, 0) AS TOTAL_POINT
+                      
+                  FROM
+                        TBL_USER
+                 WHERE
+                        1 = 1
+                   ORDER BY REG_DATE DESC
+</select>
+
+<select id="userSelect" parameterType="String" resultMap="adminUserResultMap">
+SELECT
+    USER_ID,
+      NVL(USER_CLASS, '') AS USER_CLASS,
+    NVL(AREA_NUM, 000) AS AREA_NUM,
+    NVL(SUBAREA_NUM, 00000) AS SUBAREA_NUM,
+    NVL(USER_PWD, '') AS USER_PWD,
+    NVL(USER_NAME, '') AS USER_NAME,
+    NVL(USER_EMAIL, '') AS USER_EMAIL,
+    NVL(USER_GENDER, '') AS USER_GENDER,
+    NVL(STATUS, '') AS STATUS,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+    NVL(TOTAL_POINT, 0) AS TOTAL_POINT
+FROM
+    TBL_USER
+WHERE
+    USER_ID = #{value}
+</select>
+
+
+<!-- 사용자 정보 수정 -->
+<update id="userUpdate" parameterType="com.icia.itsmyplace.model.User"> 
+UPDATE TBL_USER
+   SET
+       STATUS = #{status}
+ WHERE
+       USER_ID = #{userId}
+</update>
+
+<!-- Point에 대한 처리 -->
+<select id="pointListCount" parameterType="com.icia.itsmyplace.model.Point" resultType="int">
+SELECT
+    COUNT(POINT_SEQ) AS CNT
+  FROM
+    TBL_POINT
+ WHERE
+    1 = 1  
+</select>
+
+<select id="pointList" parameterType="com.icia.itsmyplace.model.Point" resultMap="adminPointResultMap">
+
+                SELECT 
+                      POINT_SEQ,
+                      USER_ID,
+                      NVL(SAVE_POINT, 0) AS SAVE_POINT,
+                      NVL(SAVE_PATH, '') AS SAVE_PATH,
+                  NVL(TO_CHAR(SAVE_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS SAVE_DATE,
+                  NVL(TO_CHAR(DEL_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS DEL_DATE,
+                      NVL(RSRV_SEQ, 0) AS RSRV_SEQ,
+                      NVL(STATUS, '') AS STATUS
+                  FROM
+                        TBL_POINT
+                 WHERE
+                        1 = 1                  
+                 ORDER BY POINT_SEQ DESC
+</select>
+
+<!-- 포인트 지급하기 -->
+<update id="userPointRewardUpdate" parameterType="com.icia.itsmyplace.model.User">
+UPDATE  TBL_USER
+   SET
+         TOTAL_POINT = TOTAL_POINT + #{payPoint}
+ WHERE 
+         USER_ID = #{userId}
+
+</update>
+
+<!-- 포인트 지급목록 넣기 -->
+
+<insert id="userPointInsert" parameterType="com.icia.itsmyplace.model.Point">
+<selectKey resultType="long" keyProperty="pointSeq" order="BEFORE">
+   SELECT TBL_POINT_POINT_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+INSERT INTO TBL_POINT (
+    POINT_SEQ,
+    USER_ID,
+    SAVE_POINT,
+    SAVE_PATH,
+    SAVE_DATE,
+    DEL_DATE,
+    RSRV_SEQ,
+    STATUS
+) VALUES (
+    #{pointSeq},
+    #{userId},
+    #{savePoint},
+    #{savePath},
+    SYSDATE,
+    SYSDATE+365,
+    '',
+    'Y'
+)
+
+</insert>
+
+
+
+<resultMap id="adminRsRvResultMap" type="com.icia.itsmyplace.model.RsRv">
+   <id column="RSRV_SEQ" property="rsrvSeq"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="RSRV_DATE" property="rsrvDate"/>
+   <result column="RSRV_TIME" property="rsrvTime"/>
+   <result column="RSRV_PPL_CNT" property="rsrvPplCnt"/>
+   <result column="CAFE_NUM" property="cafeNum"/>
+   <result column="RSRV_SEAT_LIST" property="seatList"/>
+   <result column="CAFE_NAME" property="cafeName"/>
+   <result column="TOTAL_PRICE" property="totalPrice"/>
+</resultMap>
+
+<select id="rsrvListCount" parameterType="com.icia.itsmyplace.model.RsRv" resultType="int">
+SELECT
+       COUNT(A.RSRV_SEQ) AS CNT
+  FROM  
+        RSRV A, CAFE B, PAY C
+ WHERE  
+       A.RSRV_SEQ = C.RSRV_SEQ
+   AND  
+         A.CAFE_NUM = B.CAFE_NUM      
+</select>    
+
+
+<select id="rsrvList" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT  A.RSRV_SEQ,
+      A.USER_ID,
+      A.RSRV_DATE,
+      A.RSRV_TIME,
+      A.RSRV_PPL_CNT,
+      A.CAFE_NUM,
+      A.RSRV_SEAT_LIST,
+      B.CAFE_NAME,
+      C.TOTAL_PRICE
+  FROM  RSRV A, CAFE B, PAY C
+ WHERE  A.RSRV_SEQ = C.RSRV_SEQ
+   AND  A.CAFE_NUM = B.CAFE_NUM      
+</select>
+
+</mapper>

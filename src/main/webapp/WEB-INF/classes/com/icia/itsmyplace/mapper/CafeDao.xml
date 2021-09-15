@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.CafeDao">
+<resultMap id="cafeResultMap" type="com.icia.itsmyplace.model.Cafe">
+	<id column="CAFE_NUM" property="cafeNum"/>
+	<result column="USER_ID" property="userId"/>
+	<result column="AREA_NUM" property="areaNum"/>
+	<result column="SUBAREA_NUM" property="subAreaNum"/>
+	<result column="CAFE_NAME" property="cafeName"/>
+	<result column="CAFE_CONTENT" property="cafeContent"/>
+	<result column="CAFE_ADDR" property="cafeAddr"/>
+	<result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
+	<result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
+	<result column="STATUS" property="status"/>
+</resultMap>
+
+<resultMap id="SeatResultMap" type="com.icia.itsmyplace.model.Seat">
+	<id column="CAFE_NUM" property="cafeNum"/>
+	<result column="SEAT_NUM" property="seatNum"/>
+	<result column="VACANCY" property="vacancy"/>
+</resultMap>
+
+<resultMap id="MenuPhtMap" type="com.icia.itsmyplace.model.MenuPht">
+	<id column="CAFE_NUM" property="cafeNum"/>
+	<id column="MENU_NUM" property="menuNum"/>
+	<id column="PHT_NUM" property="phtNum"/>
+	<result column="LIST_ORDER" property="listOrder"/>
+	<result column="PHT_ORG_NAME" property="phtOrgName"/>
+	<result column="PHT_SIZE" property="phtSize"/>
+	<result column="PHT_EXT" property="phtExt"/>
+	<result column="REG_DATE" property="regDate"/>
+	<result column="MENU_NAME" property="menuName"/>
+	<result column="MENU_PRICE" property="menuPrice"/>
+</resultMap>
+
+<resultMap id="cafePhtResultMap" type="com.icia.itsmyplace.model.CafePht">
+	<id column="CAFE_NUM" property="cafeNum" />
+	<id column="PHT_NUM" property="phtNum" />
+	<result column="LIST_ORDER" property="listOrder" />
+	<result column="PHT_NAME" property="phtName" />
+	<result column="PHT_ORG_NAME" property="phtOrgName" />
+	<result column="PHT_SIZE" property="phtSize" />
+	<result column="PHT_EXT" property="phtExt" />
+	<result column="REG_DATE" property="regDate" />
+</resultMap>
+
+<!-- 이거는 메인페이지 keyword 포함하기 위한 용도 -->
+<!-- 위에거랑 합치고 싶긴한데, 혹시 이것때문에 오류가 수두룩하게 날까봐 일단 빼놔서 해봅니다 -->
+<resultMap id="cafeKeywordResultMap" type="com.icia.itsmyplace.model.Cafe">
+	<id column="CAFE_NUM" property="cafeNum"/>
+	<result column="USER_ID" property="userId"/>
+	<result column="AREA_NUM" property="areaNum"/>
+	<result column="SUBAREA_NUM" property="subAreaNum"/>
+	<result column="CAFE_NAME" property="cafeName"/>
+	<result column="CAFE_CONTENT" property="cafeContent"/>
+	<result column="CAFE_ADDR" property="cafeAddr"/>
+	<result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
+	<result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
+	<result column="CAFE_KEYWORD" property="cafeKeyword"/>
+	<result column="STATUS" property="status"/>
+</resultMap>
+
+<resultMap id="rsRvResultMap" type="com.icia.itsmyplace.model.RsRv">
+	<id column="RSRV_DATE" property="rsrvDate"/>
+	<result column="RSRV_TIME" property="rsrvTime"/>
+	<result column="RSRV_SEAT_LIST" property="seatList"/>
+</resultMap>
+
+<!-- 카페 조회 -->
+<select id="cafeSelect" parameterType="string" resultMap="cafeResultMap">
+SELECT
+    CAFE_NUM,
+    NVL(USER_ID, '') AS USER_ID,
+    NVL(AREA_NUM, '') AS AREA_NUM,
+    NVL(SUBAREA_NUM, '') AS SUBAREA_NUM,
+    NVL(CAFE_NAME, '') AS CAFE_NAME,
+    NVL(CAFE_CONTENT, '') AS CAFE_CONTENT,
+    NVL(CAFE_ADDR, '') AS CAFE_ADDR,
+    NVL(CAFE_OPN_HRS, '') AS CAFE_OPN_HRS,
+    NVL(CAFE_CLS_HRS, '') AS CAFE_CLS_HRS,
+    NVL(STATUS, '') AS STATUS
+FROM
+    CAFE
+WHERE
+    CAFE_NUM = #{value}
+</select>
+
+<!-- 카페 자리예약/공석 조회 -->
+<select id="seatSelect" parameterType="string" resultMap="SeatResultMap">
+SELECT
+    CAFE_NUM,
+    NVL(SEAT_NUM, '') AS SEAT_NUM,
+    NVL(VACANCY, '') AS VACANCY
+FROM
+    SEAT
+WHERE
+    CAFE_NUM = #{value}
+</select>
+
+<!-- 카페 자리 Y인지, 공석인지체크-->
+<select id="seatRevSelect" parameterType="com.icia.itsmyplace.model.Seat" resultMap="SeatResultMap">
+SELECT
+    CAFE_NUM,
+    SEAT_NUM,
+    VACANCY
+FROM
+    SEAT
+WHERE CAFE_NUM = #{cafeNum}
+AND SEAT_NUM = #{seatNum}
+AND VACANCY = 'Y'
+</select>
+
+<!-- 카페 자리선택 N->Y 자리변경 -->
+<update id="seatUpdate" parameterType="com.icia.itsmyplace.model.Seat">
+UPDATE SEAT
+SET
+    VACANCY = #{vacancy}
+WHERE
+        CAFE_NUM = #{cafeNum}
+    AND SEAT_NUM = #{seatNum}
+</update>
+
+<!-- 메뉴사진 조회 -->
+<select id="menuPhtSelect" parameterType="com.icia.itsmyplace.model.MenuPht" resultMap="MenuPhtMap">
+SELECT 
+    NVL(A.CAFE_NUM, '')AS CAFE_NUM,
+    NVL(A.PHT_NUM, 0) AS PHT_NUM,
+    NVL(A.LIST_ORDER, 0) AS LIST_ORDER,
+    NVL(A.PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(A.PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(A.PHT_EXT, '') AS PHT_EXT,
+    NVL(A.REG_DATE, '') AS REG_DATE,
+    NVL(B.MENU_NUM, '') AS MENU_NUM,
+    NVL(B.MENU_NAME, '') AS MENU_NAME,
+    NVL(B.MENU_PRICE, '') AS MENU_PRICE
+FROM 
+	MENU_PHT A, MENU B
+WHERE 
+	A.CAFE_NUM = #{VALUE}
+	<choose>
+		<when test='searchType == "1"'>
+AND A.MENU_NUM LIKE 'COF%'		
+		</when>
+		<when test='searchType == "2"'>
+AND A.MENU_NUM LIKE 'HOT%'		
+		</when>
+	</choose>
+AND A.MENU_NUM = B.MENU_NUM
+AND A.CAFE_NUM = B.CAFE_NUM
+</select>
+
+
+<!-- 인덱스 페이지에 나타낼 카페 리스트 조회 -->
+<select id="cafeList" resultMap="cafeKeywordResultMap">
+SELECT
+    CAFE_NUM,
+    NVL(USER_ID, '') AS USER_ID,
+    NVL(AREA_NUM, '') AS AREA_NUM,
+    NVL(SUBAREA_NUM, '') AS SUBAREA_NUM,
+    NVL(CAFE_NAME, '') AS CAFE_NAME,
+    NVL(CAFE_CONTENT, '') AS CAFE_CONTENT,
+    NVL(CAFE_ADDR, '') AS CAFE_ADDR,
+    NVL(CAFE_OPN_HRS, '') AS CAFE_OPN_HRS,
+    NVL(CAFE_CLS_HRS, '') AS CAFE_CLS_HRS,
+    NVL(CAFE_KEYWORD, '') AS CAFE_KEYWORD,
+    NVL(STATUS, '') AS STATUS
+FROM
+    CAFE
+</select>
+
+<!-- 인덱스 페이지에 나타낼 카페의 사진 리스트 조회 -->
+<select id="cafePhtList" parameterType="com.icia.itsmyplace.model.CafePht" resultMap="cafePhtResultMap">
+SELECT
+    NVL(CAFE_NUM, '') AS CAFE_NUM,
+    NVL(PHT_NUM, 0) AS PHT_NUM,
+    NVL(LIST_ORDER, 0) AS LIST_ORDER,
+    NVL(PHT_NAME, '') AS PHT_NAME,
+    NVL(PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(PHT_EXT, '') AS PHT_EXT,
+    NVL(REG_DATE, '') AS REG_DATE
+FROM
+    CAFE_PHT
+WHERE
+    CAFE_NUM = #{cafeNum}
+<if test="phtNum != null and phtNum != ''">
+    AND PHT_NUM = #{phtNum}
+</if>
+<if test="listOrder != null and listOrder != ''">
+    AND LIST_ORDER = #{listOrder}
+</if>
+ORDER BY PHT_NUM
+</select>
+
+<!-- 자리 공석 수 체크 -->
+<select id="seatVacancyCnt" parameterType="string" resultType="int">
+SELECT
+	COUNT(VACANCY)
+FROM
+    SEAT
+WHERE CAFE_NUM = #{value}
+AND VACANCY = 'Y'
+</select>
+
+<!-- 카페시간셀렉트박스별 자리 조회 -->
+<select id="rsRvSelectList" parameterType="string" resultMap="rsRvResultMap">
+SELECT
+    TO_CHAR(A.RSRV_DATE, 'YYYYMMDD') AS RSRV_DATE,
+    NVL(A.RSRV_TIME, '') AS RSRV_TIME,
+    NVL(A.RSRV_SEAT_LIST, '') AS RSRV_SEAT_LIST
+FROM
+    RSRV A, PAY B
+WHERE
+    A.CAFE_NUM = #{cafeNum}
+   AND 
+    TO_CHAR(A.RSRV_DATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
+   AND
+   	(B.PAY_STEP = '100' OR B.PAY_STEP = '200')
+   AND
+    A.RSRV_SEQ = B.RSRV_SEQ
+    
+</select>
+
+</mapper>

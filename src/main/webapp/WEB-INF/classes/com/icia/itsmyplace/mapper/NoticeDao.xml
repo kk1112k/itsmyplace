@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icia.itsmyplace.dao.NoticeDao">
+<!-- 게시물 resultMap -->
+<resultMap id="noticeResultMap" type="com.icia.itsmyplace.model.Notice">
+	<id column="BBS_SEQ" property="bbsSeq" />
+	<result column="USER_ID" property="userId" />
+	<result column="USER_NAME" property="userName"/>
+	<result column="USER_EMAIL" property="userEmail"/>
+	<result column="BBS_TITLE" property="bbsTitle" />
+    <result column="BBS_CONTENT" property="bbsContent" />
+    <result column="BBS_READ_CNT" property="bbsReadCnt" />
+    <result column="REG_DATE" property="regDate" />
+</resultMap>
+
+<resultMap id="noticeFileResultMap" type="com.icia.itsmyplace.model.NoticeFile">
+	<id column="BBS_SEQ" property="bbsSeq" />
+	<result column="FILE_NUM" property="fileNum" />
+	<result column="FILE_NAME" property="fileName" />
+	<result column="FILE_ORG_NAME" property="fileOrgName" />
+	<result column="FILE_SIZE" property="fileSize" />
+	<result column="FILE_EXT" property="fileExt" />
+	<result column="REG_DATE" property="regDate" />
+</resultMap>
+
+
+<!-- 게시물 등록 -->
+<insert id="noticeInsert" parameterType="com.icia.itsmyplace.model.Notice">
+<selectKey resultType="long" keyProperty="bbsSeq" order="BEFORE">
+   SELECT NOTICE_BBS_SEQ.NEXTVAL FROM DUAL
+</selectKey>
+INSERT INTO NOTICE (
+    BBS_SEQ,
+    USER_ID,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE
+) VALUES (
+    #{bbsSeq},
+    #{userId},
+    #{bbsTitle},
+    #{bbsContent},
+    0,
+    SYSDATE
+)
+</insert>
+
+<!-- 총 게시물 수 -->
+<select id="noticeListCount" parameterType="com.icia.itsmyplace.model.Notice" resultType="long">
+SELECT
+   COUNT(A.BBS_SEQ) AS CNT
+FROM
+    NOTICE A, TBL_USER B
+WHERE
+    B.USER_ID = A.USER_ID
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose>
+      <when test='searchType == "1"'>
+  AND
+    B.USER_ID LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "2"'>
+  AND
+    A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "3"'>
+  AND
+    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>
+    </choose>
+</if>
+</select>
+
+
+<!-- 게시물 리스트 -->
+<select id="noticeList" parameterType="com.icia.itsmyplace.model.Notice" resultMap="noticeResultMap">
+SELECT
+    BBS_SEQ,
+    USER_ID,
+    USER_NAME,
+    USER_EMAIL,
+    BBS_TITLE,
+    BBS_CONTENT,
+    BBS_READ_CNT,
+    REG_DATE
+  FROM (SELECT  ROWNUM AS RNUM,
+                BBS_SEQ,
+                USER_ID,
+                USER_NAME,
+                USER_EMAIL,
+                BBS_TITLE,
+                BBS_CONTENT,
+                BBS_READ_CNT,
+                REG_DATE
+            FROM ( SELECT   A.BBS_SEQ AS BBS_SEQ,
+                            NVL(A.USER_ID, '') AS USER_ID,
+                            NVL(B.USER_NAME, '') AS USER_NAME,
+                            NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+                            NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                            NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                            NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                            NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD'),'') AS REG_DATE
+                        FROM
+                            NOTICE A, TBL_USER B
+                            WHERE
+                            B.USER_ID = A.USER_ID
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue !=""'>
+   <choose>
+      <when test='searchType == "1"'>
+                            AND
+                            B.USER_ID LIKE '%'|| #{searchValue} ||'%'
+        </when>
+        <when test='searchType == "2"'>
+                            AND
+                            A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+        </when>
+        <when test='searchType == "3"'>
+                            AND
+                            DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue})>0
+        </when>
+    </choose>
+</if>                     
+                            ORDER BY BBS_SEQ DESC))
+                                                     
+WHERE RNUM <![CDATA[>=]]> #{startRow}
+  AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+
+<!-- 게시물 조회 -->
+<select id="noticeSelect" parameterType="long" resultMap="noticeResultMap">
+SELECT
+    A.BBS_SEQ AS BBS_SEQ,
+    NVL(A.USER_ID, '') AS USER_ID,
+    NVL(B.USER_NAME, '') AS USER_NAME,
+    NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+    NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+    TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS') AS REG_DATE
+ FROM
+    NOTICE A, TBL_USER B
+WHERE
+    A.BBS_SEQ = ${value}
+  AND
+    A.USER_ID = B.USER_ID
+</select>
+
+<!-- 게시물 조회수 증가 -->
+<update id="noticeReadCntPlus" parameterType="long">
+UPDATE NOTICE
+   SET BBS_READ_CNT = BBS_READ_CNT + 1
+ WHERE BBS_SEQ = #{value}
+</update> 
+
+<!-- 게시물 수정 -->
+<update id="noticeUpdate" parameterType="com.icia.itsmyplace.model.Notice">
+UPDATE NOTICE
+SET
+    BBS_TITLE = #{bbsTitle},
+    BBS_CONTENT = #{bbsContent}
+WHERE
+    BBS_SEQ = #{bbsSeq}
+</update>
+
+<!-- 첨부파일 조회 -->
+<select id="noticeFileSelect" parameterType="long"  resultMap="noticeFileResultMap">
+SELECT
+    BBS_SEQ,
+    FILE_NUM,
+    NVL(FILE_NAME, '') AS FILE_NAME,
+    NVL(FILE_ORG_NAME, '') AS FILE_ORG_NAME,
+    NVL(FILE_SIZE, 0) AS FILE_SIZE,
+    NVL(FILE_EXT, '') AS FILE_EXT,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+FROM
+    NOTICE_FILE
+WHERE
+    BBS_SEQ = #{value}
+AND
+    FILE_NUM = 1
+</select>
+
+<!-- 첨부파일 등록 -->
+<insert id="noticeFileInsert" parameterType="com.icia.itsmyplace.model.NoticeFile">
+INSERT INTO NOTICE_FILE (
+    BBS_SEQ,
+    FILE_NUM,
+    FILE_NAME,
+    FILE_ORG_NAME,
+    FILE_SIZE,
+    FILE_EXT,
+    REG_DATE
+) VALUES (
+    #{bbsSeq},
+    1,
+    #{fileName},
+    #{fileOrgName},
+    #{fileSize},
+    #{fileExt},
+    SYSDATE
+)
+</insert>
+
+<!--  게시글 삭제 -->
+<delete id="noticeDelete" parameterType="long">
+DELETE FROM NOTICE
+WHERE
+        BBS_SEQ = #{value}
+</delete>
+
+<!-- 첨부파일 삭제 -->
+<delete id="noticeFileDelete" parameterType="long">
+DELETE FROM NOTICE_FILE
+WHERE
+	BBS_SEQ = #{value}
+</delete>
+
+</mapper>

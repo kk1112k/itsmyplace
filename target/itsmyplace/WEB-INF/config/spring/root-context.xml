@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                          http://www.springframework.org/schema/beans/spring-beans.xsd
+                          http://www.springframework.org/schema/context
+                           http://www.springframework.org/schema/context/spring-context.xsd
+                          http://www.springframework.org/schema/util
+                         http://www.springframework.org/schema/util/spring-util.xsd
+                         http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx.xsd">
+   
+   <!-- 환경변수 시작 -->
+   <util:properties id="env" location="/WEB-INF/config/env.xml" /> <!-- 오라클 접속정보가 들어가는 부분 -->
+   <!-- 환경변수 종료 -->
+   
+    <!-- daummail설정 -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl"> 
+     <property name="host" value="smtp.naver.com"/> <!-- 메이서버 호스트 -->
+     <property name="port" value="587"/> <!-- 메이서버 포트번호 -->
+     <property name="username" value="itsmyplace1"/> <!-- 자신의 이메일 아이디 -->
+     <property name="password" value="icia1234A!"/> <!-- 자신의 비밀번호 -->
+       <!-- 보안연결 SSL과 관련된 설정 -->
+     <property name="javaMailProperties">
+      <props>
+      <prop key="mail.smtp.auth">true</prop>
+      <prop key="mail.smtp.starttls.enable">true</prop>
+      <prop key="mail.smtps.checkserveridentity">true</prop>
+      <prop key="mail.smtps.ssl.trust">smtp.naver.com</prop>
+      <prop key="mail.smtp.ssl.protocols">TLSv1.2</prop><!--  Could not convert socket to TLS; 오류해결 -->
+      <prop key="mail.debug">true</prop>
+      <prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+      </props>
+     </property>
+    </bean>
+   
+   <!-- HikariCP configuration 시작 -->
+   <bean id="hikariConfig" class="com.zaxxer.hikari.HikariConfig"> 
+      <property name="poolName" value="#{env['db.pool.name']}" /> 
+      <property name="driverClassName" value="#{env['db.driver.class.name']}" /> 
+      <property name="jdbcUrl" value="#{env['db.jdbc.url']}" /> 
+      <property name="username" value="#{env['db.username']}" /> 
+      <property name="password" value="#{env['db.password']}" /> 
+      <property name="maximumPoolSize" value="#{env['db.maximum.pool.size']}" />
+      <property name="minimumIdle" value="#{env['db.minimum.idle']}" />
+      <property name="connectionTestQuery" value="#{env['db.connection.test.query']}" />
+      <property name="connectionTimeout" value="#{env['db.connection.timeout']}" />
+      <property name="idleTimeout" value="#{env['db.idle.timeout']}" />
+   </bean>
+   <!-- HikariCP configuration 종료 -->
+
+   <!-- dataSource 생성 시작 -->
+   <bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
+      <constructor-arg ref="hikariConfig" /> 
+   </bean>
+   <!-- dataSource 생성 종료 -->
+   
+   <!-- SqlSessionFactoryBean 생성 시작(앞서 정의했던 DataSource 를 매핑) -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+       <property name="configLocation" value="/WEB-INF/config/mybatis/mybatis-config.xml" />
+       <property name="dataSource" ref="dataSource" />
+       <property name="mapperLocations" value="classpath*:com/icia/itsmyplace/mapper/**/*.xml" />
+    </bean>
+    <!-- SqlSessionFactoryBean 생성 종료 -->
+    
+    <!-- SqlSessionTemplate 생성 시작(bean과 연결, dao와 공유) -->
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate" destroy-method="clearCache">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"/>
+    </bean>
+    <!-- SqlSessionTemplate 생성 종료 -->
+    
+    <!-- 어노테이션 mybatis dao 스캔 시작 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.icia.itsmyplace.dao" />
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+    </bean>
+    <!-- 어노테이션 mybatis dao 스캔 종료 -->
+    
+    <!-- 트랜잭션 메니져 설정 시작 -->
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- 트랜잭션 메니져 설정 종료 -->
+
+    <!-- 어노테이션 트랜잭션 사용 시작 -->
+    <tx:annotation-driven transaction-manager="transactionManager" />
+    <!-- 어노테이션 트랜잭션 사용 종료 -->
+   
+   <context:component-scan base-package="com.icia.itsmyplace.service" />
+      
+</beans>

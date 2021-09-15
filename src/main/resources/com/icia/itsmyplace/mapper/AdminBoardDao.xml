@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.icia.itsmyplace.dao.AdminBoardDao">
+
+<!-- Notice -->
+<resultMap id="adminNoticeResultMap" type="com.icia.itsmyplace.model.Notice">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <result column="USER_ID" property="userId" />
+   <result column="USER_NAME" property="userName"/>
+   <result column="USER_EMAIL" property="userEmail"/>
+   <result column="BBS_TITLE" property="bbsTitle" />
+    <result column="BBS_CONTENT" property="bbsContent" />
+    <result column="BBS_READ_CNT" property="bbsReadCnt" />
+    <result column="REG_DATE" property="regDate" />
+</resultMap>
+
+<resultMap id="adminNoticeFileResultMap" type="com.icia.itsmyplace.model.NoticeFile">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <result column="FILE_NUM" property="fileNum" />
+   <result column="FILE_NAME" property="fileName" />
+   <result column="FILE_ORG_NAME" property="fileOrgName" />
+   <result column="FILE_SIZE" property="fileSize" />
+   <result column="FILE_EXT" property="fileExt" />
+   <result column="REG_DATE" property="regDate" />
+</resultMap>
+
+
+<!-- 총 게시물 수 -->
+<select id="noticeListCount" parameterType="com.icia.itsmyplace.model.Notice" resultType="int">
+SELECT
+   COUNT(A.BBS_SEQ) AS CNT
+FROM
+    NOTICE A, TBL_USER B
+WHERE
+    B.USER_ID = A.USER_ID
+</select>
+
+
+<!-- 게시물 리스트 -->
+<select id="noticeList" parameterType="com.icia.itsmyplace.model.Notice" resultMap="adminNoticeResultMap">
+SELECT   A.BBS_SEQ AS BBS_SEQ,
+                            NVL(A.USER_ID, '') AS USER_ID,
+                            NVL(B.USER_NAME, '') AS USER_NAME,
+                            NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+                            NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                            NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                            NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                            NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'),'') AS REG_DATE
+                        FROM
+                            NOTICE A, TBL_USER B
+                       WHERE
+                            B.USER_ID = A.USER_ID       
+                            ORDER BY BBS_SEQ DESC
+</select>
+
+
+<!-- Event -->
+
+<resultMap id="adminEventBoardResultMap" type="com.icia.itsmyplace.model.EventBoard">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <result column="USER_ID" property="userId" />
+   <result column="USER_NAME" property="userName" />
+   <result column="USER_EMAIL" property="userEmail" />
+   <result column="USER_CLASS" property="userClass" />
+   <result column="BBS_TITLE" property="bbsTitle" />
+   <result column="BBS_CONTENT" property="bbsContent" />
+   <result column="BBS_READ_CNT" property="bbsReadCnt" />
+   <result column="REG_DATE" property="regDate" />
+   <result column="EVT_OPN_DATE" property="evtOpnDate" />
+   <result column="EVT_CLS_DATE" property="evtClsDate" />
+   <result column="BBS_PUBLIC" property="bbsPublic" />
+   <result column="FILE_NAME" property="fileName" />
+   <result column="FILE_ORG_NAME" property="fileOrgName" />
+   <result column="ADMIN_PUBLIC" property="adminPublic" />
+</resultMap>
+
+<resultMap id="adminEventBoardFileResultMap" type="com.icia.itsmyplace.model.EventBoardFile">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <id column="FILE_NUM" property="fileNum" />
+   <result column="FILE_NAME" property="fileName" />
+   <result column="FILE_ORG_NAME" property="fileOrgName" />
+   <result column="FILE_SIZE" property="fileSize" />
+   <result column="FILE_EXT" property="fileExt" />
+   <result column="REG_DATE" property="regDate" />
+</resultMap>
+
+<!-- 게시물 카운트 -->
+<select id ="eventBoardListCount" resultType="int">
+   SELECT
+       COUNT(A.BBS_SEQ) AS CNT
+   FROM
+       EVENT A, TBL_USER B, EVENT_FILE C
+   WHERE 
+       B.USER_ID = A.USER_ID
+     AND
+       A.BBS_SEQ = C.BBS_SEQ(+)
+       
+<if test='searchStatus != null and searchStatus != ""'>
+   <choose>
+      <when test='searchStatus == "Y"'>  
+                    AND
+                      A.BBS_PUBLIC = 'Y'
+       </when>
+       <when test='searchStatus == "N"'>
+                    AND
+                      A.BBS_PUBLIC = 'N'
+       </when>
+   </choose>                            
+</if>       
+       
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose> 
+      <when test='searchType == "1"'>  
+  AND
+    B.USER_ID LIKE '%' || #{searchValue} || '%'
+       </when>
+       <when test='searchType == "2"'>
+  AND
+    A.BBS_TITLE LIKE '%' || #{searchValue} || '%'
+       </when>
+       <when test='searchType == "3"'>
+  AND
+    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>   
+    </choose>
+</if>           
+</select>
+ 
+
+<!-- 게시물리스트 -->
+
+<select id="eventBoardList" parameterType="com.icia.itsmyplace.model.EventBoard" resultMap="adminEventBoardResultMap">
+SELECT  A.BBS_SEQ AS BBS_SEQ,
+                            NVL(A.USER_ID, '') AS USER_ID,
+                            NVL(B.USER_NAME, '') AS USER_NAME,
+                            NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+                            NVL(B.USER_CLASS, '') AS USER_CLASS,
+                            NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                            NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                            NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                            NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                            NVL(TO_CHAR(A.EVT_OPN_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS EVT_OPN_DATE,
+                            NVL(TO_CHAR(A.EVT_CLS_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS EVT_CLS_DATE,
+                            NVL(A.BBS_PUBLIC, 'Y') AS BBS_PUBLIC,
+                            NVL(C.FILE_NAME, '') AS FILE_NAME,
+                            NVL(C.FILE_ORG_NAME, '') AS FILE_ORG_NAME,
+                            NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                        FROM
+                            EVENT A, TBL_USER B, EVENT_FILE C
+                        WHERE 
+                            B.USER_ID = A.USER_ID
+                          AND
+                            A.BBS_SEQ = C.BBS_SEQ(+)
+    
+                      ORDER BY A.BBS_PUBLIC DESC, A.BBS_SEQ DESC
+</select>
+
+<!-- 이벤트 차단 설정 --> 
+<update id="eventBoardAdminPublicUpdate" parameterType="com.icia.itsmyplace.model.EventBoard"> 
+UPDATE EVENT
+   SET
+       ADMIN_PUBLIC = #{adminPublic}
+ WHERE
+       BBS_SEQ = #{bbsSeq}
+</update>
+
+
+
+
+
+
+
+<!-- Review -->
+
+<resultMap id="adminReviewResultMap" type="com.icia.itsmyplace.model.Review">
+   <id column="RSRV_SEQ" property="rsrvSeq" />
+   <result column="BBS_TITLE" property="bbsTitle"></result>
+   <result column="BBS_CONTENT" property="bbsContent"></result>
+   <result column="BBS_READ_CNT" property="bbsReadCnt"></result>
+   <result column="REG_DATE" property="regDate"></result>
+   <result column="BBS_STAR" property="bbsStar"></result>
+   <result column="BBS_PUBLIC" property="bbsPublic"></result>
+   <result column="USER_ID" property="userId"></result>
+   <result column="CAFE_NUM" property="cafeNum"></result>
+   <result column="CAFE_NAME" property="cafeName"></result>
+   <result column="PHT_NAME" property="phtName"></result>
+   <result column="ADMIN_PUBLIC" property="adminPublic" />
+   </resultMap>
+   
+<resultMap id="adminReviewPhtMap" type="com.icia.itsmyplace.model.ReviewPht">
+   <id column="RSRV_SEQ" property="rsrvSeq" />
+   <id column="PHT_NUM" property="phtNum" />
+   <id column="PHT_NAME" property="phtName" />
+   <result column="PHT_ORG_NAME" property="phtOrgName"></result>
+   <result column="PHT_SIZE" property="phtSize"></result>
+   <result column="PHT_EXT" property="phtExt"></result>
+   <result column="REG_DATE" property="regDate"></result>
+</resultMap>
+
+
+<!-- 총 게시물 수 -->
+<select id="reviewListCount" parameterType="com.icia.itsmyplace.model.Review" resultType="int">
+SELECT
+    COUNT(A.RSRV_SEQ) CNT
+FROM
+    REVIEW A, RSRV B, CAFE C
+WHERE
+    A.RSRV_SEQ = B.RSRV_SEQ
+AND    
+    B.CAFE_NUM = C.CAFE_NUM
+<if test='searchType != null and searchType != "" and searchValue != null and searchValue != ""'>
+   <choose>
+      <when test='searchType == "1"'>
+AND
+    C.CAFE_NAME LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "2"'>
+AND
+    A.BBS_TITLE LIKE '%'|| #{searchValue} ||'%'
+       </when>
+       <when test='searchType == "3"'>
+AND
+    DBMS_LOB.INSTR(A.BBS_CONTENT, #{searchValue}) > 0
+       </when>
+    </choose>
+</if>
+</select>
+
+<!-- 후기 페이지 리스트(페이지 전체) -->
+<select id="reviewList" parameterType="com.icia.itsmyplace.model.Review" resultMap="adminReviewResultMap">
+SELECT
+                    A.RSRV_SEQ AS RSRV_SEQ,
+                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+                    NVL(A.BBS_PUBLIC, 'N') AS BBS_PUBLIC,
+                    NVL(B.USER_ID, '') AS USER_ID,
+                    NVL(B.CAFE_NUM, '') AS CAFE_NUM,
+                    NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+                    D.PHT_NUM AS PHT_NUM,
+                    NVL(D.PHT_NAME, '') AS PHT_NAME,
+                    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                FROM
+                    REVIEW A, RSRV B, CAFE C, (SELECT RSRV_SEQ, PHT_NAME, PHT_NUM FROM REVIEW_PHT WHERE PHT_NUM = 1) D
+                WHERE
+                    A.RSRV_SEQ = B.RSRV_SEQ
+                AND    
+                    B.CAFE_NUM = C.CAFE_NUM
+                AND 
+                   A.RSRV_SEQ  = D.RSRV_SEQ(+)
+
+                ORDER BY 
+                    RSRV_SEQ DESC
+</select>
+
+<!-- 리뷰 관리자 차단 설정 --> 
+<update id="reviewAdminPublicUpdate" parameterType="com.icia.itsmyplace.model.Review"> 
+UPDATE REVIEW
+   SET
+       ADMIN_PUBLIC = #{adminPublic}
+ WHERE
+       RSRV_SEQ = #{rsrvSeq}
+</update>
+
+<resultMap id="adminCsResultMap" type="com.icia.itsmyplace.model.Cs">
+   <id column="BBS_SEQ" property="bbsSeq" />
+   <result column="USER_ID" property="userId" />
+   <result column="USER_NAME" property="userName"/>
+   <result column="USER_EMAIL" property="userEmail"/>
+   <result column="BBS_GROUP" property="bbsGroup" />
+    <result column="BBS_ORDER" property="bbsOrder" />
+    <result column="BBS_INDENT" property="bbsIndent" />
+    <result column="BBS_PARENT" property="bbsParent" />
+    <result column="BBS_TITLE" property="bbsTitle" />
+    <result column="BBS_CONTENT" property="bbsContent" />
+    <result column="BBS_READ_CNT" property="bbsReadCnt" />
+    <result column="REG_DATE" property="regDate" />
+    <result column="BBS_PUBLIC" property="bbsPublic" />
+    <result column="ADMIN_PUBLIC" property="adminPublic" />
+</resultMap>
+
+<select id="csListCount" parameterType="com.icia.itsmyplace.model.Cs" resultType="int">
+SELECT
+   COUNT(A.BBS_SEQ) AS CNT
+FROM
+    TBL_CS A, TBL_USER B
+WHERE
+    B.USER_ID = A.USER_ID
+</select>
+
+<select id="csList" parameterType="com.icia.itsmyplace.model.Cs" resultMap="adminCsResultMap">
+SELECT   A.BBS_SEQ AS BBS_SEQ,
+                            NVL(A.USER_ID, '') AS USER_ID,
+                            NVL(B.USER_NAME, '') AS USER_NAME,
+                            NVL(B.USER_EMAIL, '') AS USER_EMAIL,
+                            NVL(A.BBS_GROUP, 0) AS BBS_GROUP,
+                            NVL(A.BBS_ORDER, 0) AS BBS_ORDER,
+                            NVL(A.BBS_INDENT, 0) AS BBS_INDENT,
+                            NVL(A.BBS_PARENT, 0) AS BBS_PARENT,
+                            NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                            NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                            NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                            NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'),'') AS REG_DATE,
+                            NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC,
+                            NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                        FROM
+                            TBL_CS A, TBL_USER B
+                       WHERE
+                            B.USER_ID = A.USER_ID
+
+                              ORDER BY A.BBS_GROUP DESC, A.BBS_ORDER ASC
+</select>
+
+<!-- 고객센터 관리자 차단 설정 --> 
+<update id="csAdminPublicUpdate" parameterType="com.icia.itsmyplace.model.Cs"> 
+UPDATE TBL_CS
+   SET
+       ADMIN_PUBLIC = #{adminPublic}
+ WHERE
+       BBS_SEQ = #{bbsSeq}
+</update>
+
+<resultMap id="adminCommResultMap" type="com.icia.itsmyplace.model.Comm">
+<id column="BBS_SEQ" property="bbsSeq"/>
+<result column="USER_ID" property="userId"/>
+<result column="USER_NAME" property="userName"/>
+<result column="BBS_TITLE" property="bbsTitle"/>
+<result column="BBS_CONTENT" property="bbsContent"/>
+<result column="BBS_READ_CNT" property="bbsReadCnt"/>
+<result column="REG_DATE" property="regDate"/>
+<result column="BBS_PUBLIC" property="bbsPublic"/>
+<result column="ADMIN_PUBLIC" property="adminPublic"/>
+</resultMap>
+
+<resultMap id="adminCommPhtResultMap" type="com.icia.itsmyplace.model.CommPht">
+<id column="BBS_SEQ" property="bbsSeq"/>
+<id column="PHT_NUM" property="phtNum"/>
+<result column="PHT_NAME" property="phtName"/>
+<result column="PHT_ORG_NAME" property="phtOrgName"/>
+<result column="PHT_SIZE" property="phtSize"/>
+<result column="PHT_EXT" property="phtExt"/>
+<result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<resultMap id="adminCommCmtResultMap" type="com.icia.itsmyplace.model.CommCmt">
+<id column="BBS_SEQ" property="bbsSeq"/>
+<id column="CMT_SEQ" property="cmtSeq"/>
+<result column="USER_ID" property="userId"/>
+<result column="CMT_GROUP" property="cmtGroup"/>
+<result column="CMT_ORDER" property="cmtOrder"/>
+<result column="CMT_INDENT" property="cmtIndent"/>
+<result column="CMT_CONTENT" property="cmtContent"/>
+<result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<select id="commListCount" parameterType="com.icia.itsmyplace.model.Comm" resultType="int">
+SELECT    COUNT(A.BBS_SEQ)
+  FROM    COMMUNITY A, TBL_USER B
+ WHERE    B.USER_ID = A.USER_ID
+</select>
+
+<select id="commList" parameterType="com.icia.itsmyplace.model.Comm" resultMap="adminCommResultMap">
+SELECT     NVL(A.BBS_SEQ, 0) AS BBS_SEQ,
+                                    NVL(A.USER_ID, '') AS USER_ID,
+                                    NVL(B.USER_NAME, '') AS USER_NAME,
+                                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                                    NVL(A.BBS_READ_CNT, 0) AS BBS_READ_CNT,
+                                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC,
+                                    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                            FROM    COMMUNITY A, TBL_USER B 
+                           WHERE    B.USER_ID = A.USER_ID
+                          
+                           ORDER BY BBS_SEQ DESC
+</select>
+
+<!-- 커뮤니티 관리자 차단 설정 --> 
+<update id="commAdminPublicUpdate" parameterType="com.icia.itsmyplace.model.Comm"> 
+UPDATE COMMUNITY
+   SET
+       ADMIN_PUBLIC = #{adminPublic}
+ WHERE
+       BBS_SEQ = #{bbsSeq}
+</update>
+
+
+
+<select id="commPhtList" parameterType="long" resultMap="adminCommPhtResultMap">
+SELECT
+    NVL(BBS_SEQ, 0) AS BBS_SEQ,
+    NVL(PHT_NUM, 0) AS PHT_NUM,
+    NVL(PHT_NAME, '') AS PHT_NAME,
+    NVL(PHT_ORG_NAME, '') AS PHT_ORG_NAME,
+    NVL(PHT_SIZE, 0) AS PHT_SIZE,
+    NVL(PHT_EXT, '') AS PHT_EXT,
+    NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+FROM
+    COMM_PHT
+WHERE
+   BBS_SEQ = #{value}
+</select>
+
+<select id="commCmtList" parameterType="com.icia.itsmyplace.model.CommCmt" resultMap="adminCommCmtResultMap">
+SELECT      NVL(BBS_SEQ, 0) AS BBS_SEQ,
+                            NVL(CMT_SEQ, 0) AS CMT_SEQ,
+                            NVL(USER_ID, '') AS USER_ID,
+                            NVL(CMT_GROUP, 0) AS CMT_GROUP,
+                            NVL(CMT_ORDER, 0) AS CMT_ORDER,
+                            NVL(CMT_INDENT, 0) AS CMT_INDENT,
+                            NVL(CMT_CONTENT, '') AS CMT_CONTENT,
+                            NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE
+                FROM        COMM_CMT
+                ORDER BY    CMT_GROUP DESC, CMT_ORDER DESC
+        ORDER BY RNUM DESC)
+WHERE    BBS_SEQ = #{bbsSeq}
+
+</select>
+
+<resultMap id="adminRsRvResultMap" type="com.icia.itsmyplace.model.RsRv">
+   <id column="RSRV_SEQ" property="rsrvSeq"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="USER_NAME" property="userName"/>
+   <result column="RSRV_DATE" property="rsrvDate"/>
+   <result column="RSRV_TIME" property="rsrvTime"/>
+   <result column="RSRV_PPL_CNT" property="rsrvPplCnt"/>
+   <result column="CAFE_NUM" property="cafeNum"/>
+   <result column="CAFE_NAME" property="cafeName"/>
+   <result column="RSRV_SEAT_LIST" property="seatList"/>
+   <result column="TOTAL_PRICE" property="totalPrice"/>
+</resultMap>
+
+<!--  총 결제 수 -->
+<select id="rsRvListCount" parameterType="com.icia.itsmyplace.model.User" resultType="long">
+SELECT
+   COUNT(A.RSRV_SEQ) AS CNT
+FROM
+   RSRV A, TBL_USER B
+WHERE
+   B.USER_ID = A.USER_ID
+</select>
+
+<!--  결제정보조회 -->
+<select id="rsRvList" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT  A.RSRV_SEQ,
+        NVL(TO_CHAR(A.RSRV_DATE, 'YYYY.MM.DD'),'') AS RSRV_DATE,
+        NVL(A.USER_ID, '') AS USER_ID,
+        NVL(D.USER_NAME, '') AS USER_NAME,
+        NVL(A.RSRV_TIME,'') AS RSRV_TIME,
+        NVL(A.RSRV_PPL_CNT, '') AS RSRV_PPL_CNT,
+        NVL(A.RSRV_SEAT_LIST, '') AS RSRV_SEAT_LIST,
+        NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+        NVL(B.TOTAL_PRICE, 0) AS TOTAL_PRICE,
+        NVL(B.PAY_STEP, '') AS PAY_STEP
+  FROM 
+        RSRV A, PAY B, CAFE C, TBL_USER D
+ WHERE
+        C.CAFE_NUM = A.CAFE_NUM
+   AND  
+        A.RSRV_SEQ = B.RSRV_SEQ
+   AND 
+        A.USER_ID = D.USER_ID
+</select>
+
+<resultMap id="refundResultMap" type="com.icia.itsmyplace.model.Refund">
+   <id column="RSRV_SEQ" property="rsrvSeq"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="USER_NAME" property="userName"/>
+   <result column="RSRV_DATE" property="rsrvDate"/>
+   <result column="RSRV_TIME" property="rsrvTime"/>
+   <result column="RSRV_PPL_CNT" property="rsrvPplCnt"/>
+   <result column="CAFE_NUM" property="cafeNum"/>
+   <result column="CAFE_NAME" property="cafeName"/>
+   <result column="RSRV_SEAT_LIST" property="seatList"/>
+   <result column="TOTAL_PRICE" property="totalPrice"/>
+   <result column="PAY_STEP" property="payStep"/>
+   <result column="RFD_REASON" property="rfdReason"/>
+   <result column="RFD_METHOD" property="rfdMethod"/>
+   <result column="REG_DATE" property="regDate"/>
+</resultMap>
+
+<select id="refundList" parameterType="com.icia.itsmyplace.model.Refund" resultMap="refundResultMap">
+SELECT  A.RSRV_SEQ,
+        NVL(TO_CHAR(A.RSRV_DATE, 'YYYY.MM.DD'),'') AS RSRV_DATE,
+        NVL(A.USER_ID, '') AS USER_ID,
+        NVL(D.USER_NAME, '') AS USER_NAME,
+        NVL(A.RSRV_TIME,'') AS RSRV_TIME,
+        NVL(A.RSRV_PPL_CNT, '') AS RSRV_PPL_CNT,
+        NVL(A.RSRV_SEAT_LIST, '') AS RSRV_SEAT_LIST,
+        NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+        NVL(B.TOTAL_PRICE, 0) AS TOTAL_PRICE,
+        NVL(B.PAY_STEP, '') AS PAY_STEP,
+        NVL(E.RFD_REASON,'') AS RFD_REASON,
+        NVL(E.RFD_METHOD,'') AS RFD_METHOD
+  FROM 
+        RSRV A, PAY B, CAFE C, TBL_USER D, REFUND E
+ WHERE
+        C.CAFE_NUM = A.CAFE_NUM
+   AND  
+        A.RSRV_SEQ = B.RSRV_SEQ
+   AND 
+        A.USER_ID = D.USER_ID
+    AND
+        A.RSRV_SEQ = E.RSRV_SEQ
+</select>
+
+<select id="refundListCount" parameterType="com.icia.itsmyplace.model.User" resultType="long">
+SELECT
+   COUNT(A.RSRV_SEQ) AS CNT
+FROM
+   RSRV A, TBL_USER B
+WHERE
+   B.USER_ID = A.USER_ID
+</select>
+
+<resultMap id="indexResultMap" type="com.icia.itsmyplace.model.RsRv">
+   <id column="BBS_SEQ" property="bbsSeq"/>
+   <id column="RSRV_SEQ" property="rsrvSeq"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="USER_NAME" property="userName"/>
+   <result column="RSRV_DATE" property="rsrvDate"/>
+   <result column="RSRV_TIME" property="rsrvTime"/>
+   <result column="RSRV_PPL_CNT" property="rsrvPplCnt"/>
+   <result column="CAFE_NUM" property="cafeNum"/>
+   <result column="CAFE_NAME" property="cafeName"/>
+   <result column="RSRV_SEAT_LIST" property="seatList"/>
+   <result column="TOTAL_PRICE" property="totalPrice"/>
+   <result column="ORIGIN_PRICE" property="originPrice"/>
+</resultMap>
+
+<select id="cafeList" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT
+    RSRV_SEQ,
+    USER_ID,
+    RSRV_DATE,
+    RSRV_TIME,
+    RSRV_PPL_CNT,
+    CAFE_NUM,
+    RSRV_SEAT_LIST
+FROM
+    RSRV
+WHERE
+RSRV_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+</select>
+
+<select id="cafe1List" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT
+    RSRV_SEQ,
+    USER_ID,
+    RSRV_DATE,
+    RSRV_TIME,
+    RSRV_PPL_CNT,
+    CAFE_NUM,
+    RSRV_SEAT_LIST
+FROM
+    RSRV
+WHERE
+CAFE_NUM = 'A0000001'
+AND
+RSRV_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+</select>
+
+<select id="cafe2List" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT
+    RSRV_SEQ,
+    USER_ID,
+    RSRV_DATE,
+    RSRV_TIME,
+    RSRV_PPL_CNT,
+    CAFE_NUM,
+    RSRV_SEAT_LIST
+FROM
+    RSRV
+WHERE
+CAFE_NUM = 'A0000002'
+AND
+RSRV_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+</select>
+
+<select id="cafe3List" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT
+    RSRV_SEQ,
+    USER_ID,
+    RSRV_DATE,
+    RSRV_TIME,
+    RSRV_PPL_CNT,
+    CAFE_NUM,
+    RSRV_SEAT_LIST
+FROM
+    RSRV
+WHERE
+CAFE_NUM = 'A0000003'
+AND
+RSRV_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+</select>
+
+<select id="cafe4List" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT
+    RSRV_SEQ,
+    USER_ID,
+    RSRV_DATE,
+    RSRV_TIME,
+    RSRV_PPL_CNT,
+    CAFE_NUM,
+    RSRV_SEAT_LIST
+FROM
+    RSRV
+WHERE
+CAFE_NUM = 'A0000004'
+AND
+RSRV_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+</select>
+
+<select id="user1List" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
+SELECT
+    USER_ID,
+    REG_DATE
+FROM
+    TBL_USER
+where
+REG_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+</select>
+
+<select id="totalList"  resultMap="adminRsRvResultMap">
+SELECT
+    SUM (ORIGIN_PRICE) SUM,
+    CAFE_NUM
+FROM
+    RSRV A, PAY B
+WHERE
+RSRV_DATE BETWEEN TRUNC(SYSDATE) - 30 AND TRUNC(SYSDATE)
+AND
+A.RSRV_SEQ = B.RSRV_SEQ
+GROUP BY CAFE_NUM
+ORDER BY SUM DESC
+</select>
+
+</mapper>
