@@ -13,6 +13,7 @@ public class UserPostList implements Serializable{
 	private String bbsContent;
 	private String regDate;
 	private String bbsPublic;
+	private String adminPublic;
 	
 	private long startRow;
 	private long endRow;
@@ -25,6 +26,7 @@ public class UserPostList implements Serializable{
 		bbsContent = "";
 		regDate = "";
 		bbsPublic = "";
+		adminPublic = "";
 		
 	}
 	
@@ -102,6 +104,12 @@ public class UserPostList implements Serializable{
 		this.endRow = endRow;
 	}
 
+	public String getAdminPublic() {
+		return adminPublic;
+	}
 
-	
+	public void setAdminPublic(String adminPublic) {
+		this.adminPublic = adminPublic;
+	}
+
 }	

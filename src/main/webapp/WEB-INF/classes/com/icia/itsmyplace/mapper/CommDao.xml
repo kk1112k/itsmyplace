@@ -134,7 +134,7 @@ FROM
     COMMUNITY A, TBL_USER B
 WHERE	BBS_SEQ = #{value}
   AND B.USER_ID = A.USER_ID
-  AND	A.ADMIN_PUBLIC = 'Y'
+  <!--  AND	A.ADMIN_PUBLIC = 'Y'-->
 </select>
 
 <insert id="commInsert" parameterType="com.icia.itsmyplace.model.Comm">

@@ -21,6 +21,7 @@ public interface ReviewDao
 	public long reviewListCount(Review review);
 	
 	public List<Review> reviewList(Review review);
+	public List<Review> reviewList2(Review review);
 	
 	//리뷰 조회
 	public Review reviewSelect(long rsrvSeq);

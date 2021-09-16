@@ -37,7 +37,7 @@ public interface CafeDao {
 	public List<Cafe> cafeList();
 	
 	//카페별 공석 수 조회
-	public int seatVacancyCnt(String cafeNum);
+	public int seatVacancyCnt(RsRv rsrv);
 	
 	public List<RsRv> rsRvSelectList(String cafeNum);
 }

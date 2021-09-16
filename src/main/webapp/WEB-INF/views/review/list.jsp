@@ -294,7 +294,7 @@ function fn_delete(){
 			</c:if>
 		</ul>
 	</nav>
-</section>
+</div>
 
 <!-- Modal -->
 <div class="modal product-modal fade" id="product-modal">

@@ -102,7 +102,7 @@ function fn_loginCheck()
 						$("#userPwd").focus();
 					}
 					else if(code == -3){
-						alert("탈퇴된 회원입니다.");
+						alert("사용할 수 없는 아이디입니다.");
 					}
 					else if(code == -2){
 						alert("사용 권한이 일치하지 않습니다.");
@@ -152,7 +152,7 @@ function fn_loginCheck()
       <div class="col-md-6 col-md-offset-3">
         <div class="block text-center">
           <a class="logo" href="/index">
-			<img src="../resources/images/logo.png" alt="image" width="150" height="40" />
+			<img src="../resources/images/logo.png" alt="image" width="240" height="60" />
           </a>
           <form class="text-left clearfix">
             <div class="form-group">
@@ -164,18 +164,18 @@ function fn_loginCheck()
             <br />
             <div class="text-center">
             	 <input type="hidden" id="_userClass" value="" />
-			     <input type="radio" id="userClass" name="userClass" value="N" checked><label for="select1">&nbsp;회원&nbsp;&nbsp;</label>
-			     <input type="radio" id="userClass" name="userClass" value="C"><label for="select2">&nbsp;카페 운영자&nbsp;&nbsp;</label>
-			     <input type="radio" id="userClass" name="userClass" value="S"><label for="select3">&nbsp;서버 관리자</label>
+			     <input type="radio" id="userClass1" name="userClass" value="N" checked ><label for="userClass1" style="font-size:18px;">&nbsp;회원&nbsp;&nbsp;</label>
+			     <input type="radio" id="userClass2" name="userClass" value="C"><label for="userClass2" style="font-size:18px;">&nbsp;카페운영자&nbsp;&nbsp;</label>
+			     <input type="radio" id="userClass3" name="userClass" value="S"><label for="userClass3" style="font-size:18px;">&nbsp;사이트관리자</label>
 			</div>
 			<br />
 			<div class="text-center">
-              <button type="button" id="btnLogin" class="btn btn-main text-center">로그인</button>
+              <button type="button" id="btnLogin" class="btn btn-main text-center" style="witdth:200px; height:60px;">로그인</button>
             </div>
           </form>
           <br />
-          <p class="mt-20"> 내자리얌을 이용하세요! <a href="regForm"> 회원가입</a></p>
-          <p class="mt-20"> 비밀번호를 잊으셨나요? <a href="findPwd"> 비밀번호찾기</a></p>
+          <p class="mt-20" style="font-size:18px;"> 내자리얌을 이용하세요! <a href="regForm"> 회원가입</a></p>
+          <p class="mt-20" style="font-size:18px;"> 비밀번호를 잊으셨나요? <a href="findPwd"> 비밀번호찾기</a></p>
         </div>
       </div>
     </div>

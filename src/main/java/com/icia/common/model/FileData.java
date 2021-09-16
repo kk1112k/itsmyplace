@@ -3,8 +3,6 @@
  * 프로젝트명 : BasicBoard
  * 패키지명   : com.icia.common.model
  * 파일명     : FileData.java
- * 작성일     : 2020. 12. 30.
- * 작성자     : daekk
  * </pre>
  */
 package com.icia.common.model;
@@ -15,8 +13,6 @@ import java.io.Serializable;
  * <pre>
  * 패키지명   : com.icia.common.model
  * 파일명     : FileData.java
- * 작성일     : 2020. 12. 30.
- * 작성자     : daekk
  * 설명       : 파일 모델
  * </pre>
  */
@@ -56,8 +52,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : getName
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -70,8 +64,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setName
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @param name
@@ -84,8 +76,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : getFileName
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -98,8 +88,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setFileName
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @param fileName
@@ -112,8 +100,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : getFileOrgName
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -126,8 +112,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setFileOrgName
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @param fileOrgName
@@ -139,9 +123,7 @@ public class FileData implements Serializable
 
 	/**
 	 * <pre>
-	 * 메소드명   : getFilePath
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
+	 * 메소드명   : getFilePathk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -154,8 +136,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setFilePath
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @param filePath
@@ -168,8 +148,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : getFileExt
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -182,8 +160,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setFileExt
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @param fileExt
@@ -196,8 +172,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : getFileSize
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -210,8 +184,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setFileSize
-	 * 작성일     : 2020. 12. 30.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @param fileSize
@@ -224,8 +196,6 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : getContentType
-	 * 작성일     : 2021. 1. 4.
-	 * 작성자     : daekk
 	 * 설명       :
 	 * </pre>
 	 * @return 
@@ -238,9 +208,7 @@ public class FileData implements Serializable
 	/**
 	 * <pre>
 	 * 메소드명   : setContentType
-	 * 작성일     : 2021. 1. 4.
-	 * 작성자     : daekk
-	 * 설명       :
+	 * 설명      :
 	 * </pre>
 	 * @param contentType
 	 */

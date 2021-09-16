@@ -59,8 +59,9 @@
             		<list>
             			<value>/index</value>
             			<value>/itsmyplace</value>
-            			<value>/notice</value>
-            			<value>/test</value>
+            			<value>/notice/list</value>
+            			<value>/notice/view</value>
+            			<value>/contact</value>
             			<value>/user/login</value>
             			<value>/user/loginOut</value>
             			<value>/user/regForm</value>

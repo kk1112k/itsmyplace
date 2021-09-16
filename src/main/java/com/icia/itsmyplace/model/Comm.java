@@ -55,14 +55,13 @@ public class Comm implements Serializable{
 		searchValue = "";
 		
 		commPhtList = null;
+		commCmtList = null;
 		commCmtCnt = 0;
 		
 		ArsrvCafe = "";
 		ArsrvSeat = "";
 		ArsrvTime = "";
 		ArsrvDate = "";
-		
-		commCmtList = null;
 	}
 
 	public long getBbsSeq() {
@@ -207,8 +206,8 @@ public class Comm implements Serializable{
 
 	public void setArsrvDate(String arsrvDate) {
 		ArsrvDate = arsrvDate;
-	}
-
+	}	
+	
 	public String getAdminPublic() {
 		return adminPublic;
 	}
@@ -232,6 +231,7 @@ public class Comm implements Serializable{
 	public void setCommCmtList(List<CommCmt> commCmtList) {
 		this.commCmtList = commCmtList;
 	}	
+	
 	
 	
 }

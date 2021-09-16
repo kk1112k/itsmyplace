@@ -187,6 +187,67 @@ WHERE RNUM <![CDATA[>=]]> #{startRow}
   AND RNUM <![CDATA[<=]]> #{endRow}
 </select>
 
+<!-- 인데스 후기 리스트 -->
+<select id="reviewList2" parameterType="com.icia.itsmyplace.model.Review" resultMap="reviewResultMap">
+SELECT
+    RSRV_SEQ,
+    BBS_TITLE,
+    BBS_CONTENT,
+    REG_DATE,
+    BBS_STAR,
+    BBS_PUBLIC,
+    USER_ID,
+    CAFE_NUM,
+    CAFE_NAME,
+    PHT_NUM,
+    PHT_NAME,
+    ADMIN_PUBLIC
+FROM (SELECT
+            ROWNUM AS RNUM,
+            RSRV_SEQ,
+            BBS_TITLE,
+            BBS_CONTENT,
+            REG_DATE,
+            BBS_STAR,
+            BBS_PUBLIC,
+            USER_ID,
+            CAFE_NUM,
+            CAFE_NAME,
+            PHT_NUM,
+            PHT_NAME,
+    		ADMIN_PUBLIC
+        FROM (SELECT
+                    A.RSRV_SEQ AS RSRV_SEQ,
+                    NVL(A.BBS_TITLE, '') AS BBS_TITLE,
+                    NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
+                    NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+                    NVL(A.BBS_STAR, 0.0) AS BBS_STAR,
+                    NVL(A.BBS_PUBLIC, 'N') AS BBS_PUBLIC,
+                    NVL(B.USER_ID, '') AS USER_ID,
+                    NVL(B.CAFE_NUM, '') AS CAFE_NUM,
+                    NVL(C.CAFE_NAME, '') AS CAFE_NAME,
+                    D.PHT_NUM AS PHT_NUM,
+                   	NVL(D.PHT_NAME, '') AS PHT_NAME,
+                   	NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
+                FROM
+                    REVIEW A, RSRV B, CAFE C, (SELECT RSRV_SEQ, PHT_NAME, PHT_NUM FROM REVIEW_PHT WHERE PHT_NUM = 1) D
+                WHERE
+                    A.RSRV_SEQ = B.RSRV_SEQ
+                AND    
+                    B.CAFE_NUM = C.CAFE_NUM
+                AND 
+                	A.RSRV_SEQ  = D.RSRV_SEQ(+)
+                AND
+                	A.ADMIN_PUBLIC = 'Y'
+
+                AND
+					A.BBS_PUBLIC = 'Y'
+                ORDER BY 
+                    REG_DATE DESC))
+WHERE RNUM <![CDATA[>=]]> #{startRow}
+  AND RNUM <![CDATA[<=]]> #{endRow}
+</select>
+
 <!-- 카페별 후기 리스트-->
 <select id="cafeReviewList" parameterType="String" resultMap="reviewResultMap">
 SELECT
@@ -228,6 +289,8 @@ FROM (SELECT
                     A.RSRV_SEQ = B.RSRV_SEQ
                 AND 
                     B.USER_ID  = C.USER_ID
+                AND 
+                	A.BBS_PUBLIC = 'Y'
                 ORDER BY 
                     REG_DATE DESC))
 WHERE RNUM <![CDATA[>=]]> 1
@@ -276,6 +339,8 @@ FROM (SELECT
                     A.RSRV_SEQ = B.RSRV_SEQ
                 AND 
                     B.USER_ID  = C.USER_ID
+                AND 
+                	A.BBS_PUBLIC = 'Y'
                 ORDER BY 
                     REG_DATE DESC))
 WHERE RNUM = 1
@@ -305,7 +370,7 @@ AND
 AND    
     B.CAFE_NUM = C.CAFE_NUM
 AND 
-	A.ADMIN_PUBLIC = 'Y' s
+	A.ADMIN_PUBLIC = 'Y'
 </select>
 
 <!-- 첨부사진 조회 -->

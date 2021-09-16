@@ -38,6 +38,7 @@ function fn_list(curPage){
 					<ol class="breadcrumb">
 						<li><a href="/index">홈</a></li>
 						<li class="active">마이페이지</li>
+						<li class="active">내 결제내역</li>
 					</ol>
 				</div>
 			</div>
@@ -52,7 +53,7 @@ function fn_list(curPage){
       <div class="col-md-12">
         <ul class="list-inline dashboard-menu text-center">
           <li><a href="userProfile">내정보</a></li>	
-          <li><a href="userPost">내가쓴 게시물</a></li>
+          <li><a href="userPost">내가 쓴 게시물</a></li>
           <li><a class="active" href="userPayment">내 결제내역</a></li>
         </ul>
 				<div class="dashboard-wrapper user-dashboard">

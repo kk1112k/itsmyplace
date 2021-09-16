@@ -3,8 +3,6 @@
  * 프로젝트명 : common
  * 패키지명   : com.icia.common.util
  * 파일명     : FileUtil.java
- * 작성일     : 2020. 12. 29.
- * 작성자     : daekk
  * </pre>
  */
 package com.icia.common.util;
@@ -34,8 +32,6 @@ import java.util.UUID;
  * <pre>
  * 패키지명   : com.icia.common.util
  * 파일명     : FileUtil.java
- * 작성일     : 2020. 12. 29.
- * 작성자     : daekk
  * 설명       : 파일 관련 유틸리티
  * </pre>
  */
@@ -56,8 +52,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : getTempDir
 	 * 설명        : 시스템 템프 디렉토리 경로를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @return String
 	 */
@@ -70,8 +64,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : getUserHome
 	 * 설명        : 사용자 홈 디렉토리 경로를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @return String
 	 */
@@ -84,8 +76,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : getUserDir
 	 * 설명        : 현재 디렉토리 경로를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @return String
 	 */
@@ -97,8 +87,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getLineSeparator
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 개행 문자를 얻는다.
 	 * </pre>
 	 * @return String
@@ -111,8 +99,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getFileSeparator
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일 구분자를 얻는다.
 	 * </pre>
 	 * @return String
@@ -126,8 +112,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : isFile
 	 * 설명        : 파일 체크
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param path 파일경로
 	 * @return boolean
@@ -148,8 +132,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : isFile
 	 * 설명        : 파일 체크
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param file 파일객체
 	 * @return boolean
@@ -170,8 +152,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : isDircetory
 	 * 설명        : 디렉토리 체크
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param path 디렉토리경로
 	 * @return boolean
@@ -192,8 +172,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : isDircetory
 	 * 설명        : 디렉토리 체크
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 파일객체
 	 * @return boolean
@@ -214,8 +192,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : createDirectorys
 	 * 설명        : 디렉토리를 생성한다.(상위 경로도 생성)
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param path 디렉토리경로
 	 * @return boolean
@@ -238,8 +214,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : createDirectorys
 	 * 설명        : 디렉토리를 생성한다.(상위 경로도 생성)
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 파일객체
 	 * @return boolean
@@ -278,8 +252,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : createDirectory
 	 * 설명        : 디렉토리를 생성한다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param path 디렉토리경로
 	 * @return boolean
@@ -302,8 +274,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : createDirectory
 	 * 설명        : 디렉토리를 생성한다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 파일객체
 	 * @return boolean
@@ -341,8 +311,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getCanonicalPath
-	 * 작성일     : 2020. 12. 31.
-	 * 작성자     : daekk
 	 * 설명       : 파일 또는 디렉토리의 경로를 얻는다.
 	 * </pre>
 	 * @param file java.File
@@ -369,8 +337,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : write
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 바이트를 스트림에 출력한다.
 	 * </pre>
 	 * @param bytes byte[]
@@ -406,8 +372,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : write
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 스트림에 출력한다.
 	 * </pre>
 	 * @param in 문자열
@@ -422,8 +386,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : write
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 스트림에 출력한다.
 	 * </pre>
 	 * @param in 문자열
@@ -465,8 +427,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : write
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 입력 스트림을 출력 스트림에 출력한다.
 	 * </pre>
 	 * @param in InputStream
@@ -512,8 +472,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyFile
 	 * 설명        : 파일 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 원본파일경로
 	 * @param destFile 목적지파일경로
@@ -528,8 +486,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyFile
 	 * 설명        : 파일 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 원본파일경로
 	 * @param destFile 목적지파일경로
@@ -556,8 +512,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyFile
 	 * 설명        : 파일 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 원본파일객체
 	 * @param destFile 목적지파일객체
@@ -572,8 +526,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyFile
 	 * 설명        : 파일 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 원본파일객체
 	 * @param destFile 목적지파일객체
@@ -695,8 +647,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리경로
 	 * @param destDir 목적지디렉토리경로
@@ -711,8 +661,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리경로
 	 * @param destDir 목적지디렉토리경로
@@ -728,8 +676,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리경로
 	 * @param destDir 목적지디렉토리경로
@@ -745,8 +691,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리경로
 	 * @param destDir 목적지디렉토리경로
@@ -774,8 +718,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리객체
 	 * @param destDir 목적지디렉토리객체
@@ -791,8 +733,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리객체
 	 * @param destDir 목적지디렉토리객체
@@ -809,8 +749,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리객체
 	 * @param destDir 목적지디렉토리객체
@@ -827,8 +765,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : copyDirectory
 	 * 설명        : 디렉토리 복사
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리객체
 	 * @param destDir 목적지디렉토리객체
@@ -950,8 +886,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : moveFile
 	 * 설명        : 파일 이동
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 대상파일경로
 	 * @param destFile 이동파일경로
@@ -977,8 +911,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : moveFile
 	 * 설명        : 파일 이동
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 대상파일객체
 	 * @param destFile 이동파일객체
@@ -1064,8 +996,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : moveDirectory
 	 * 설명        : 디렉토리 이동
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리경로
 	 * @param destDir 이동디렉토리경로
@@ -1091,8 +1021,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : moveDirectory
 	 * 설명        : 디렉토리 이동
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcDir 대상디렉토리객체
 	 * @param destDir 이동디렉토리객체
@@ -1184,8 +1112,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : deleteFile
 	 * 설명        : 파일 삭제
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 삭제파일경로
 	 * @return boolean
@@ -1205,8 +1131,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : deleteFile
 	 * 설명        : 파일 삭제
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 삭제파일객체
 	 * @return boolean
@@ -1247,8 +1171,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : deleteDirectory
 	 * 설명        : 디렉토리 삭제
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 디렉토리경로
 	 * @return boolean
@@ -1268,8 +1190,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : deleteDirectory
 	 * 설명        : 디렉토리 삭제
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 디렉토리객체
 	 * @return boolean
@@ -1363,8 +1283,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : listFiles
 	 * 설명        : 디렉토리 파일 리스트를 얻는다. (디렉토리 포함)
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 디렉토리경로
 	 * @return java.io.File[]
@@ -1384,8 +1302,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : listFiles
 	 * 설명        : 디렉토리 파일 리스트를 얻는다. (디렉토리 포함)
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param directory 디렉토리객체
 	 * @return java.io.File[]
@@ -1497,8 +1413,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : openOutputStream
 	 * 설명        : FileOutputStream 객체를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일경로
 	 * @return java.io.FileOutputStream
@@ -1518,8 +1432,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : openOutputStream
 	 * 설명        : FileOutputStream 객체를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일경로
 	 * @param append 파일끝에붙여쓰기
@@ -1540,8 +1452,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : openOutputStream
 	 * 설명        : FileOutputStream 객체를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일객체
 	 * @return java.io.FileOutputStream
@@ -1556,8 +1466,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : openOutputStream
 	 * 설명        : FileOutputStream 객체를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일객체
 	 * @param append 파일끝에붙이기
@@ -1610,8 +1518,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : openInputStream
 	 * 설명        : FileInputStream 객체를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일경로
 	 * @return java.io.FileInputStream
@@ -1631,8 +1537,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : openInputStream
 	 * 설명        : FileInputStream 객체를 얻는다.
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일객체
 	 * @return java.io.FileInputStream
@@ -1676,8 +1580,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : openInputStream
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : InputStream 객체를 얻는다.
 	 * </pre>
 	 * @param reader java.io.Reader
@@ -1691,8 +1593,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : openInputStream
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : InputStream 객체를 얻는다.
 	 * </pre>
 	 * @param reader java.io.Reader
@@ -1739,8 +1639,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : touch
 	 * 설명        : 파일및 디렉토리 마지막 변경 시간정보 변경
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일객체
 	 * @return boolean
@@ -1760,8 +1658,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : touch
 	 * 설명        : 파일및 디렉토리 마지막 변경 시간정보 변경
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param srcFile 파일객체
 	 * @param timestamp 시작정보
@@ -1797,8 +1693,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readString
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 얻는다.
 	 * </pre>
 	 * @param path 파일경로
@@ -1812,8 +1706,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readString
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 얻는다.
 	 * </pre>
 	 * @param path 파일경로
@@ -1838,8 +1730,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readString
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 얻는다.
 	 * </pre>
 	 * @param file 파일
@@ -1853,8 +1743,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readString
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 얻는다.
 	 * </pre>
 	 * @param file 파일
@@ -1897,8 +1785,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readString
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 얻는다.
 	 * </pre>
 	 * @param in InputStream
@@ -1912,8 +1798,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readString
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 문자열을 얻는다.
 	 * </pre>
 	 * @param in InputStream
@@ -1959,8 +1843,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readByteArray
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일의 byte[]을 얻는다.
 	 * </pre>
 	 * @param path 파일경로
@@ -1979,8 +1861,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readByteArray
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일의 byte[]을 얻는다.
 	 * </pre>
 	 * @param file 파일객체
@@ -2016,8 +1896,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : readByteArray
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : InputStream byte[]을 얻는다.
 	 * </pre>
 	 * @param inputStream InputStream
@@ -2061,8 +1939,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : byteToDisplay
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 바이트정보 변환 표시
 	 * </pre>
 	 * @param size 크기
@@ -2076,8 +1952,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : byteToDisplay
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 바이트정보 변환 표시
 	 * </pre>
 	 * @param size 크기
@@ -2091,8 +1965,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getFilSizeUnit
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일 크기의 단위를 얻는다.
 	 * </pre>
 	 * @param size 파일크기
@@ -2106,8 +1978,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getFilSizeUnit
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일 크기의 단위를 얻는다.
 	 * </pre>
 	 * @param size 파일크기
@@ -2121,8 +1991,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getFilSizeUnit
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일 크기의 단위를 얻는다.
 	 * </pre>
 	 * @param size 파일크기
@@ -2170,8 +2038,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : byteToDisplay
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 바이트정보 변환 표시
 	 * </pre>
 	 * @param size 크기
@@ -2185,8 +2051,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : byteToDisplay
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 바이트정보 변환 표시
 	 * </pre>
 	 * @param size    크기
@@ -2246,8 +2110,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getFileExtension
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일 확장자
 	 * </pre>
 	 * @param path 경로또는 파일명
@@ -2269,8 +2131,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : getFileExtension
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : 파일 확장자
 	 * </pre>
 	 * @param src 파일객체
@@ -2299,8 +2159,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : close
 	 * 설명        : 자원 해제
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param closeables java.io.Closeable
 	 */
@@ -2319,8 +2177,6 @@ public final class FileUtil
 	 * <pre>
 	 * 메소드명    : close
 	 * 설명        : 자원 해제
-	 * 작성일      : 2020. 12. 29.
-	 * 작성자      : daekk
 	 *</pre>
 	 * @param closeable java.io.Closeable
 	 */
@@ -2342,8 +2198,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : uniqueFileName
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : Unique 파일명을 얻는다.
 	 * </pre>
 	 * @return String
@@ -2356,8 +2210,6 @@ public final class FileUtil
 	/**
 	 * <pre>
 	 * 메소드명   : uniqueFileName
-	 * 작성일     : 2020. 12. 29.
-	 * 작성자     : daekk
 	 * 설명       : Unique 파일명을 얻는다.
 	 * </pre>
 	 * @param fileExt 확장자
@@ -2391,8 +2243,6 @@ public final class FileUtil
 		/**
 		 * <pre>
 		 * 메소드명   : equals
-		 * 작성일     : 2020. 12. 29.
-		 * 작성자     : daekk
 		 * 설명       : 같은지 비교한다.
 		 * </pre>
 		 * @param fileSizeUnit FileSizeUnit
@@ -2411,8 +2261,6 @@ public final class FileUtil
 		/**
 		 * <pre>
 		 * 메소드명   : equals
-		 * 작성일     : 2020. 12. 29.
-		 * 작성자     : daekk
 		 * 설명       : 같은지 비교한다.
 		 * </pre>
 		 * @param value 값
@@ -2426,8 +2274,6 @@ public final class FileUtil
 		/**
 		 * <pre>
 		 * 메소드명   : value
-		 * 작성일     : 2020. 12. 29.
-		 * 작성자     : daekk
 		 * 설명       : 값을 얻는다.
 		 * </pre>
 		 * @return String
@@ -2440,8 +2286,6 @@ public final class FileUtil
 		/**
 		 * <pre>
 		 * 메소드명   : getFileSizeUnit
-		 * 작성일     : 2020. 12. 29.
-		 * 작성자     : daekk
 		 * 설명       : 값으로 FileSizeUnit을 얻는다.
 		 * </pre>
 		 * @param value 값

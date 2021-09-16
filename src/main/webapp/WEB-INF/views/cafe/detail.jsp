@@ -52,9 +52,9 @@
       <div class="row">
          <div class="col-md-6">
             <ol class="breadcrumb">
-               <li><a href="/index">메인페이지 </a></li>
-               <li><a href="/cafe/intro">카페</a></li>
-               <li class="/index">상세 페이지</li>
+               <li style="font-size:15px;"><a href="/index">메인페이지 </a></li>
+               <li style="font-size:15px;"><a href="/cafe/intro">카페</a></li>
+               <li class="/index" style="font-size:15px;">상세 페이지</li>
             </ol>
          </div>
          <div class="col-md-6">
@@ -63,10 +63,10 @@
                <c:set var="minusSub" value="${(fn:substring(cafeNumber,1,8))-1}"/>
                <c:set var="plusSub" value="${(fn:substring(cafeNumber,1,8))+1}"/>
                <c:if test="${minusSub > 0}">
-                  <li><a href="/cafe/detail?cafeNum=A000000${(fn:substring(cafeNumber,1,8))-1}"><i class="tf-ion-ios-arrow-left"></i> 이전 카페 </a></li>
+                  <li style="font-size:15px;"><a href="/cafe/detail?cafeNum=A000000${(fn:substring(cafeNumber,1,8))-1}"><i class="tf-ion-ios-arrow-left"></i> 이전 카페 </a></li>
                </c:if>
                <c:if test="${plusSub < 5}">
-                  <li><a href="/cafe/detail?cafeNum=A000000${(fn:substring(cafeNumber,1,8))+1}">다음 카페 <i class="tf-ion-ios-arrow-right"></i></a></li>
+                  <li style="font-size:15px;"><a href="/cafe/detail?cafeNum=A000000${(fn:substring(cafeNumber,1,8))+1}">다음 카페 <i class="tf-ion-ios-arrow-right"></i></a></li>
                </c:if>
             </ol>
          </div>
@@ -200,9 +200,10 @@
 <div class="container" style="padding:30px;">
    <div class="row" style="margin-left:20%; margin-right:20%;">
       <c:forEach var="phtList" items="${menuPhtList}" varStatus="status">
-         <div class="col-md-4">
+         <div class="col-md-4" style="text-align:center;">
             <c:set var="category" value="${phtList.menuNum}"/>
-            <img style="width:70%" src="/resources/images/shop/reservation/cafe1/menu/${fn:toLowerCase(fn:substring(category,0,3))}/${phtList.phtNum}.png" alt="메뉴이미지"/>
+            <c:set var="cafeNumber" value="${cafe.cafeNum}"/>
+			<img style="width:70%" src="/resources/images/shop/reservation/${cafe.userId}/menu/${fn:toLowerCase(fn:substring(category,0,3))}/${phtList.phtNum}.png" alt="메뉴이미지"/>
             <c:set var="menuName" value="${phtList.phtOrgName}"/>
             <c:set var="NameLength" value="${fn:length(menuName)}"/>
             <div class="detail-subNameText">${fn:substring(menuName,0,NameLength-4)}</div>

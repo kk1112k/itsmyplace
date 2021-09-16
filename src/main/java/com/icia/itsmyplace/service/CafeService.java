@@ -233,6 +233,20 @@ public class CafeService {
 		return count;
 	}
 	
+	public Point pointSelect(long rsrvSeq){
+		 Point point = null;
+			try
+			{
+				point = pointDao.pointSelect(rsrvSeq);
+			}
+			catch(Exception e)
+			{
+				logger.error("[CafeService] pointSelect Exception", e);
+			}
+			
+		return point;
+	}
+	
 	//전체 카페 조회
 	public List<Cafe> cafeList() {
 		
@@ -264,11 +278,11 @@ public class CafeService {
 	}
 	
 	//카페별 공석 수 조회
-	public int seatVacancyCnt(String cafeNum) {
+	public int seatVacancyCnt(RsRv rsrv) {
 		int count = 0;
 		
 		try {
-			count = cafeDao.seatVacancyCnt(cafeNum);
+			count = cafeDao.seatVacancyCnt(rsrv);
 		}
 		catch(Exception e){
 			logger.error("[CafeService] seatVacancyCnt Exception", e);

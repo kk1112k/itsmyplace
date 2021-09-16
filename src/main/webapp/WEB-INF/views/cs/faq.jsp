@@ -191,7 +191,7 @@ ul {
 	<div class="container">
 	   <div class="d-flex">
 	   <div class="logo text-left">
-					<a href="/cs/list"><img src="/resources/images/king/faq.png" alt="image" width="250" height="60" /></a>
+					<a href="/cs/list"><img src="/resources/images/king/faq.png" alt="image" width="360" height="80" /></a>
 					<br/>
 
 				</div>
@@ -213,8 +213,8 @@ ul {
 			      	 다른 이용자들을 위하여 더욱 깨끗한 네티즌 문화를 만들어갑시다.</div>
       </li>
       <li class="item">
-         <h2 class="accordionTitle">2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;결제했어요! 포인트 적립은 상시 2%만 적립되는건가요? <span class="accIcon"></span></h2>
-         <div class="text">예, 그렇습니다. 현재는 일괄적으로 결제금액의 2%를 포인트로 적립해드리고 있으며,  <br>추후 장기간 사이트를 이용해주시는 회원님들을 위해 포인트를 상향 적립하여 운영할 예정입니다.</div>
+         <h2 class="accordionTitle">2.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;결제했어요! 포인트 적립은 상시 3%만 적립되는건가요? <span class="accIcon"></span></h2>
+         <div class="text">예, 그렇습니다. 현재는 일괄적으로 결제금액의 3%를 포인트로 적립해드리고 있으며, 후기작성시 결제금액의 2%를 포인트로 적립해드립니다.  <br>추후 장기간 사이트를 이용해주시는 회원님들을 위해 포인트를 상향 적립하여 운영할 예정입니다.</div>
       </li>
       <li class="item">
          <h2 class="accordionTitle">3.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;결제 수단이 부족해요.<span class="accIcon"></span></h2>
@@ -227,7 +227,7 @@ ul {
       </li>
       <li class="item">
          <h2 class="accordionTitle">5.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;사업자로 카페입점 문의하고 싶어요.<span class="accIcon"></span></h2>
-         <div class="text">카페 입점 문의는 Q&A 게시판 또는 내자리얌 고객센터로 문의해주시면 빠르게 응대해드리고 있습니다.</div>
+         <div class="text">카페 입점 문의는 itsmyplace1@naver.com 으로 별도 양식 없이 메일로 문의 주시면 빠르게 응대해드리고 있습니다.</div>
       </li>
    </ul>
 </div>

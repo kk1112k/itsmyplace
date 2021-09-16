@@ -106,7 +106,7 @@ function fn_adminPublicUpdate(bbsSeq)
                                             <th class="text-center" style="width:8%">작성일자</th>
                                             <th class="text-center" style="width:8%">조회수</th>
                                             <th class="text-center" style="width:8%">차단여부</th>
-                                            <th class="text-center" style="width:9%">바로가기</th>   6 11 9 7 7 11 12 8 8 8 9
+                                            <th class="text-center" style="width:9%">바로가기</th>
 						                 </tr>
                                     </thead>
                                    

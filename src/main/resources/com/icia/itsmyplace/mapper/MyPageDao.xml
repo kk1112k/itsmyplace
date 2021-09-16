@@ -22,6 +22,7 @@
 	<result column="BBS_TITLE" property="bbsTitle"/>
 	<result column="REG_DATE" property="regDate"/>
 	<result column="BBS_PUBLIC" property="bbsPublic"/>
+	<result column="ADMIN_PUBLIC" property="adminPublic"/>
 </resultMap>
 
 <!-- 마이페이지 내가쓴 후기게시판글 관리 -->
@@ -32,6 +33,7 @@
 	<result column="BBS_CONTENT" property="bbsContent"/>
 	<result column="REG_DATE" property="regDate"/>
 	<result column="BBS_PUBLIC" property="bbsPublic"/>
+	<result column="ADMIN_PUBLIC" property="adminPublic"/>
 </resultMap>
 
 
@@ -97,20 +99,23 @@ SELECT
             BBS_SEQ,
             BBS_TITLE,
             REG_DATE,
-            BBS_PUBLIC
+            BBS_PUBLIC,
+            ADMIN_PUBLIC
  FROM       (SELECT     ROWNUM AS RNUM,
                         BBS_SEQ,
                         USER_ID,
                         USER_NAME,
                         BBS_TITLE,
                         REG_DATE,
-                        BBS_PUBLIC
+                        BBS_PUBLIC,
+                        ADMIN_PUBLIC
                FROM     (SELECT     NVL(A.BBS_SEQ, 0) AS BBS_SEQ,
                                     NVL(A.USER_ID, '') AS USER_ID,
                                     NVL(B.USER_NAME, '') AS USER_NAME,
                                     NVL(A.BBS_TITLE, '') AS BBS_TITLE,
                                     NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
-                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC,
+                                    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
                             FROM    COMMUNITY A, TBL_USER B 
                            WHERE    B.USER_ID = #{userId}
                            AND 		B.USER_ID = A.USER_ID
@@ -134,7 +139,8 @@ SELECT
             BBS_TITLE,
             BBS_CONTENT,
             REG_DATE,
-            BBS_PUBLIC
+            BBS_PUBLIC,
+            ADMIN_PUBLIC
  FROM       (SELECT     ROWNUM AS RNUM,
                         RSRV_SEQ,
                         USER_ID,
@@ -142,14 +148,16 @@ SELECT
                         BBS_TITLE,
                         BBS_CONTENT,
                         REG_DATE,
-                        BBS_PUBLIC
+                        BBS_PUBLIC,
+                        ADMIN_PUBLIC
                FROM     (SELECT     NVL(A.RSRV_SEQ, 0) AS RSRV_SEQ,
                                     NVL(B.USER_ID, '') AS USER_ID,
                                     NVL(B.USER_NAME, '') AS USER_NAME,
                                     NVL(A.BBS_TITLE, '') AS BBS_TITLE,
                                     NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
                                     NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
-                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+                                    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC,
+                                    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
                             FROM    REVIEW A, TBL_USER B, RSRV C 
                            WHERE    B.USER_ID = #{userId}
                            AND 		B.USER_ID = C.USER_ID
@@ -175,7 +183,8 @@ SELECT
     NVL(A.USER_ID, '') AS USER_ID,
     NVL(A.BBS_TITLE, '') AS BBS_TITLE,
     NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI'), '') AS REG_DATE,
-    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC,
+    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
 FROM
     COMMUNITY A, TBL_USER B
 WHERE	BBS_SEQ = #{value}
@@ -196,7 +205,8 @@ SELECT
     NVL(A.BBS_TITLE, '') AS BBS_TITLE,
     NVL(A.BBS_CONTENT, '') AS BBS_CONTENT,
     NVL(TO_CHAR(A.REG_DATE, 'YYYY.MM.DD HH24:MI'), '') AS REG_DATE,
-    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC
+    NVL(A.BBS_PUBLIC, '') AS BBS_PUBLIC,
+    NVL(A.ADMIN_PUBLIC, '') AS ADMIN_PUBLIC
 FROM
     REVIEW A, TBL_USER B, RSRV C
 WHERE	A.RSRV_SEQ = #{userId}

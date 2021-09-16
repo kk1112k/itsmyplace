@@ -1,5 +1,6 @@
 package com.icia.itsmyplace.controller;
 
+import java.time.LocalTime;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import com.icia.itsmyplace.model.Paging;
 import com.icia.itsmyplace.model.Response;
 import com.icia.itsmyplace.model.Review;
 import com.icia.itsmyplace.model.ReviewPht;
+import com.icia.itsmyplace.model.RsRv;
 import com.icia.itsmyplace.model.User;
 import com.icia.itsmyplace.service.CafeService;
 import com.icia.itsmyplace.service.EventBoardService;
@@ -189,7 +191,7 @@ public class IndexController
 			search.setStartRow(paging.getStartRow());
 			search.setEndRow(paging.getEndRow());
 			
-			list = reviewService.reviewList(search);
+			list = reviewService.reviewList2(search);
 		}
 		
 		model.addAttribute("reviewList", list);
@@ -241,16 +243,94 @@ public class IndexController
 	@ResponseBody
 	public Response<Object> indexProc(HttpServletRequest request, HttpServletResponse response)
 	{
+		LocalTime now = LocalTime.now();
+		int startHourA = now.getHour() * 100;
+		int endHourA = (now.getHour() + 2) * 100;
+				
 		Response<Object> ajaxResponse = new Response<Object>();
 		
 		List<Cafe> cafeList = cafeService.cafeList();
 		
 		for(int i=0; i<cafeList.size(); i++)
 		{	
+			List<RsRv> rsRvSeatList = cafeService.rsRvSelectList(cafeList.get(i).getCafeNum());
+			
+			String str = "";
+			for(int j=0; j<rsRvSeatList.size(); j++) { // select 1501 <= 1700 <= 1899
+
+				if(startHourA <= Integer.parseInt(rsRvSeatList.get(j).getRsrvTime()) && 
+						endHourA >= Integer.parseInt(rsRvSeatList.get(j).getRsrvTime()) )
+				{
+					str = str + rsRvSeatList.get(j).getSeatList() + ",";
+				}
+			}
+			
+			String[] Astr = str.split(",");
+			String switchCnt = "";
+			
+			for(int a=0; a<Astr.length; a++) {
+				
+				int AstrInt = Integer.parseInt(StringUtil.nvl(Astr[a], "0"));
+				
+				if(AstrInt > 16)
+				{
+					switchCnt += "A";
+				}
+				else if(AstrInt > 12)
+				{
+					switchCnt += "B";
+				}
+				else if(AstrInt > 8)
+				{
+					switchCnt += "C";
+				}
+				else if(AstrInt > 4)
+				{
+					switchCnt += "D";
+				}
+				else if(AstrInt == 0)
+				{
+					switchCnt += "F";
+				}
+				else
+				{
+					switchCnt += "E";
+				}
+			}
+			
+			System.out.println("##########");
+			System.out.println(switchCnt);
+			System.out.println("##########");
+			
+			char a = switchCnt.charAt(0);
+			int cntA = 1;
+			
+			if(!switchCnt.equals("F"))
+			{
+				for(int k=0; k<switchCnt.length(); k++)
+				{
+					if(a != switchCnt.charAt(k))
+					{
+						a = switchCnt.charAt(k);
+						cntA++;
+					}
+				}
+			}
+			else
+			{
+				cntA = 0;
+			}
+			
+			System.out.println("##########");
+			System.out.println(cntA);
+			System.out.println("##########");
+			
 			int seatVacancyCnt = 0;
-			seatVacancyCnt = cafeService.seatVacancyCnt(cafeList.get(i).getCafeNum());
+			
+			seatVacancyCnt = 20 - (cntA * 4);
 			
 			cafeList.get(i).setSeatVacancyCnt(seatVacancyCnt);
+			
 		}
 				
 		if(!StringUtil.isEmpty(cafeList))

@@ -32,6 +32,10 @@ public class RsRv implements Serializable{
 	//마이페이지 카페관리자 예약현황 조회용
 	private MyPage mypage;
 	
+	//인덱스 남은자리 확인용
+	private String startRsrvTime;
+	private String endRsrvTime;
+	
     public RsRv() {
     	rsrvSeq = 0;
     	userId = "";
@@ -57,6 +61,9 @@ public class RsRv implements Serializable{
     	searchValue = "";
     	
     	mypage = null;
+    	
+    	startRsrvTime = "";
+    	endRsrvTime = "";
     }
 
 	public long getRsrvSeq() {
@@ -218,8 +225,21 @@ public class RsRv implements Serializable{
 	public void setSearchStatus(String searchStatus) {
 		this.searchStatus = searchStatus;
 	}
-	
-	
-	
+
+	public String getStartRsrvTime() {
+		return startRsrvTime;
+	}
+
+	public void setStartRsrvTime(String startRsrvTime) {
+		this.startRsrvTime = startRsrvTime;
+	}
+
+	public String getEndRsrvTime() {
+		return endRsrvTime;
+	}
+
+	public void setEndRsrvTime(String endRsrvTime) {
+		this.endRsrvTime = endRsrvTime;
+	}
 	
  }

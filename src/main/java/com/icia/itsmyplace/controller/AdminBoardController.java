@@ -145,7 +145,7 @@ public class AdminBoardController
 	      list6 = adminBoardService.totalList(search6);
 	      model.addAttribute("list6", list6);
 	      
-	      System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+list6.get(0)+ list6.get(1)+ list6.get(2) );
+	      //System.out.println("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk"+list6.get(0)+ list6.get(1)+ list6.get(2) );
 	      
 	      return "/admin/index"; 
 	      
@@ -379,6 +379,9 @@ public class AdminBoardController
    {
       
       long bbsSeq = Long.parseLong(HttpUtil.get(request, "bbsSeq"));
+      System.out.println("##########################");
+      System.out.println("bbsSeq = " + bbsSeq);
+      System.out.println("##########################");
       String adminPublic = HttpUtil.get(request, "adminPublic");
 
       logger.debug("[AdminBoardController] /admin/commAdminPublicUpdateProc bbsSeq" + bbsSeq);

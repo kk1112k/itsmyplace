@@ -107,7 +107,7 @@ $(document).ready(function() {
                </th>
                <th scope="col" style="width:40%" class="text-right">
                   조회 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${cs.bbsReadCnt}" /><br/>
-                  작성자명 : <c:out value="${cs.userName}" /><br/>
+                  작성자 아이디 : <c:out value="${cs.userId}" /><br/>
                   작성시간 : ${cs.regDate}
                </th>
             </tr>
@@ -127,7 +127,9 @@ $(document).ready(function() {
    
    <input type="hidden" id="userClass" name="userClass" value="${user.userClass}">
    <button type="button" id="btnList" class="btn btn-main mb-3" style="height:45px;" >리스트</button>
+   <c:if test="${user.userClass eq 'S'}">
    <button type="button" id="btnReply" class="btn btn-main mb-3" style="height:45px;" >답변</button>
+   </c:if>
    <c:if test="${csMe eq 'Y'}">
    <button type="button" id="btnUpdate" class="btn btn-main mb-3" style="height:45px;" >수정</button>
    <button type="button" id="btnDelete" class="btn btn-main mb-3" style="height:45px;" >삭제</button>

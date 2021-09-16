@@ -17,44 +17,7 @@ function fn_rsrv(cafeNum){
 		location.href = "/cafe/reservation?cafeNum=" + cafeNum;
 	
 }
-/*
-	$(document).ready(function(){
-		
- 				
-		$("#btnDetailA0000001").on("click", function() {
-			location.href = "/cafe/A0000001";
-		});
-		
-		$("#btnDetailA0000002").on("click", function() {
-			location.href = "/cafe/A0000002";
-		});
-		
-		$("#btnDetailA0000003").on("click", function() {
-			location.href = "/cafe/A0000003";
-		});
-		
-		$("#btnDetailA0000004").on("click", function() {
-			location.href = "/cafe/A0000004";
-		}); 
-		
-		
-		$("#btnRegHanzan").on("click", function() {
-			location.href = "/cafe/reservation?cafeNum=A0000001";
-		});
-		
-		$("#btnRegNoname").on("click", function() {
-			location.href = "/cafe/reservation?cafeNum=A0000003";
-		});
-		
-		$("#btnRegDamda").on("click", function() {
-			location.href = "/cafe/reservation?cafeNum=A0000004";
-		});
-		
-		$("#btnRegDonut").on("click", function() {
-			location.href = "/cafe/reservation?cafeNum=A0000002";
-		});
-	});
-*/
+
 </script>
 
 <style>
@@ -99,8 +62,9 @@ function fn_rsrv(cafeNum){
 <section class="product-category section" style="padding:20px;">
 	<div class="container">
 		<div class="row">
-			<div class="logo text-center">
-				<img src="/resources/images/logo6.png" alt="image" width="250" height="60" />
+			<div class="logo text-left">
+				<img src="/resources/images/logo6.png" alt="image" width="250" height="60" style="margin-left:50px;"/>
+				<div class=index-info-text style="display:inline-block; margin-left:200px;">내자리얌의 입점카페를 확인하세요!</div>
 			</div>
 			
 			<br><br><br>

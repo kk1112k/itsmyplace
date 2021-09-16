@@ -45,11 +45,12 @@ function view(bbsSeq)
                                     <thead>
                                          <tr>                                                                                     
                                             <th class="text-center" style="width:7%">순번</th>
-                                            <th class="text-center" style="width:10%">아이디</th>
-                                            <th class="text-center" style="width:10%">회원명</th>
-                                            <th class="text-center" style="width:20%">제목</th>
-                                            <th class="text-center" style="width:20%">내용</th>
-                                            <th class="text-center" style="width:13%">작성일자</th>
+                                            <th class="text-center" style="width:10%">게시물번호</th>
+                                            <th class="text-center" style="width:8%">아이디</th>
+                                            <th class="text-center" style="width:8%">회원명</th>
+                                            <th class="text-center" style="width:17%">제목</th>
+                                            <th class="text-center" style="width:18%">내용</th>
+                                            <th class="text-center" style="width:12%">작성일자</th>
                                             <th class="text-center" style="width:10%">조회수</th>
                                             <th class="text-center" style="width:10%">바로가기</th>                
                                         </tr>
@@ -60,11 +61,12 @@ function view(bbsSeq)
                                     	<c:forEach items="${list}" var="notice" varStatus="status">
                                         <tr>
                                            <td class="text-center" style="width:7%">${status.count}</td>
-                                           <td class="text-center" style="width:10%">${notice.userId}</td>
-                                           <td class="text-center" style="width:10%">${notice.userName}</td>
-                                           <td class="text-center" style="width:20%">${notice.bbsTitle}</td>
-                                           <td class="text-center" style="width:20%">${notice.bbsContent}</td>
-                                           <td class="text-center" style="width:13%">${notice.regDate}</td>
+                                           <td class="text-center" style="width:10%">${notice.bbsSeq}</td>
+                                           <td class="text-center" style="width:8%">${notice.userId}</td>
+                                           <td class="text-center" style="width:8%">${notice.userName}</td>
+                                           <td class="text-center" style="width:17%">${notice.bbsTitle}</td>
+                                           <td class="text-center" style="width:18%">${notice.bbsContent}</td>
+                                           <td class="text-center" style="width:12%">${notice.regDate}</td>
                                            <th class="text-center" style="width:10%">${notice.bbsReadCnt}</th>
                                            <th class="text-center" style="width:10%">
                                            	<input type="button" href="javascript:void(0)" onclick="view('${notice.bbsSeq}')" value="바로가기" />

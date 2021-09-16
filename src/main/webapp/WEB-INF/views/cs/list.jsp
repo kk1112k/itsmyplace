@@ -140,7 +140,7 @@ function fn_list(curPage)
 if(com.icia.itsmyplace.util.CookieUtil.getCookie(request, (String)request.getAttribute("AUTH_COOKIE_NAME")) != null)
 {
 %>
-<div class="ml-auto input-group" style="width:auto; float:right;">
+<div class="ml-auto input-group" style="width:auto; float:right; margin-right:10px;">
 	<c:if test="${user.userClass ne 'S'}">
 		<button type="button" id="btnWrite" class="btn btn-main btn-medium">글쓰기</button>
 	</c:if>

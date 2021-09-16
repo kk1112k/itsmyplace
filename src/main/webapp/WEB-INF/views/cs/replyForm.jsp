@@ -103,7 +103,7 @@ $(document).ready(function() {
 <div class="container">
 	<h2>게시물 답변</h2>
 	<form name="replyForm" id="replyForm" method="post" enctype="multipart/form-data">
-		<input type="text" name="userName" id="userName" maxlength="20" value="${user.userName}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="이름을 입력해주세요." readonly />
+		<input type="text" name="userId" id="userId" maxlength="20" value="작성자 아이디 : ${user.userId}" style="ime-mode:active;" class="form-control mt-4 mb-2" placeholder="아이디를 입력해주세요." readonly />
 		<input type="text" name="userEmail" id="userEmail" maxlength="30" value="${user.userEmail}"  style="ime-mode:inactive;" class="form-control mb-2" placeholder="이메일을 입력해주세요." readonly />
 		<input type="text" name="bbsTitle" id="bbsTitle" maxlength="100" style="ime-mode:active;" value="" class="form-control mb-2" placeholder="제목을 입력해주세요." required />
 		<div class="form-group">

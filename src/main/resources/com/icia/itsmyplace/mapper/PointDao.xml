@@ -2,6 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.icia.itsmyplace.dao.PointDao">
 
+<resultMap type="com.icia.itsmyplace.model.Point" id="pointResultMap">
+	<id column="POINT_SEQ" property="pointSeq" />
+	<result column="USER_ID" property="userId" />
+	<result column="SAVE_POINT" property="savePoint" />
+	<result column="SAVE_PATH" property="savePath" />
+	<result column="SAVE_DATE" property="saveDate" />
+	<result column="DEL_DATE" property="delDate" />
+	<result column="RSRV_SEQ" property="rsrvSeq" />
+	<result column="STATUS" property="status" />
+</resultMap>
 
 <insert id="pointInsert" parameterType="com.icia.itsmyplace.model.Point">
 
@@ -34,6 +44,21 @@ INSERT INTO TBL_POINT(
 )
 </insert>
 
+<select id="pointSelect" parameterType="long" resultMap="pointResultMap">
+SELECT
+    POINT_SEQ,
+    USER_ID,
+    SAVE_POINT,
+    SAVE_PATH,
+    SAVE_DATE,
+    DEL_DATE,
+    RSRV_SEQ,
+    STATUS
+FROM
+    TBL_POINT
+WHERE
+    RSRV_SEQ = #{rsrvSeq}
+</select>
 
 
 

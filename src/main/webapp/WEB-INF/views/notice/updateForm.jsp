@@ -130,7 +130,7 @@ function fn_list(curPage)
 	<div style="height:70px;"><img src="/resources/images/notice/updateFormTitle.png" alt="글수정페이지 이미지" height=70px;/></div>
 	<div style="height:16.5px; background-color:#4397CF"></div>
    <form name="updateForm" id="updateForm" method="post" enctype="multipart/form-data">
-      <input type="text" name="userName" id="userName" maxlength="20" value="작성자명 : ${user.userName}" style="ime-mode:active;" class="form-control mt-4 mb-2" readonly />
+      <input type="text" name="userId" id="userId" maxlength="20" value="작성자 아이디 : ${user.userId}" style="ime-mode:active;" class="form-control mt-4 mb-2" readonly />
       <input type="text" name="bbsTitle" id="bbsTitle" maxlength="100" style="ime-mode:active;" class="form-control mb-2" value="${notice.bbsTitle}" placeholder="제목을 입력해주세요." required />
       <div class="form-group">
          <textarea class="form-control" rows="10" name="bbsContent" id="bbsContent" style="ime-mode:active;" placeholder="내용을 입력해주세요" required>${notice.bbsContent}</textarea>

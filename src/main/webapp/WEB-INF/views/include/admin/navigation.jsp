@@ -1,5 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<script type="text/javascript">
+function viewIndex()
+{
+	window.open("/index");
+}
+</script>
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -22,7 +29,7 @@
                     <span>메인페이지</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/index">
+                <a class="nav-link" href="javascript:void(0)" onclick="viewIndex();">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>사용자페이지로돌아가기</span></a>
             </li>
@@ -107,10 +114,7 @@
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
-            <!-- Sidebar Toggler (Sidebar) -->
-            <div class="text-center d-none d-md-inline">
-                <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+            
 
         </ul>
         <!-- End of Sidebar -->

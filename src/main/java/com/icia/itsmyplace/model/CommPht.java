@@ -13,6 +13,7 @@ public class CommPht implements Serializable{
 	private long phtSize;
 	private String phtExt;
 	private String regDate;
+	private String adminPublic;
 	
 	private short phtNumForUpdate;
 	
@@ -24,6 +25,7 @@ public class CommPht implements Serializable{
 		phtSize = 0;
 		phtExt = "";
 		regDate = "";
+		adminPublic = "";
 		phtNumForUpdate = 0;
 	}
 
@@ -90,6 +92,15 @@ public class CommPht implements Serializable{
 	public void setPhtNumForUpdate(short phtNumForUpdate) {
 		this.phtNumForUpdate = phtNumForUpdate;
 	}
+
+	public String getAdminPublic() {
+		return adminPublic;
+	}
+
+	public void setAdminPublic(String adminPublic) {
+		this.adminPublic = adminPublic;
+	}
+	
 	
 	
 }

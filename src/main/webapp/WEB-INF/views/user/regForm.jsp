@@ -338,7 +338,7 @@ function fn_userReg(area_Num, subArea_Num)
       <div class="col-md-6 col-md-offset-3">
         <div class="block text-center">
           <a class="logo" href="/">
-            <img src="/resources/images/logo.png" style="width: 120px;" alt="">
+            <img src="/resources/images/logo.png" width="240" height="60" alt="">
           </a>
           <h2 class="text-center">회원가입</h2>
           <form name="form" method="post" action="">
@@ -346,31 +346,31 @@ function fn_userReg(area_Num, subArea_Num)
 					<input type="text" id="userId" name="userId" placeholder="아이디" class="form-control">
 				</div>
 				<div class="form-group text-center">
-		           	<button type="button" id="btnConfirm" class="btn btn-main text-center">중복확인</button>
+		           	<button type="button" id="btnConfirm" class="btn btn-main text-center" style="witdth:200px; height:60px;">중복확인</button>
 		           	<span id="dcheck" style="display:none;">A</span><br>
 	           </div>
 				<div class="form-group text-center">
 					<div class="form-check">
 						<input type="hidden" id="_userClass" value="" />
 						<input class="form-check-input" type="radio" name="userClass" id="userClass1" value="N" checked>
-						<label class="form-check-label" for="flexRadioDefault1">개인</label>
-						<input class="form-check-input" type="radio" name="userClass" id="userClass2" value="C">
-						<label class="form-check-label" for="flexRadioDefault2">카페운영자</label>
-						<input class="form-check-input" type="radio" name="userClass" id="userClass3" value="S" disabled>
-						<label class="form-check-label" for="flexRadioDefault3">관리자</label>
+						<label class="form-check-label" for="userClass1" style="font-size:18px;">회원</label>
+						<input class="form-check-input" type="radio" name="userClass" id="userClass2" value="C" disabled>
+						<label class="form-check-label" for="userClass2" style="font-size:18px;">카페운영자</label>
+						<p>카페입점 문의는 itsmyplace1@naver.com 으로 메일 부탁드립니다.</p>
 					</div>
 				</div>
-				지역 :&nbsp;&nbsp;
+				<label style="font-size:18px;">지역</label>&nbsp;&nbsp;
 				<c:if test="${!empty areaList}">
-					<select name="area" id="area" onchange="fn_areaBefore()">
+					<select name="area" id="area" onchange="fn_areaBefore()" style="font-size:18px;">
 							<option id="areaNum0" class="areaNum" value="000">전체</option>
 						<c:forEach var="areaList" items="${areaList}" varStatus="status">
 							<option id="areaNum${status.count}" class="areaNum" value="${areaList.areaNum}">${areaList.areaName}</option>
 						</c:forEach>
 					</select>
 				</c:if>
-				&nbsp;&nbsp;시/군/구 :&nbsp;&nbsp;
-				<select name="subArea" id="subArea">
+				&nbsp;&nbsp;
+				<label style="font-size:18px;">시/군/구 :</label>&nbsp;&nbsp;
+				<select name="subArea" id="subArea" style="font-size:18px;">
 					<option id="subAreaNum0" class="subAreaNum" value="00000">---</option>
 				</select>
 				
@@ -391,15 +391,17 @@ function fn_userReg(area_Num, subArea_Num)
 					<input type="email" class="form-control" id="userEmail" name="userEmail" placeholder="이메일주소">
 				</div>
 				<div class="form-group text-center">
-					<input type="hidden" id="_userGender" value="" />
-					<input class="form-check-input" type="radio" name="userGender" id="userGender1" value="M">
-					<label class="form-check-label" for="flexRadioDefault1"  style="width: 80px">남</label>
-					<input class="form-check-input" type="radio" name="userGender" id="userGender2" value="F" >
-					<label class="form-check-label" for="flexRadioDefault2"  style="width: 80px">여</label>
+					<div class="form-check">
+						<input type="hidden" id="_userGender" value="" />
+						<input class="form-check-input" type="radio" name="userGender" id="userGender1" value="M">
+						<label class="form-check-label" for="userGender1"  style="width: 80px; font-size:18px;">남</label>
+						<input class="form-check-input" type="radio" name="userGender" id="userGender2" value="F" >
+						<label class="form-check-label" for="userGender2"  style="width: 80px; font-size:18px;">여</label>
+					</div>
 				</div>
 	
 				<div class="text-center">
-					<button type="button" id="btnReg" class="btn btn-main text-center">회원가입</button>
+					<button type="button" id="btnReg" class="btn btn-main text-center" style="witdth:200px; height:60px;">회원가입</button>
 				</div>
 			</form>
           <p class="mt-20">내자리얌 회원이신가요? <a href="login"> 로그인</a></p>

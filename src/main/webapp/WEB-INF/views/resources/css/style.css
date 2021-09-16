@@ -2712,7 +2712,6 @@ input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focu
     font-weight: 500;
 }
 .basketdiv .data {
-    border-bottom: 1px dashed #888;
     box-sizing: border-box;
     cursor: pointer;
     float: left;
@@ -3197,15 +3196,43 @@ input[type="email"]:focus, input[type="password"]:focus, input[type="text"]:focu
 }
 
 .detail-contentText{
-	position: relative;
-	background-color:#fbf9d3;
-	border:0px;
-	color: #4397CF;
-	margin-left: -10px;
+   position: relative;
+   background-color:#fbf9d3;
+   border:0px;
+   color: #4397CF;
+   margin-left: -10px;
+   font-size:18px;
+   width:120%;
 }
+
 
 .detail-subNameText{
 	position: relative;
 	color: #4397CF;
 	font-size: 20px;
+}
+
+.navigation .dropdown-slide .dropdown-menu {
+  right: auto;
+  left: auto;
+  border: 2px solid #dadbdb;
+  
+}
+
+.navigation .dropdown-slide .dropdown-menu li a {
+  color: #000;
+  font-size: 15px;
+  border: 1px solid transparent;
+  display: block;
+  padding: 8px 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: .3s all;
+   border-bottom: 2px solid #dadbdb;
+  
+}
+
+.navigation .dropdown-slide .dropdown-menu li a:hover {
+  background-color: #4397cf;
+  color: #fbf9d3; 
 }

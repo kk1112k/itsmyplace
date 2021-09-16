@@ -111,6 +111,11 @@ function chkList(bbsSeq){
 
 
 function chkDeleteClick(){
+	if(checkBoxArr == ""){
+		alert("삭제할 게시글을 선택해 주세요.");
+		return;
+	}
+	
 	if(confirm("게시물을 삭제 하시겠습니까?") == true){ 
 	 $.ajax({
 	      type  : "POST",
@@ -131,6 +136,15 @@ function chkDeleteClick(){
 				else if(response.code == 404){
 					alert("작성한 유저가 아니거나 유저정보가 없습니다");
 				}
+				else if(response.code == 500){
+					alert("aa");
+				}
+				else if(response.code == 501){
+					alert("bb");
+				}
+				else if(response.code == 502){
+					alert("cc");
+				}
 				else{
 					alert("게시물 삭제 중 오류가 발생했습니다.");
 				}
@@ -146,7 +160,11 @@ function chkDeleteClick(){
 }
 
 function chkReviewDeleteClick(){
-	alert(checkBoxArr2);
+	if(checkBoxArr2 == ""){
+		alert("삭제할 게시글을 선택해 주세요.");
+		return;
+	}
+	
 	if(confirm("게시물을 삭제 하시겠습니까?") == true){ 
 	 $.ajax({
 	      type  : "POST",
@@ -196,6 +214,7 @@ function chkReviewDeleteClick(){
 					<ol class="breadcrumb">
 						<li><a href="/index">홈</a></li>
 						<li class="active">마이페이지</li>
+						<li class="active">내가 쓴 게시물</li>
 					</ol>
 				</div>
 			</div>
@@ -209,8 +228,8 @@ function chkReviewDeleteClick(){
     <div class="row">
       <div class="col-md-12">
         <ul class="list-inline dashboard-menu text-center">
-          <li><a href="userProfile">내정보</a></li>
-          <li><a class="active" href="userPost">내가쓴 게시물</a></li>
+          <li><a href="userProfile">내 정보</a></li>
+          <li><a class="active" href="userPost">내가 쓴 게시물</a></li>
 			<c:choose>
 			<c:when test="${user.userClass == 'N'}">
           <li><a href="userPayment">내 결제내역</a></li>
@@ -251,7 +270,7 @@ function chkReviewDeleteClick(){
 							</a>
 						</td>
 						<td class="text-center" style="width:20%">${userPostList.regDate}</td>
-						<td class="text-center" style="width:5%">${userPostList.regDate}</td>
+						<td class="text-center" style="width:5%">${userPostList.adminPublic}</td>
 					</tr>
 					</c:forEach>
 					</c:if>
@@ -315,8 +334,9 @@ function chkReviewDeleteClick(){
                     <th scope="col" class="text-center" style="width:5%"><input type="checkbox" class="chk_all2"></th>
          			<th scope="col" class="text-center" style="width:5%">번호</th>
         		    <th scope="col" class="text-center" style="width:15%">제목</th>
-        		    <th scope="col" class="text-center" style="width:55%">내용</th>
+        		    <th scope="col" class="text-center" style="width:50%">내용</th>
        			    <th scope="col" class="text-center" style="width:15%">날짜</th>
+       			    <th scope="col" class="text-center" style="width:5%">상태</th>
        			    <th scope="col" class="text-center" style="width:5%">비고</th>
               	  </tr>
              	</thead>
@@ -329,8 +349,9 @@ function chkReviewDeleteClick(){
 						<td class="text-center" style="width:15%">
 							<c:out value="${userReviewPostList.bbsTitle}" />
 						</td>
-						<td style="width:55%"><c:out value="${userReviewPostList.bbsContent}" /></td>
-						<td class="text-center" style="width:20%">${userReviewPostList.regDate}</td>
+						<td style="width:50%"><c:out value="${userReviewPostList.bbsContent}" /></td>
+						<td class="text-center" style="width:15%">${userReviewPostList.regDate}</td>
+						<td class="text-center" style="width:5%">${userReviewPostList.adminPublic}</td>
 						<td class="text-center" style="width:5%"><a href="/review/reviewUpdate?rsrvSeq=${userReviewPostList.rsrvSeq}" class="btn btn-default">수정</a></td>
 					</tr>
 					</c:forEach>

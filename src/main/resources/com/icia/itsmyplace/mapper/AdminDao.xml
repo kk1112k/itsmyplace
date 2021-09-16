@@ -55,24 +55,24 @@ SELECT
 
 
 <select id="userList" parameterType="com.icia.itsmyplace.model.User" resultMap="adminUserResultMap">
-                SELECT 
-                      USER_ID,
-                      NVL(USER_CLASS, '') AS USER_CLASS,
-                      NVL(AREA_NUM, 0) AS AREA_NUM,
-                      NVL(SUBAREA_NUM, 0) AS SUBAREA_NUM,
-                      NVL(USER_PWD, '') AS USER_PWD,
-                      NVL(USER_NAME, '') AS USER_NAME,
-                      NVL(USER_EMAIL, '') AS USER_EMAIL,
-                      NVL(USER_GENDER, '') AS USER_GENDER,
-                      NVL(STATUS, '') AS STATUS,
-                      NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
-                      NVL(TOTAL_POINT, 0) AS TOTAL_POINT
-                      
-                  FROM
-                        TBL_USER
-                 WHERE
-                        1 = 1
-                   ORDER BY REG_DATE DESC
+SELECT 
+      USER_ID,
+      NVL(USER_CLASS, '') AS USER_CLASS,
+      NVL(AREA_NUM, 0) AS AREA_NUM,
+      NVL(SUBAREA_NUM, 0) AS SUBAREA_NUM,
+      NVL(USER_PWD, '') AS USER_PWD,
+      NVL(USER_NAME, '') AS USER_NAME,
+      NVL(USER_EMAIL, '') AS USER_EMAIL,
+      NVL(USER_GENDER, '') AS USER_GENDER,
+      NVL(STATUS, '') AS STATUS,
+      NVL(TO_CHAR(REG_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS REG_DATE,
+      NVL(TOTAL_POINT, 0) AS TOTAL_POINT
+      
+  FROM
+        TBL_USER
+ WHERE
+        1 = 1
+   ORDER BY REG_DATE DESC
 </select>
 
 <select id="userSelect" parameterType="String" resultMap="adminUserResultMap">
@@ -116,20 +116,18 @@ SELECT
 
 <select id="pointList" parameterType="com.icia.itsmyplace.model.Point" resultMap="adminPointResultMap">
 
-                SELECT 
-                      POINT_SEQ,
-                      USER_ID,
-                      NVL(SAVE_POINT, 0) AS SAVE_POINT,
-                      NVL(SAVE_PATH, '') AS SAVE_PATH,
-                  NVL(TO_CHAR(SAVE_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS SAVE_DATE,
-                  NVL(TO_CHAR(DEL_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS DEL_DATE,
-                      NVL(RSRV_SEQ, 0) AS RSRV_SEQ,
-                      NVL(STATUS, '') AS STATUS
-                  FROM
-                        TBL_POINT
-                 WHERE
-                        1 = 1                  
-                 ORDER BY POINT_SEQ DESC
+SELECT 
+      POINT_SEQ,
+      USER_ID,
+      NVL(SAVE_POINT, 0) AS SAVE_POINT,
+      NVL(SAVE_PATH, '') AS SAVE_PATH,
+  NVL(TO_CHAR(SAVE_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS SAVE_DATE,
+  NVL(TO_CHAR(DEL_DATE, 'YYYY.MM.DD HH24:MI:SS'), '') AS DEL_DATE,
+      NVL(RSRV_SEQ, 0) AS RSRV_SEQ,
+      NVL(STATUS, '') AS STATUS
+  FROM
+        TBL_POINT              
+ ORDER BY POINT_SEQ DESC
 </select>
 
 <!-- 포인트 지급하기 -->
@@ -197,18 +195,19 @@ SELECT
 
 
 <select id="rsrvList" parameterType="com.icia.itsmyplace.model.RsRv" resultMap="adminRsRvResultMap">
-SELECT  A.RSRV_SEQ,
-      A.USER_ID,
-      A.RSRV_DATE,
-      A.RSRV_TIME,
-      A.RSRV_PPL_CNT,
-      A.CAFE_NUM,
-      A.RSRV_SEAT_LIST,
-      B.CAFE_NAME,
-      C.TOTAL_PRICE
-  FROM  RSRV A, CAFE B, PAY C
- WHERE  A.RSRV_SEQ = C.RSRV_SEQ
-   AND  A.CAFE_NUM = B.CAFE_NUM      
+SELECT      A.RSRV_SEQ,
+            A.USER_ID,
+            A.RSRV_DATE,
+            A.RSRV_TIME,
+            A.RSRV_PPL_CNT,
+            A.CAFE_NUM,
+            A.RSRV_SEAT_LIST,
+            B.CAFE_NAME,
+            C.TOTAL_PRICE
+  FROM      RSRV A, CAFE B, PAY C
+ WHERE      A.RSRV_SEQ = C.RSRV_SEQ
+   AND      A.CAFE_NUM = B.CAFE_NUM
+ ORDER BY   A.RSRV_SEQ DESC   
 </select>
 
 </mapper>

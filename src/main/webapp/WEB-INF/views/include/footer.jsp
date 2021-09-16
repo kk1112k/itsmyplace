@@ -18,7 +18,7 @@
 					<li><a href="/cafe/intro">카페모아보기</a></li>
 					<li><a href="/event/list">이벤트</a></li>
 					<li><a href="/review/list">이용후기</a></li>
-					<li><a href="/community/list">커뮤니티</a></li>
+					<li><a href="/community/list">자유게시판</a></li>
 					<li><a href="/cs/list">고객센터</a></li>
 					<li><a href="/contact">이용약관</a></li>
 				</ul>

@@ -41,7 +41,7 @@ public class CsController {
 	@Autowired
 	private CsService csService;
 	
-	private static final int LIST_COUNT = 5; 	// 한 페이지의 게시물 수
+	private static final int LIST_COUNT = 10; 	// 한 페이지의 게시물 수
 	private static final int PAGE_COUNT = 5;	// 페이징 수
 	
 	

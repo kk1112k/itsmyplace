@@ -87,7 +87,6 @@ function selectTimeSeat(){
 	           var SeatNum = seatNumList[i]-1;
 	           if(SeatNum == -1)	//선택좌석이 없을시
 	           {
-	        	   leftSeatA(0);
 	         	   break;
 	           }
 	           $("#seatsNum"+SeatNum).hide();	//선택좌석이 있을시 이미지, 클래스추가
@@ -95,8 +94,9 @@ function selectTimeSeat(){
 	           $("#img"+SeatNum).addClass("noemptySeat");
 	         }
 	      }
-	      leftSeatA(seatNumList.length);
+	      
 	      tableCheck();	//예약된 테이블 잔여좌석 막기
+	      leftSeatA();
 	   },
 	   error: function(error){
 	      icia.common.error(error);
@@ -120,30 +120,30 @@ function timeSelSelect(cafeNumber) {
 	var index = $('select option[value='+nowTime+']').index();
 	var timeSelSize = $("#timeSel option").length;
 	
-	for(var i=0; i<index; i++)
+	$('select option[value='+nowTime+']').prop("selected",true);
+	
+	if(Number(nowTime) > 1000 && Number(nowTime) < Number($("#timeSel option:last").val()))
 	{
-		$('#timeSel option:eq('+i+')').attr('disabled', 'true');
+		for(var i=0; i<index; i++)
+		{
+			$('#timeSel option:eq('+i+')').attr('disabled', 'true');
+		}
 	}
 	
 	// 운영시간에 따른 selectbox 표현
 	if(cafeNumber == "A0000001")
 	{
-		$("#timeSel option[value='0900']").remove();
 		$("#timeSel option[value='2200']").remove();
 	}
 	else if(cafeNumber == "A0000002")
 	{
-		$("#timeSel option[value='0900']").remove();
 		$("#timeSel option[value='2200']").remove();
 	}
-	else if(cafeNumber == "A0000003")
-	{
-		$("#timeSel option[value='0900']").remove();
-	}
-	else if(cafeNumber == "A0000004")
-	{
-		$("#timeSel option[value='0900']").remove();
-	}
+	
+	if(Number($("#timeSel option:last").val()) <= Number(nowTime))
+    {
+		$('#timeSel').attr('disabled', 'true');
+    }
 }
 
 /* 당일시간표현 함수*/
@@ -153,29 +153,28 @@ function printTime() {
 	clock.innerHTML = (now.getMonth()+1) + "월 " + now.getDate() + "일 " ;
 }
 
-function leftSeat() {
-	var noEmptyleng = $("#seatsBlock").find('img.noEmpty').length;
+function leftSeatA() {
 	
-	leftSeats.innerHTML =  (20-noEmptyleng) + "/20";
-}
-
-function leftSeatA(count) {
-	var leftSeats = document.getElementById("leftSeats");
-	if(count == 1)
+	var cnt = 0;
+		
+	for(var n=0; n<20; n++)
 	{
-		leftSeats.innerHTML =  "20/20";
+		if($('input#seatsNum'+n+':checkbox').prop('disabled') == false)
+		{
+			cnt++;
+		}
+		
 	}
-	else
-	{
-		var leftSeats = document.getElementById("leftSeats");
-		leftSeats.innerHTML =  (20-count) + "/20";
-	}
+	
+	leftSeats.innerHTML =  cnt + "/20";
+	
+	/* var noEmptyleng = $("#seatsBlock").find('img.noemptySeat').length;
+	
+	leftSeats.innerHTML =  (20-noEmptyleng) + "/20"; */
 }
-
 
 //테이블별로 예약이되있다면 체크못하게 하는함수
 function tableCheck() {
-
 	if($("#table1").find('img.noemptySeat').length)
 	{
 		$('input#seatsNum0:checkbox').prop('disabled', true);
@@ -215,7 +214,6 @@ function tableCheck() {
 }
 
 function getCheckboxValue(chairIndex)  {
-	 
 	//체크했을시
 	 if($("input:checkbox[id='seatsNum"+chairIndex+"']").is(":checked"))
     {
@@ -226,11 +224,9 @@ function getCheckboxValue(chairIndex)  {
        $("#img"+chairIndex).attr("src", "/resources/images/reservation/chairs.png");
     }
 
-
-	
 	//$("#seatsNum"+chairIndex).show();
-	
-	$('#table1').click(function(){
+	if(chairIndex == 0 || chairIndex == 1 || chairIndex == 2 || chairIndex == 3)
+	{
 		$(":checkbox").prop('disabled', true);
 		if ($('input[name="seats"]:checked').length == ($("#Numseats").val()))  //체크박스와 인원수가 같다면, 체크를못하게한다
 		{
@@ -243,10 +239,12 @@ function getCheckboxValue(chairIndex)  {
 			$('input#seatsNum2:checkbox').prop('disabled', false);
 			$('input#seatsNum3:checkbox').prop('disabled', false);
 		}
-	});
-	$('#table2').click(function(){
+	}
+	
+	if(chairIndex == 4 || chairIndex == 5 || chairIndex == 6 || chairIndex == 7)
+	{
 		$(":checkbox").prop('disabled', true);
-		if ($('input[name="seats"]:checked').length == ($("#Numseats").val()))  //체크박스와 인원수가 같다면, 체크를못하게한다
+		if ($('input[name="seats"]:checked').length == ($("#Numseats").val()))  
 		{
 			$(":checkbox").prop('disabled', true);
 		}
@@ -257,8 +255,10 @@ function getCheckboxValue(chairIndex)  {
 			$('input#seatsNum6:checkbox').prop('disabled', false);
 			$('input#seatsNum7:checkbox').prop('disabled', false);
 		}
-	});
-	$('#table3').click(function(){
+	}
+	
+	if(chairIndex == 8 || chairIndex == 9 || chairIndex == 10 || chairIndex == 11)
+	{
 		$(":checkbox").prop('disabled', true);
 		if ($('input[name="seats"]:checked').length == ($("#Numseats").val()))  //체크박스와 인원수가 같다면, 체크를못하게한다
 		{
@@ -271,8 +271,10 @@ function getCheckboxValue(chairIndex)  {
 			$('input#seatsNum10:checkbox').prop('disabled', false);
 			$('input#seatsNum11:checkbox').prop('disabled', false);
 		}
-	});
-	$('#table4').click(function(){
+	}
+	
+	if(chairIndex == 12 || chairIndex == 13 || chairIndex == 14 || chairIndex == 15)
+	{
 		$(":checkbox").prop('disabled', true);
 		if ($('input[name="seats"]:checked').length == ($("#Numseats").val()))  //체크박스와 인원수가 같다면, 체크를못하게한다
 		{
@@ -285,8 +287,9 @@ function getCheckboxValue(chairIndex)  {
 			$('input#seatsNum14:checkbox').prop('disabled', false);
 			$('input#seatsNum15:checkbox').prop('disabled', false);
 		}
-	});
-	$('#table5').click(function(){
+	}
+	if(chairIndex == 16 || chairIndex == 17 || chairIndex == 18 || chairIndex == 19)
+	{
 		$(":checkbox").prop('disabled', true);
 		if ($('input[name="seats"]:checked').length == ($("#Numseats").val()))  //체크박스와 인원수가 같다면, 체크를못하게한다
 		{
@@ -300,10 +303,9 @@ function getCheckboxValue(chairIndex)  {
 			$('input#seatsNum18:checkbox').prop('disabled', false);
 			$('input#seatsNum19:checkbox').prop('disabled', false);
 		}
-	});
+	}
 	showSelectNum();
 	tableCheck();	
-	
 }
 
 //화면 출력
@@ -341,7 +343,7 @@ function changePplSelect(){
 	showSelectNum();
 	tableCheck();
 }
-	
+
 $(document).ready(function() {
 	
 	for(var i=0; i<20; i++){
@@ -377,7 +379,6 @@ $(document).ready(function() {
 		        var SeatNum = seatNumList[i]-1;
 		        if(SeatNum == -1)
 		        {
-		        	leftSeatA(0);
 		      	  	break;
 		        }
 		        $("#seatsNum"+SeatNum).hide();
@@ -386,8 +387,9 @@ $(document).ready(function() {
 		        $("#img"+SeatNum).addClass("noemptySeat");
 		      }
 		   }
-		   leftSeatA(seatNumList.length);
+		   
 		   tableCheck();
+		   leftSeatA();
 		},
 		error: function(error){
 		   icia.common.error(error);
@@ -452,10 +454,10 @@ $(document).ready(function() {
 		tableCheck();
 	});
 	
-	
-	leftSeat();
+	leftSeatA();
 	printTime();
 	timeSelSelect('${cafe.cafeNum}');
+	
 });
 
 </script>
@@ -497,7 +499,6 @@ $(document).ready(function() {
 				<th scope="row">예약시간</th>
 			  	<td>
 				  	<select class="selectpicker" id="timeSel" style="width: 160px;" onchange="selectTimeSeat()">
-						 <option value="0900">9:00</option>
 						 <option value="1000">10:00</option>
 						 <option value="1100">11:00</option>
 						 <option value="1200">12:00</option>

@@ -237,7 +237,8 @@ INSERT INTO TBL_CS (
     BBS_CONTENT,
     BBS_READ_CNT,
     REG_DATE,
-    BBS_PUBLIC
+    BBS_PUBLIC,
+    ADMIN_PUBLIC
 ) VALUES (
     #{bbsSeq},
     #{userId},
@@ -249,7 +250,8 @@ INSERT INTO TBL_CS (
     #{bbsContent},
     0,
     SYSDATE,
-    #{bbsPublic}
+    #{bbsPublic},
+    'Y'
 )
 </insert>
 

@@ -94,7 +94,7 @@ $(document).ready(function() {
 				</th>
 				<th scope="col" style="width:40%" class="text-right">
                   조회 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${notice.bbsReadCnt}" /><br/>
-                  작성자명 : <c:out value="${notice.userName}" /><br/>
+                  작성자 아이디 : <c:out value="${notice.userId}" /><br/>
                   작성시간 : ${notice.regDate}
                </th>
             </tr>

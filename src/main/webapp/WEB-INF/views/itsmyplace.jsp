@@ -22,7 +22,7 @@
 				<div class="col-md-12">
 					<img class="img-responsive" src="/resources/images/about/about.png" style="margin:-30px; padding:0;">
 				</div>
-				<div class="text-center"><button type="button" id="btngoCafePage" class="btn btn-main text-center">카페 둘러보기</button></div>
+				<div class="text-center"><button type="button" id="btngoCafePage" class="btn btn-main text-center" style="margin-top:30px;">카페 둘러보기</button></div>
 			</div>
 		</div>
 	</section>

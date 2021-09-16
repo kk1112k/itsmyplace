@@ -219,7 +219,7 @@ $(document).ready(function(){
             <c:forEach var="cafeList" items="${cafeList}" varStatus="status">
                <div class="col-md-6">
                   <div class="category-box">
-                     <a id="${cafeList.cafeNum}img" href="/cafe/${cafeList.cafeNum}">
+                     <a id="${cafeList.cafeNum}img" href="/cafe/detail?cafeNum=${cafeList.cafeNum}">
                      <c:choose>
                         <c:when test="${!empty cafeList.cafePhtList}">
                            <img src="/resources/upload/cafe/${cafeList.cafePhtList[0].phtName}" alt="카페이미지"/>
@@ -325,6 +325,9 @@ $(document).ready(function(){
 		                      	</div>
 							</div>
 							<div class="product-content" style="margin-top: 5px;">
+								<a class="product-content">
+									<i class="tf-ion-android-happy" style="color:#000000" ><c:out value="${review.cafeName}" /></i>
+								</a>
 								<c:if test="${review.bbsStar == 1.0}">
 								<div class="star_rating">
 									<a href="#" class="on">★</a>
@@ -370,8 +373,10 @@ $(document).ready(function(){
 								    <a href="#" class="on">★</a>
 								</div>
 								</c:if>	
-								<div class="target" style="font-size:x-large; margin-top: 5px; margin-bottom: 5px; color:#4397cf;"><c:out value="${review.bbsTitle}" /></div>
-								<div class="target" style="font-size:large;"><c:out value="${review.bbsContent}" /></div>																	
+								<div class="target" style="font-size:x-large; margin-top: 5px; margin-bottom: 5px; color:#000000;"><c:out value="${review.bbsTitle}" /></div>
+								<a class="product-content">
+									<i class="tf-ion-android-person" ><c:out value="${review.userId}" /></i>
+								</a>																
 							</div>
 						</div>
 					</div>
@@ -421,6 +426,7 @@ $(document).ready(function(){
 	        			<div class="product-short-details">
 	        				<div class="product-title" style="font-size:x-large; color:#4397cf; margin: 0 0 10px;"></div><!-- 리뷰 제목 -->
 	        				<div class="product-short-description product-cafeName-modal" style="margin: 0 0 0px;"></div><!-- 카페 이름 -->
+							<div class="product-user" style="margin:0 0 3px;"></div><!-- 아이디 -->
 							<div class="star_rating_modal" style="margin: 0 0 30px; font-size:25px;"></div><!-- 별점 -->
 	        				<div class="product-short-description product-content-modal" style="font-size:large;"></div><!-- 리뷰 내용 -->
 	        			</div>
@@ -456,8 +462,9 @@ $('.preview-meta').on('click', 'ul li .searchBtn', function() {
 	var content = this.getAttribute('content');
 	var cafe = this.getAttribute('cafe');
 	var star = this.getAttribute('star');
- 	
-	var list = [rsrvSeq, title, content, cafe, star];
+	var userId = this.getAttribute('userId');
+	
+	var list = [rsrvSeq, title, content, cafe, star, userId];
 	//배열
 	
 	fn_modalPht(list);
@@ -482,6 +489,7 @@ function fn_modalPht(list){
 			document.querySelector('.product-title').innerHTML = list[1];
 			document.querySelector('.product-content-modal').innerHTML = list[2];
 			document.querySelector('.product-cafeName-modal').innerHTML = list[3];
+			document.querySelector('.product-user').innerHTML = list[5];
 			
 			var rating = document.querySelector('.star_rating_modal');
 			var starPoint = Number(list[4]);

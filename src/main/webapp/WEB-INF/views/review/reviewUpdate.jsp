@@ -189,11 +189,7 @@ $(document).ready(function() {
 		<div class="row">
 			<div class="col-md-12">
 				<div class="content">
-					<h1 class="page-name">후기 수정</h1>
-					<ol class="breadcrumb">
-						<li><a href="/index">Home</a></li>
-						<li class="active">Update</li>
-					</ol>
+					<img src="/resources/images/comm/updateFormTitle.png" alt="글수정페이지 이미지" height=70px;/>
 				</div>
 			</div>
 		</div>

@@ -145,9 +145,7 @@ public class KakaoPayController
 		String menuNum = HttpUtil.get(request, "menuNum"); 		//메뉴번호
 		String menuName = HttpUtil.get(request, "orderMenu");  //메뉴이름을 담은 리스트(카카오페이에담을거)
 		String menuCount = HttpUtil.get(request, "menuCount");
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		System.out.println("menuName = " + menuName);
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+
 		int originPrice = Integer.parseInt(HttpUtil.get(request, "originPrice"));
 		int payPoint = Integer.parseInt(HttpUtil.get(request, "payPoint"));//사용한포인트
 		int resultPrice = Integer.parseInt(HttpUtil.get(request, "resultPrice"));//최종결제금액 - 포인트할인 적용
@@ -194,7 +192,7 @@ public class KakaoPayController
 		pay.setPayPoint(payPoint);
 		pay.setOriginPrice(originPrice);
 		pay.setTotalPrice(resultPrice);
-//		pay.setPayDate("결제된 날짜"); xml에서 처리할것
+//		pay.setPayDate("결제된 날짜"); xml에서 처리
 
 		List<Order> orderList = new ArrayList<Order>();
 		
@@ -438,7 +436,7 @@ public class KakaoPayController
 			List<Order> order = myPageService.myOrderList(rsrvSeq);
 			String menuInfo = "";
 			for(int i=0; i<order.size(); i++) {
-				menuInfo = menuInfo + order.get(i).getMenuName() + " " + order.get(i).getMenuCount() + "잔  ";
+				menuInfo = menuInfo + order.get(i).getMenuName() + " X " + order.get(i).getMenuCount() + "  ";
 			}
 			
 			//카페운영자에게 메일전송(예약들어왔다고)
@@ -526,27 +524,20 @@ public class KakaoPayController
 		Seat seat = new Seat();
 		Seat result = null;
 		Refund refund = new Refund();
-		System.out.println("###########################");
-		System.out.println("rsRv.getSeatList = " + rsRv.getSeatList());
-		System.out.println("###########################");
 		String[] seatSets = rsRv.getSeatList().split(",");
 		
 		Pay pay = cafeService.paySelect(rsrvSeq);
 		Response<Object> ajaxResponse = new Response<Object>();
 		
 		User user = userService.userSelect(cookieUserId);
+		Point curPoint = cafeService.pointSelect(rsrvSeq);
+		
 		Point point = new Point();
 		point.setRsrvSeq(rsrvSeq);
 		point.setUserId(user.getUserId());
 		point.setSavePath("환불에 따른 적립");
-		point.setSavePoint(pay.getPayPoint()+pay.getTotalPrice());
-		
-		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-		System.out.println("setSavePoint = " + point.getSavePoint());
-		System.out.println(seatSets[0]);
-		System.out.println(seatSets[1]);
-		System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
-		
+		point.setSavePoint(pay.getPayPoint()+pay.getTotalPrice()-curPoint.getSavePoint());
+
 		refund.setRsrvSeq(rsrvSeq);
 		refund.setRfdReason(rfdReason);
 		refund.setRfdMethod("전액포인트환불");
@@ -719,10 +710,10 @@ public class KakaoPayController
 		User cafeUser = userService.userSelect(cafe.getUserId());
 		String cafeUserMail = cafeUser.getUserEmail();
 		long rewardPoint = (long)(pay.getTotalPrice()*0.03);
+		long payPoint = rewardPoint;
 		String userId = CookieUtil.getHexValue(request, AUTH_COOKIE_NAME);
 		User user = userService.userSelect(userId);
-		user.setTotalPoint(rewardPoint);
-		
+		user.setPayPoint(rewardPoint);
 		
 		Point point = new Point();
 		
@@ -750,6 +741,7 @@ public class KakaoPayController
 			if(adminService.userPointRewardUpdate(user) <= 0) {
 				ajaxResponse.setResponse(404, "3% point Reward Error");
 			}
+			
 			if(cafeService.pointInsert(point) <= 0) {
 				ajaxResponse.setResponse(405, "point Insert Error");
 			}
@@ -757,7 +749,7 @@ public class KakaoPayController
 			List<Order> order = myPageService.myOrderList(rsrvSeq);
 			String menuInfo = "";
 			for(int i=0; i<order.size(); i++) {
-				menuInfo = menuInfo + order.get(i).getMenuName() + " " + order.get(i).getMenuCount() + "잔  ";
+				menuInfo = menuInfo + order.get(i).getMenuName() + " X " + order.get(i).getMenuCount() + "  ";
 			}
 			
 			if(!StringUtil.isEmpty(cafeUserMail)) { // 카페운영자에게 예약정보 메일로 전송하기

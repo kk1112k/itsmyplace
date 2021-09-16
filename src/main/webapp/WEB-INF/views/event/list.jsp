@@ -43,7 +43,7 @@ $(document).ready(function(){
    $("#btnCafeHanzan").on("click", function(){
       document.eventForm.bbsSeq.value = "";
       document.eventForm.searchType.value = "1";
-      document.eventForm.searchValue.value = "cafe1"
+      document.eventForm.searchValue.value = "cafeHanzan"
       document.eventForm.curPage.value = "1";
       document.eventForm.action = "/event/list"; 
       document.eventForm.submit();
@@ -53,7 +53,7 @@ $(document).ready(function(){
    $("#btnCafeDonut").on("click", function(){
       document.eventForm.bbsSeq.value = "";
       document.eventForm.searchType.value = "1";
-      document.eventForm.searchValue.value = "cafe2"
+      document.eventForm.searchValue.value = "cafeDonut"
       document.eventForm.curPage.value = "1";
       document.eventForm.action = "/event/list"; 
       document.eventForm.submit();
@@ -63,7 +63,7 @@ $(document).ready(function(){
    $("#btnCafeNoname").on("click", function(){
       document.eventForm.bbsSeq.value = "";
       document.eventForm.searchType.value = "1";
-      document.eventForm.searchValue.value = "cafe3"
+      document.eventForm.searchValue.value = "cafeNoname"
       document.eventForm.curPage.value = "1";
       document.eventForm.action = "/event/list"; 
       document.eventForm.submit(); 
@@ -73,7 +73,7 @@ $(document).ready(function(){
    $("#btnCafeDamda").on("click", function(){
       document.eventForm.bbsSeq.value = "";
       document.eventForm.searchType.value = "1";
-      document.eventForm.searchValue.value = "cafe4"
+      document.eventForm.searchValue.value = "cafeDamda"
       document.eventForm.curPage.value = "1";
       document.eventForm.action = "/event/list"; 
       document.eventForm.submit();

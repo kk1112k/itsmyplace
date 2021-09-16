@@ -34,6 +34,7 @@ function fn_list(curPage){
 					<ol class="breadcrumb">
 						<li><a href="index.html">홈</a></li>
 						<li class="active">마이페이지</li>
+						<li class="active">예약현황</li>
 					</ol>
 				</div>
 			</div>
@@ -54,33 +55,34 @@ function fn_list(curPage){
 				<div class="dashboard-wrapper user-dashboard">
 					<h3>${cafe.cafeName} 예약현황</h3>
 					<div class="table-responsive">
-						<table class="table">
+						<table class="table table-hover" border="2" bordercolor="#ADD8E6">
 							<thead>
-								<tr>
-									<th>주문 번호</th>
-									<th>이용 날짜</th>
-									<th>이용 시간</th>
-									<th>이용 자리</th>
-									<th>결제 금액</th>
-									<th>결제 상태</th>
-									<th>주문내역</th>
-									<th></th>
+								<tr style="background-color: #4397CF;">
+									<th scope="col" class="text-center" style="width:8%">주문 번호</th>
+									<th scope="col" class="text-center" style="width:10%">이용 날짜</th>
+									<th scope="col" class="text-center" style="width:8%">이용 시간</th>
+									<th scope="col" class="text-center" style="width:10%">이용 자리</th>
+									<th scope="col" class="text-center" style="width:10%">결제 금액</th>
+									<th scope="col" class="text-center" style="width:10%">결제 상태</th>
+									<th scope="col" class="text-center" style="width:44%">주문내역</th>
+									
 								</tr>
 							</thead>
 							<tbody>
 							<c:if test="${!empty rsRv}">
 							<c:forEach var="payInfo" items="${rsRv}" varStatus="status">
 								<tr>
-									<td>${payInfo.rsrvSeq}</td>
-									<td>${payInfo.rsrvDate}</td>
-									<td>${payInfo.rsrvTime}</td>
-									<td>${payInfo.mypage.rsrvSeatList}</td>
-									<td>${payInfo.mypage.originPrice_s}</td>
-									<td>${payInfo.payStep}</td>
-			                    	<td>
+									<td scope="col" class="text-center" style="width:8%">${payInfo.rsrvSeq}</td>
+									<td scope="col" class="text-center" style="width:10%">${payInfo.rsrvDate}</td>
+									<td scope="col" class="text-center" style="width:8%">${payInfo.rsrvTime}</td>
+									<td scope="col" class="text-center" style="width:10%">${payInfo.mypage.rsrvSeatList}</td>
+									<td scope="col" class="text-center" style="width:10%">${payInfo.mypage.originPrice_s}</td>
+									<td scope="col" class="text-center" style="width:10%">${payInfo.payStep}</td>
+			                    	<td scope="col" class="text-center" style="width:44%">
 			                    		<c:forEach var="list" items="${payInfo.mypage.orderList}" varStatus="status">
 			                    			<c:out value="${list.menuName}" />
-			                    			<c:out value="${list.menuCount}" />잔&nbsp;&nbsp;
+			                    			X
+			                    			<c:out value="${list.menuCount}" />&nbsp;&nbsp;
 			                    		</c:forEach>
 			                    	</td>
 								</tr>

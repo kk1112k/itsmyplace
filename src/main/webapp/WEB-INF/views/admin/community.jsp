@@ -25,7 +25,20 @@ input[type="button"]
 function view(bbsSeq)
 {   
 	var bbsSeq = bbsSeq;
-	   
+	
+	/*
+	var target = 'pop';
+	window.open('',target);
+	
+	var form = document.commForm;
+	form.action="/community/view";
+	form.target=target;
+	form.submit();
+	*/
+	//document.commForm.bbsSeq = bbsSeq;
+	//document.commForm.action = "/cafe/reservationNext";
+	//document.commForm.submit();
+	
 	window.open("/community/view?bbsSeq=" + bbsSeq);
 }
 
@@ -43,6 +56,7 @@ function fn_adminPublicUpdate(bbsSeq)
       return;
    }
    
+   alert(bbsSeq);
    $.ajax({
       url: "/admin/commAdminPublicUpdateProc",
       data: {
@@ -190,11 +204,11 @@ function fn_adminPublicUpdate2(cmtSeq)
                                                    </select>
                                                 </p>
                                                    
-                                                  <input type="button" href="javascript:void(0)" onclick="fn_adminPublicUpdate('${s.cmtSeq}')" style="margin-left:.10rem; width: 4rem; height: 2rem; " value="변경"> 
+                                                  <input type="button" href="javascript:void(0)" onclick="fn_adminPublicUpdate('${comm.bbsSeq}')" style="margin-left:.10rem; width: 4rem; height: 2rem; " value="변경"> 
                                             </td>
                                                   
                                             <td class="text-center" style="width:9%">                                               
-                                               <input type="button" href="javascript:void(0)" onclick="view('${s.cmtSeq}')" value="바로가기" />                                               
+                                               <input type="button" href="javascript:void(0)" onclick="view('${comm.bbsSeq}')" value="바로가기" />                                               
                                             </td>                                  
                                           </tr>
                                           <c:if test="${!empty comm.commCmtList}">

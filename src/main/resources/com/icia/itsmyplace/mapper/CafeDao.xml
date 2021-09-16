@@ -2,68 +2,68 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.icia.itsmyplace.dao.CafeDao">
 <resultMap id="cafeResultMap" type="com.icia.itsmyplace.model.Cafe">
-	<id column="CAFE_NUM" property="cafeNum"/>
-	<result column="USER_ID" property="userId"/>
-	<result column="AREA_NUM" property="areaNum"/>
-	<result column="SUBAREA_NUM" property="subAreaNum"/>
-	<result column="CAFE_NAME" property="cafeName"/>
-	<result column="CAFE_CONTENT" property="cafeContent"/>
-	<result column="CAFE_ADDR" property="cafeAddr"/>
-	<result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
-	<result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
-	<result column="STATUS" property="status"/>
+   <id column="CAFE_NUM" property="cafeNum"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="AREA_NUM" property="areaNum"/>
+   <result column="SUBAREA_NUM" property="subAreaNum"/>
+   <result column="CAFE_NAME" property="cafeName"/>
+   <result column="CAFE_CONTENT" property="cafeContent"/>
+   <result column="CAFE_ADDR" property="cafeAddr"/>
+   <result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
+   <result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
+   <result column="STATUS" property="status"/>
 </resultMap>
 
 <resultMap id="SeatResultMap" type="com.icia.itsmyplace.model.Seat">
-	<id column="CAFE_NUM" property="cafeNum"/>
-	<result column="SEAT_NUM" property="seatNum"/>
-	<result column="VACANCY" property="vacancy"/>
+   <id column="CAFE_NUM" property="cafeNum"/>
+   <result column="SEAT_NUM" property="seatNum"/>
+   <result column="VACANCY" property="vacancy"/>
 </resultMap>
 
 <resultMap id="MenuPhtMap" type="com.icia.itsmyplace.model.MenuPht">
-	<id column="CAFE_NUM" property="cafeNum"/>
-	<id column="MENU_NUM" property="menuNum"/>
-	<id column="PHT_NUM" property="phtNum"/>
-	<result column="LIST_ORDER" property="listOrder"/>
-	<result column="PHT_ORG_NAME" property="phtOrgName"/>
-	<result column="PHT_SIZE" property="phtSize"/>
-	<result column="PHT_EXT" property="phtExt"/>
-	<result column="REG_DATE" property="regDate"/>
-	<result column="MENU_NAME" property="menuName"/>
-	<result column="MENU_PRICE" property="menuPrice"/>
+   <id column="CAFE_NUM" property="cafeNum"/>
+   <id column="MENU_NUM" property="menuNum"/>
+   <id column="PHT_NUM" property="phtNum"/>
+   <result column="LIST_ORDER" property="listOrder"/>
+   <result column="PHT_ORG_NAME" property="phtOrgName"/>
+   <result column="PHT_SIZE" property="phtSize"/>
+   <result column="PHT_EXT" property="phtExt"/>
+   <result column="REG_DATE" property="regDate"/>
+   <result column="MENU_NAME" property="menuName"/>
+   <result column="MENU_PRICE" property="menuPrice"/>
 </resultMap>
 
 <resultMap id="cafePhtResultMap" type="com.icia.itsmyplace.model.CafePht">
-	<id column="CAFE_NUM" property="cafeNum" />
-	<id column="PHT_NUM" property="phtNum" />
-	<result column="LIST_ORDER" property="listOrder" />
-	<result column="PHT_NAME" property="phtName" />
-	<result column="PHT_ORG_NAME" property="phtOrgName" />
-	<result column="PHT_SIZE" property="phtSize" />
-	<result column="PHT_EXT" property="phtExt" />
-	<result column="REG_DATE" property="regDate" />
+   <id column="CAFE_NUM" property="cafeNum" />
+   <id column="PHT_NUM" property="phtNum" />
+   <result column="LIST_ORDER" property="listOrder" />
+   <result column="PHT_NAME" property="phtName" />
+   <result column="PHT_ORG_NAME" property="phtOrgName" />
+   <result column="PHT_SIZE" property="phtSize" />
+   <result column="PHT_EXT" property="phtExt" />
+   <result column="REG_DATE" property="regDate" />
 </resultMap>
 
 <!-- 이거는 메인페이지 keyword 포함하기 위한 용도 -->
 <!-- 위에거랑 합치고 싶긴한데, 혹시 이것때문에 오류가 수두룩하게 날까봐 일단 빼놔서 해봅니다 -->
 <resultMap id="cafeKeywordResultMap" type="com.icia.itsmyplace.model.Cafe">
-	<id column="CAFE_NUM" property="cafeNum"/>
-	<result column="USER_ID" property="userId"/>
-	<result column="AREA_NUM" property="areaNum"/>
-	<result column="SUBAREA_NUM" property="subAreaNum"/>
-	<result column="CAFE_NAME" property="cafeName"/>
-	<result column="CAFE_CONTENT" property="cafeContent"/>
-	<result column="CAFE_ADDR" property="cafeAddr"/>
-	<result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
-	<result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
-	<result column="CAFE_KEYWORD" property="cafeKeyword"/>
-	<result column="STATUS" property="status"/>
+   <id column="CAFE_NUM" property="cafeNum"/>
+   <result column="USER_ID" property="userId"/>
+   <result column="AREA_NUM" property="areaNum"/>
+   <result column="SUBAREA_NUM" property="subAreaNum"/>
+   <result column="CAFE_NAME" property="cafeName"/>
+   <result column="CAFE_CONTENT" property="cafeContent"/>
+   <result column="CAFE_ADDR" property="cafeAddr"/>
+   <result column="CAFE_OPN_HRS" property="cafeOpnHrs"/>
+   <result column="CAFE_CLS_HRS" property="cafeClsHrs"/>
+   <result column="CAFE_KEYWORD" property="cafeKeyword"/>
+   <result column="STATUS" property="status"/>
 </resultMap>
 
 <resultMap id="rsRvResultMap" type="com.icia.itsmyplace.model.RsRv">
-	<id column="RSRV_DATE" property="rsrvDate"/>
-	<result column="RSRV_TIME" property="rsrvTime"/>
-	<result column="RSRV_SEAT_LIST" property="seatList"/>
+   <id column="RSRV_DATE" property="rsrvDate"/>
+   <result column="RSRV_TIME" property="rsrvTime"/>
+   <result column="RSRV_SEAT_LIST" property="seatList"/>
 </resultMap>
 
 <!-- 카페 조회 -->
@@ -134,17 +134,17 @@ SELECT
     NVL(B.MENU_NAME, '') AS MENU_NAME,
     NVL(B.MENU_PRICE, '') AS MENU_PRICE
 FROM 
-	MENU_PHT A, MENU B
+   MENU_PHT A, MENU B
 WHERE 
-	A.CAFE_NUM = #{VALUE}
-	<choose>
-		<when test='searchType == "1"'>
-AND A.MENU_NUM LIKE 'COF%'		
-		</when>
-		<when test='searchType == "2"'>
-AND A.MENU_NUM LIKE 'HOT%'		
-		</when>
-	</choose>
+   A.CAFE_NUM = #{VALUE}
+   <choose>
+      <when test='searchType == "1"'>
+AND A.MENU_NUM LIKE 'COF%'      
+      </when>
+      <when test='searchType == "2"'>
+AND A.MENU_NUM LIKE 'HOT%'      
+      </when>
+   </choose>
 AND A.MENU_NUM = B.MENU_NUM
 AND A.CAFE_NUM = B.CAFE_NUM
 </select>
@@ -193,13 +193,16 @@ ORDER BY PHT_NUM
 </select>
 
 <!-- 자리 공석 수 체크 -->
-<select id="seatVacancyCnt" parameterType="string" resultType="int">
+<select id="seatVacancyCnt" parameterType="com.icia.itsmyplace.model.RsRv" resultType="int">
 SELECT
-	COUNT(VACANCY)
+    NVL(COUNT(RSRV_SEQ), 0) AS CNT
 FROM
-    SEAT
-WHERE CAFE_NUM = #{value}
-AND VACANCY = 'Y'
+    RSRV
+WHERE
+    CAFE_NUM = #{cafeNum}
+    AND RSRV_TIME <![CDATA[>=]]> #{startRsrvTime}
+    AND RSRV_TIME <![CDATA[<=]]> #{endRsrvTime}
+    AND TO_CHAR(RSRV_DATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
 </select>
 
 <!-- 카페시간셀렉트박스별 자리 조회 -->
@@ -215,7 +218,7 @@ WHERE
    AND 
     TO_CHAR(A.RSRV_DATE, 'YYYYMMDD') = TO_CHAR(SYSDATE, 'YYYYMMDD')
    AND
-   	(B.PAY_STEP = '100' OR B.PAY_STEP = '200')
+      (B.PAY_STEP = '100' OR B.PAY_STEP = '200' OR B.PAY_STEP = '300')
    AND
     A.RSRV_SEQ = B.RSRV_SEQ
     

@@ -33,6 +33,13 @@ ul.tabs li{
 	text-align: center;
 }
 
+input[type="text"] { 
+	background: none;
+	border: none;
+	font-size: 20px;
+}
+
+
 </style>
 
 <script>
@@ -742,7 +749,7 @@ function movePage()
 
 <!-- 하단 장바구니 -->
 <form name="orderform" id="orderform" method="post" class="orderform" action="/Page" onsubmit="return false;" style="margin:0 auto; padding:0; max-width:1170px;">    
-	<input type="hidden" name="cmd" value="order">
+	<input type="hidden" name="cmd" value="order" class="input-text">
 	<div class="basketdiv" id="basket" style="margin:0 auto; padding:0;">
 	    <div class="row head" style="margin:0 auto; padding:0;">
 	        <div class="subdiv">
@@ -768,8 +775,10 @@ function movePage()
 	        </div>
 	    </div>
 		<div class="row" style="margin: 25px 0px 67px -19px; text-align: right;">
-			<h4 style="display: inline; padding-right: 20px;">총 주문개수 : <span class="bold" id="totalCount_s">0</span> 개</h4>
-		    <button type="button" class="btn btn-dark" onclick="delAllItem();">장바구니 비우기</button>
+			<div style="padding-left: 893px;padding-top: 44px;">
+				<h4 style="display: inline; padding-right: 20px;">총 주문개수 : <span class="bold" id="totalCount_s">0</span> 개</h4>
+			    <button type="button" class="btn btn-dark" onclick="delAllItem();">장바구니 비우기</button>
+		    </div>
 		</div>
 		<div class="bigtext right-align sumcount" id="sum_p_num">
 			<input type="hidden" name="totalCount" id="totalCount" value="0"/>

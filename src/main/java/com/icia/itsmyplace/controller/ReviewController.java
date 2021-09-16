@@ -46,7 +46,7 @@ public class ReviewController
 	private ReviewService reviewService;
 	
 	private static final int LIST_COUNT = 8; 	// 한 페이지의 게시물 수
-	private static final int PAGE_COUNT = 3;	// 페이징 수
+	private static final int PAGE_COUNT = 5;	// 페이징 수
 	
 	@RequestMapping(value="/review/list")
 	public String review(Model model, HttpServletRequest request, HttpServletResponse response)

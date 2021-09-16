@@ -278,5 +278,21 @@ public class ReviewService
 		
 	}
 		
+   //인덱스 리뷰 리스트
+    public List<Review> reviewList2(Review review)
+    {
+       List<Review> list = null;
+       
+       try
+       {
+          list = reviewDao.reviewList2(review);
+       }
+       catch(Exception e)
+       {
+          logger.error("[ReviewService] reviewList2 Exception", e);
+       }
+       
+       return list;
+    }
 	   
 }

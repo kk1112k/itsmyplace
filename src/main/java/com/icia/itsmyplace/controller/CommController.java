@@ -51,7 +51,7 @@ public class CommController {
 	@Autowired
 	private CommService commService;
 	
-	private static final int LIST_COUNT = 5;
+	private static final int LIST_COUNT = 10;
 	private static final int PAGE_COUNT = 5;
 	
 	//커뮤니티 게시판 리스트
@@ -310,16 +310,17 @@ public class CommController {
 			User user = userService.userSelect(cookieUserId);
 			Comm comm = commService.commSelect(bbsSeq);
 			String boardMe = "N";
-			
-			List<CommPht> commPhtList = commService.commPhtList(bbsSeq);
-			comm.setCommPhtList(commPhtList);
-			
+
+			if(comm != null) {
+			   List<CommPht> commPhtList = commService.commPhtList(bbsSeq);
+			   comm.setCommPhtList(commPhtList);
+		    }
 			CommCmt commCmtForList = new CommCmt();
 			commCmtForList.setBbsSeq(bbsSeq);
 			
 			List<CommCmt> list = commService.commCmtList(commCmtForList);
 			
-			if(user != null)
+			if(comm != null && user != null)
 			{
 				if(comm.getUserId().equals(user.getUserId()))
 				{
@@ -824,6 +825,10 @@ public class CommController {
 		List<CommCmt> commCmtList = commService.commCmtList(commCmt);
 		List<CommPht> commPhtList = commService.commPhtList(bbsSeq);
 		
+		System.out.println("#########################");
+        System.out.println("cmt, pht = " + (commCmtList == null) + "  " + (commPhtList == null));
+        System.out.println("#########################");
+        
 		Response<Object> ajaxResponse = new Response<Object>();
 		
 		if(user != null && comm != null && user.getUserId().equals(comm.getUserId()))

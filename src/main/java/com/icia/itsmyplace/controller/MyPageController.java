@@ -22,6 +22,7 @@ import com.icia.common.model.FileData;
 import com.icia.common.util.StringUtil;
 import com.icia.itsmyplace.model.Area;
 import com.icia.itsmyplace.model.Cafe;
+import com.icia.itsmyplace.model.Comm;
 import com.icia.itsmyplace.model.CommCmt;
 import com.icia.itsmyplace.model.CommPht;
 import com.icia.itsmyplace.model.MyPage;
@@ -86,7 +87,7 @@ public class MyPageController {
    DecimalFormat formatter = new DecimalFormat("###,###");
    
    private static final int LIST_COUNT = 10; //한 페이지의 게시물 수
-   private static final int PAGE_COUNT = 3;  //페이징 수
+   private static final int PAGE_COUNT = 5;  //페이징 수
    
    
    //마이페이지 - 결제 내역
@@ -294,7 +295,9 @@ public class MyPageController {
  			list2 = myPageService.userReviewPostList(search2); 
  			
  		}
- 		
+// 		System.out.println("#########################################");
+// 		System.out.println(list.get(0).getAdminPublic());
+// 		System.out.println("#########################################");
  		model.addAttribute("user", user); 
  		model.addAttribute("list", list);   
  		model.addAttribute("list2", list2);
@@ -320,29 +323,38 @@ public class MyPageController {
       User user = userService.userSelect(cookieUserId);
       
       for(int i=0; i<seqList.length; i++) {
+    	  System.out.println("#########################");
+    	  System.out.println("seqList["+i+"] = " + seqList[i]);
+    	  System.out.println("Integer seqList["+i+"] = " + Integer.parseInt(seqList[i]));
+    	  System.out.println("#########################");
+    	  Comm comm = commService.commSelect(Integer.parseInt(seqList[i]));
          CommCmt commCmt = new CommCmt();
          commCmt.setBbsSeq(Integer.parseInt(seqList[i]));
          
-         UserPostList postList = myPageService.chkListSelect(Integer.parseInt(seqList[i]));
+         //UserPostList postList = myPageService.chkListSelect(Integer.parseInt(seqList[i]));
+         
          List<CommCmt> commCmtList = commService.commCmtList(commCmt);
          List<CommPht> commPhtList = commService.commPhtList(Integer.parseInt(seqList[i]));
-         
-         if(user != null && postList != null && user.getUserId().equals(postList.getUserId()))
+         System.out.println("#########################");
+         System.out.println("cmt, pht = " + (commCmtList == null) + "  " + (commPhtList == null));
+         System.out.println("#########################");
+         if(user != null && comm != null && user.getUserId().equals(comm.getUserId()))
          {      
             if(commCmtList != null)
             {
                if(commService.commCmtDeleteAll(commCmt) == 0)
                {
                   ajaxResponse.setResponse(500, "Internal Server Error");
-                  return ajaxResponse;
+                  //return ajaxResponse;
                }
+               
             }
             if(commPhtList != null)
             {
                if(commService.commPhtDeleteAll(Integer.parseInt(seqList[i])) == 0)
                {
-                  ajaxResponse.setResponse(500, "Internal Server Error");
-                  return ajaxResponse;
+                  ajaxResponse.setResponse(501, "Internal Server Error");
+                  //return ajaxResponse;
                }
             }
             
@@ -352,12 +364,12 @@ public class MyPageController {
             }
             else
             {
-               ajaxResponse.setResponse(500, "Internal Server Error");
+               ajaxResponse.setResponse(502, "Internal Server Error");
             }
          }
          else
          {
-            ajaxResponse.setResponse(400, "Bad Request");
+            ajaxResponse.setResponse(404, "Bad Request");
          }
       }
       
@@ -388,7 +400,6 @@ public class MyPageController {
 	            {
 					if(reviewService.reviewPhtDeleteAll(Integer.parseInt(seqList[i])) <= 0) {
 						ajaxResponse.setResponse(403, "Pht Delete Error");
-						return ajaxResponse;
 					}
 	            }
 					
@@ -400,8 +411,6 @@ public class MyPageController {
 				{
 					ajaxResponse.setResponse(500, "Internal Server Error");
 				}
-				
-				
 		
 			}
 			else

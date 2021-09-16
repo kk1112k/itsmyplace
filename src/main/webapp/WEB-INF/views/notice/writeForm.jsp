@@ -112,13 +112,13 @@ function fn_list(curPage)
 <div class="container">
 	<div class="d-flex">
 		<div class="logo text-center">
-			<a href="/notice/list"><img src="/resources/images/notice/notice.png" alt="공지사항 타이틀 이미지" height="80" /></a>
+			<a href="/notice/list"><img src="/resources/images/notice/noticeTitle.png" alt="공지사항 타이틀 이미지" height="80" /></a>
 		</div>
 	<div class="comm-custom2"></div>
 	<div style="height:70px;"><img src="/resources/images/notice/writeFormTitle.png" alt="글쓰기페이지 이미지" height=70px;/></div>
 	<div style="height:16.5px; background-color:#4397CF"></div>
 	<form name="writeForm" id="writeForm" method="post" enctype="multipart/form-data">
-		<input type="text" name="userName" id="userName" maxlength="20" value="작성자명 : ${user.userName}" style="ime-mode:active; background-color:#90D5EB" class="form-control mt-4 mb-2" readonly />
+		<input type="text" name="userId" id="userId" maxlength="20" value="작성자 아이디 : ${user.userId}" style="ime-mode:active; background-color:#90D5EB" class="form-control mt-4 mb-2" readonly />
 		<input type="text" name="bbsTitle" id="bbsTitle" maxlength="100" style="ime-mode:active;" class="form-control mb-2" placeholder="제목을 입력해주세요." required />
 		<div class="form-group">
 			<textarea class="form-control" rows="10" name="bbsContent" id="bbsContent" style="ime-mode:active;" placeholder="내용을 입력해주세요" required></textarea>

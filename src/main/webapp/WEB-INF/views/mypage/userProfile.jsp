@@ -74,6 +74,7 @@ function fn_withdrawal(){
 					<ol class="breadcrumb">
 						<li><a href="/index">홈</a></li>
 						<li class="active">마이페이지</li>
+						<li class="active">내 정보</li>
 					</ol>
 				</div>
 			</div>
@@ -88,7 +89,7 @@ function fn_withdrawal(){
       <div class="col-md-12">
         <ul class="list-inline dashboard-menu text-center">
           <li><a class="active"  href="userProfile">내정보</a></li>	
-          <li><a href="userPost">내가쓴 게시물</a></li>
+          <li><a href="userPost">내가 쓴 게시물</a></li>
           <c:choose>
           <c:when test="${user.userClass == 'N'}">
           <li><a href="userPayment">내 결제내역</a></li>
@@ -121,7 +122,7 @@ function fn_withdrawal(){
                     ${user.userEmail}
                 </div>
                 <div class="form-group">
-                    <label for="username">마일리지 : </label>
+                    <label for="username">보유포인트 : </label>
 					${user.totalPoint}
                 </div>
                 <input type="hidden" id="userId" name="userId" value="${user.userId}" />

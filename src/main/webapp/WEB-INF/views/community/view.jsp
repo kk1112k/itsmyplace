@@ -3,6 +3,8 @@
 <%
    // 개행문자 값을 저장한다.
    pageContext.setAttribute("newLine", "\n");
+response.setHeader("Cache-Control", "no-cache");
+response.setHeader("Pragma", "no-cache");
 %>
 <!DOCTYPE html>
 <html>
@@ -599,7 +601,7 @@ $(document).ready(function(){
                </th>
                <th scope="col" style="width:40%" class="text-right">
                   조회 : <fmt:formatNumber type="number" maxFractionDigits="3" value="${comm.bbsReadCnt}" /><br/>
-                  작성자명 : <c:out value="${comm.userName}" /><br/>
+                  작성자 아이디 : <c:out value="${comm.userId}" /><br/>
                   작성시간 : ${comm.regDate}
                </th>
             </tr>
@@ -644,7 +646,7 @@ $(document).ready(function(){
             <c:if test="${!empty list}">
                <c:forEach var="commCmt" items="${list}" varStatus="status">
                   <tr id="replyLoc${commCmt.cmtSeq}">
-                     <td class="text-center"><c:out value="${commCmt.userId}" /><input type="hidden" id="cmtSeq" name="cmtSeq" value="${commCmt.cmtSeq}" /></td>
+                     <td class="text-center" style="width:10%"><c:out value="${commCmt.userId}" /><input type="hidden" id="cmtSeq" name="cmtSeq" value="${commCmt.cmtSeq}" /></td>
                      <td class="text-left" id="cmtContentUp${commCmt.cmtSeq}">
                   <c:if test="${commCmt.cmtIndent > 0}">
                         <div id="indentImgLoc" style="width:35px; float:left;"><img src="/resources/images/icon_reply.gif" style="margin-left: ${commCmt.cmtIndent}em;"/></div>

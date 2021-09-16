@@ -65,7 +65,8 @@ function btn_Refund(){
 					<ol class="breadcrumb">
 						<li><a href="/../index">홈</a></li>
 						<li class="active">마이페이지</li>
-						<li class="active">결제정보 자세히보기</li>
+						<li class="active">내 결제내역</li>
+						<li class="active">결제정보 자세히 보기</li>
 					</ol>
 				</div>
 			</div>
@@ -117,7 +118,8 @@ function btn_Refund(){
 				                    	<td>
 				                    		<c:forEach var="list" items="${myPage.orderList}" varStatus="status">
 				                    			<c:out value="${list.menuName}" />
-				                    			<c:out value="${list.menuCount}" />잔&nbsp;&nbsp;
+				                    			X
+				                    			<c:out value="${list.menuCount}" />&nbsp;&nbsp;
 				                    		</c:forEach>
 				                    	</td>
 				                    	

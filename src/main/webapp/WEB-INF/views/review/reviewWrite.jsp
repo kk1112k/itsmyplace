@@ -153,16 +153,12 @@ $(document).ready(function() {
 		<div class="row">
 			<div class="col-md-12">
 				<div class="content">
-					<h1 class="page-name">후기 글쓰기</h1>
-					<ol class="breadcrumb">
-						<li><a href="/index">Home</a></li>
-						<li class="active">Write</li>
-					</ol>
+					<img src="/resources/images/comm/writeFormTitle.png" alt="이용후기 글쓰기 이미지" height="80" />
 				</div>
 			</div>
 		</div>
 	</div>
-
+	
 	<div class="container">
 		<div class="row">
 			<div class="col-md-50">
@@ -181,7 +177,7 @@ $(document).ready(function() {
 						
 						<br />
 						
-						<h4>카페 이용은 만족하셨나요?</h4>
+						<h4>카페 이용은 만족하셨나요? (별점을 선택하지 않을 시 5점이 부여됩니다.)</h4>
 						<div class="form-control mb-2" name="myform" id="myform">
 						    <fieldset>
 						        <input type="radio" name="bbsStar" value="5" id="rate1"><label for="rate1">⭐</label>
@@ -194,7 +190,7 @@ $(document).ready(function() {
 						
 						<br />
 						
-						<h4>후기를 공개하시겠습니까?</h4>
+						<h4>후기를 공개하시겠습니까? (선택하지 않으시면 공개처리 됩니다.)</h4>
 						<div class="form-control mb-2">
 							<input type="radio" name="bbsPublic" style="ime-mode:active;" value="Y" required />공개&nbsp;&nbsp;
 							<input type="radio" name="bbsPublic" style="ime-mode:active;" value="N" required />비공개
